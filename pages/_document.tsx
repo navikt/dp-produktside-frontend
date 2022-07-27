@@ -1,4 +1,8 @@
-import { Components as DekoratorComponents, fetchDecoratorReact, Props as DekoratorProps } from "@navikt/nav-dekoratoren-moduler/ssr";
+import {
+  Components as DekoratorComponents,
+  fetchDecoratorReact,
+  Props as DekoratorProps,
+} from "@navikt/nav-dekoratoren-moduler/ssr";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 export default class MyDocument extends Document<{ Dekorator: DekoratorComponents }> {
@@ -8,6 +12,7 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
     const dekoratorParams: DekoratorProps = {
       // @ts-ignore
       env: process.env.DEKORATOR_MILJO || "prod",
+      breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
       context: "privatperson",
     };
 
