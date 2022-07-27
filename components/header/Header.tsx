@@ -1,4 +1,4 @@
-import { BodyShort, Detail } from "@navikt/ds-react";
+import { BodyShort, Detail, Heading } from "@navikt/ds-react";
 import styles from "./Header.module.scss";
 import { Money } from "@navikt/ds-icons";
 
@@ -9,7 +9,9 @@ export default function Header() {
         <Money />
       </div>
       <div className={styles.text}>
-        <h1>Dagpenger</h1>
+        <Heading size={"xlarge"} level={"1"}>
+          Dagpenger
+        </Heading>
         <div className={styles.taglineWrapper}>
           <BodyShort size="small" className={styles.taglineLabel}>
             PENGESTØTTE
