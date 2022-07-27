@@ -3,6 +3,9 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.scss";
 import Header from "../components/header/Header";
+import LeftMenu from "../components/left-menu/LeftMenu";
+import React from "react";
+import { BodyLong, Heading, Panel } from "@navikt/ds-react";
 
 const Home: NextPage = () => {
   return (
@@ -14,10 +17,57 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Header />
-        <h2 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h2>
+        <div className={styles.productPage}>
+          <Header />
+
+          <div className={styles.content}>
+            <div className={styles.layoutContainer}>
+              <div>
+                <LeftMenu
+                  title="Dagpenger"
+                  links={[
+                    {
+                      anchorId: "kort-fortalt",
+                      linkText: "Kort fortalt",
+                    },
+                    {
+                      anchorId: "tekst",
+                      linkText: "Tekst",
+                    },
+                  ]}
+                />
+              </div>
+
+              <div className={styles.mainContent}>
+                <section>
+                  <Panel>
+                    <Heading spacing level="2" size="large">
+                      Kort fortalt
+                    </Heading>
+                    <BodyLong>
+                      Du kan søke om det du trenger økonomisk støtte til. Det er bare ett søknadsskjema, og du beskriver
+                      selv hva du vil søke om. NAV-kontoret vil gjøre en konkret og individuell vurdering av din søknad.
+                      Har du sendt en søknad og ønsker å sende dokumentasjon, kan du gjøre dette under dine søknader.
+                    </BodyLong>
+                  </Panel>
+                </section>
+
+                <section>
+                  <Panel>
+                    <Heading spacing level="2" size="large">
+                      Søk dagpenger
+                    </Heading>
+                    <BodyLong>
+                      Du kan søke om det du trenger økonomisk støtte til. Det er bare ett søknadsskjema, og du beskriver
+                      selv hva du vil søke om. NAV-kontoret vil gjøre en konkret og individuell vurdering av din søknad.
+                      Har du sendt en søknad og ønsker å sende dokumentasjon, kan du gjøre dette under dine søknader.
+                    </BodyLong>
+                  </Panel>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );

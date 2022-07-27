@@ -1,1 +1,45 @@
+@use "styles/globals" as common;
 
+.main {
+  max-width: 90rem;
+  min-height: 22.5rem;
+  margin: 0 auto;
+  background-color: var(--navds-semantic-color-canvas-background);
+}
+
+.productPage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .content {
+    align-self: center;
+    width: 100%;
+
+    .layoutContainer {
+      display: flex;
+      flex-direction: row;
+      max-width: 67.5rem;
+      margin-top: 3rem;
+      padding: 0 3rem;
+    }
+
+    .mainContent {
+      > section {
+        margin-bottom: 2rem;
+      }
+    }
+
+    // Break out of the global app padding for better screen-width usage
+    // on narrower screens
+    @media #{common.$mq-screen-tablet-and-desktop} {
+      margin-left: -(common.$padding-sides-tablet);
+      margin-right: -(common.$padding-sides-tablet);
+    }
+
+    @media #{common.$mq-screen-desktop} {
+      margin-left: -(common.$padding-sides-desktop);
+      margin-right: -(common.$padding-sides-desktop);
+    }
+  }
+}
