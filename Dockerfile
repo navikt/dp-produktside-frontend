@@ -6,6 +6,7 @@ ENV TZ Europe/Oslo
 ENV CI=true
 
 COPY package*.json /home/node/app/
+COPY prepare.js /home/node/app/
 COPY .npmrc /home/node/app/
 
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
