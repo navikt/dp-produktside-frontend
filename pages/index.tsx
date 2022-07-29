@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.scss";
 import Header from "../components/header/Header";
 import LeftMenu from "../components/left-menu/LeftMenu";
 import React from "react";
-import { BodyLong, Heading, Panel } from "@navikt/ds-react";
+import { BodyLong, Heading, Menu, Panel } from "@navikt/ds-react";
 
 const Home: NextPage = () => {
   return (
