@@ -1,4 +1,4 @@
-FROM navikt/node-express:16 as builder
+FROM node:16 as builder
 WORKDIR /home/node/app
 
 ENV NODE_ENV=production
