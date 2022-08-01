@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:16 AS builder
 WORKDIR /home/node/app
 
 ENV NODE_ENV=production
@@ -17,7 +17,7 @@ RUN npm ci
 COPY . /home/node/app
 RUN npm run build
 
-FROM navikt/node-express:16 as runtime
+FROM node:16-alpine AS runtime
 WORKDIR /home/node/app
 
 ENV PORT=3000
