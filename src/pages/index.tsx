@@ -6,8 +6,22 @@ import Header from "../components/header/Header";
 import LeftMenu from "../components/left-menu/LeftMenu";
 import React from "react";
 import { BodyLong, Heading, Menu, Panel } from "@navikt/ds-react";
+import { sanityClient } from "../sanity/client";
+import { produktsideQuery } from "../sanity/groq/produktside/produktsideQuery";
 
-const Home: NextPage = () => {
+export async function getStaticProps() {
+  // It's important to default the slug so that it doesn't return "undefined"
+  const post = await sanityClient.fetch(produktsideQuery);
+  return {
+    props: {
+      post,
+    },
+  };
+}
+
+const Home: NextPage = ({ post }: any) => {
+  console.log(post);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,6 +33,8 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.productPage}>
           <Header />
+
+          <div></div>
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>
@@ -39,6 +55,19 @@ const Home: NextPage = () => {
               </div>
 
               <div className={styles.mainContent}>
+                <section>
+                  <Panel>
+                    <Heading spacing level="2" size="large">
+                      {post?.produktside[0].title}
+                    </Heading>
+                    <BodyLong>
+                      Du kan søke om det du trenger økonomisk støtte til. Det er bare ett søknadsskjema, og du beskriver
+                      selv hva du vil søke om. NAV-kontoret vil gjøre en konkret og individuell vurdering av din søknad.
+                      Har du sendt en søknad og ønsker å sende dokumentasjon, kan du gjøre dette under dine søknader.
+                    </BodyLong>
+                  </Panel>
+                </section>
+
                 <section>
                   <Panel>
                     <Heading spacing level="2" size="large">
