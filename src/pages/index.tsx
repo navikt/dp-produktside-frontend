@@ -14,17 +14,17 @@ import SanityBlockContent from "@sanity/block-content-to-react";
 
 export async function getStaticProps() {
   // It's important to default the slug so that it doesn't return "undefined"
-  const post = await sanityClient.fetch(produktsideQuery);
+  //todo: errorhåndtering hvis man ikke greier å hente produktside
+  const response = await sanityClient.fetch(produktsideQuery);
   return {
     props: {
-      post,
+      sanityData: response,
     },
   };
 }
 
-const Home: NextPage = ({ post }: any) => {
-  const tittel = post?.produktside[0].title;
-  const kortFortalt = post?.produktside[0].kortFortalt;
+const Home: NextPage = ({ sanityData }: any) => {
+  const { title: tittel, kortFortalt, innhold } = sanityData?.produktside[0];
 
   return (
     <div className={styles.container}>

@@ -3,7 +3,7 @@ import { createClient } from "next-sanity";
 import { SanityImage } from "./types";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "rt6o382n";
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "development";
 
 export const sanityConfig = {
   dataset: dataset,
