@@ -1,4 +1,5 @@
 dekoratorMiljo: dev
+sanityDataset: development
 ingresses: |
   ingresses:
     - https://arbeid.dev.nav.no/dagpenger
