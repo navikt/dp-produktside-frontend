@@ -1,0 +1,25 @@
+@use "styles/globals" as common;
+
+$topOffset: calc(var(--decorator-sticky-offset, 0px) + 1rem);
+$bottomOffset: 2rem;
+
+.leftMenu {
+  background-color: var(--navds-semantic-color-component-background-light);
+  padding: 2rem;
+  margin-right: 2rem;
+  top: $topOffset;
+  min-width: 17rem;
+
+  @media #{common.$mq-screen-tablet-and-desktop} {
+    overflow: auto;
+    max-height: calc(100vh - #{$topOffset} - #{$bottomOffset});
+  }
+
+  &__sticky {
+    position: sticky;
+  }
+
+  & * {
+    word-break: break-word;
+  }
+}
