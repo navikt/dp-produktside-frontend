@@ -1,5 +1,0 @@
-dekoratorMiljo: dev
-ingresses: |
-  ingresses:
-    - https://arbeid.dev.nav.no/dagpenger
-    - https://arbeid.ekstern.dev.nav.no/dagpenger
