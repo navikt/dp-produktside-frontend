@@ -4,7 +4,7 @@ const customJestConfig = {
   transform: {
     "^.+\\.(css|less)$": "jest-transform-stub",
   },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // testing library jest-dom needs to be injected for some reason, even after we set jsdom as enviroment
   transformIgnorePatterns: ["/node_modules/(?!(nav-.+)/)", "^.+\\.module\\.(css|sass|scss)$"],
   moduleNameMapper: {
     "^.+\\.module\\.(css|sass|scss|less)$": "identity-obj-proxy",
