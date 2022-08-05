@@ -13,9 +13,9 @@ import { produktsideQuery } from "../sanity/groq/produktside/produktsideQuery";
 import SanityBlockContent from "@sanity/block-content-to-react";
 
 export async function getStaticProps() {
-  // It's important to default the slug so that it doesn't return "undefined"
-  //todo: errorhåndtering hvis man ikke greier å hente produktside
+  // TODO: errorhåndtering hvis man ikke greier å hente produktside
   const response = await sanityClient.fetch(produktsideQuery);
+
   return {
     props: {
       sanityData: response,
