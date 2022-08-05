@@ -5,9 +5,7 @@ import { Money } from "@navikt/ds-icons";
 export default function Header() {
   return (
     <header className={styles.header}>
-      <div className={styles.illustration}>
-        <Money />
-      </div>
+      <div className={styles.illustration}>{<Money />}</div>
       <div className={styles.text}>
         <Heading size={"xlarge"} level={"1"}>
           Dagpenger
