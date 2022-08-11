@@ -1,16 +1,13 @@
 import { groq } from "next-sanity";
-import { SanityBlock } from "../../types";
 
 export const produktsideQuery = groq`{
-    'produktside': *[_type == "produktside"] {
-        ...
+    'oppsett': *[_type == "siteSettings"][0] {
+      ...
     },
-  }`;
 
-export interface IProduktside {
-  id: string;
-  _updatedAt: string;
-  title?: string;
-  innhold?: SanityBlock;
-  kortFortalt?: SanityBlock;
-}
+    'innholdsseksjoner': *[_type == "innholdsseksjon"] {
+      ...
+    }
+}`;
+
+// TODO: Fix typescript definitions for results returned from produktsideQuery

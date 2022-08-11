@@ -8,9 +8,7 @@ import React from "react";
 import { BodyLong, Heading, Menu, Panel } from "@navikt/ds-react";
 import { sanityClient } from "../sanity/client";
 import { produktsideQuery } from "../sanity/groq/produktside/produktsideQuery";
-// https://github.com/sanity-io/block-content-to-react/issues/26
-// @ts-ignore
-import SanityBlockContent from "@sanity/block-content-to-react";
+import { PortableText } from "@portabletext/react";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -24,12 +22,16 @@ export async function getStaticProps() {
 }
 
 const Home: NextPage = ({ sanityData }: any) => {
-  const { title: tittel, kortFortalt, innhold } = sanityData?.produktside[0];
+  const {
+    innholdsseksjoner,
+    oppsett: { title, kortFortalt },
+  } = sanityData;
 
+  console.log(sanityData);
   return (
     <div className={styles.container}>
       <Head>
-        <title>{tittel}</title>
+        <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -43,7 +45,7 @@ const Home: NextPage = ({ sanityData }: any) => {
             <div className={styles.layoutContainer}>
               <div>
                 <LeftMenu
-                  title={tittel}
+                  title={title}
                   links={[
                     {
                       anchorId: "kort-fortalt",
@@ -64,22 +66,22 @@ const Home: NextPage = ({ sanityData }: any) => {
                       Kort fortalt
                     </Heading>
                     {/* bør styles til bodylong*/}
-                    <SanityBlockContent blocks={kortFortalt}></SanityBlockContent>
+                    <PortableText value={kortFortalt} />
                   </Panel>
                 </section>
 
-                <section>
-                  <Panel>
-                    <Heading spacing level="2" size="large">
-                      Søk dagpenger
-                    </Heading>
-                    <BodyLong>
-                      Du kan søke om det du trenger økonomisk støtte til. Det er bare ett søknadsskjema, og du beskriver
-                      selv hva du vil søke om. NAV-kontoret vil gjøre en konkret og individuell vurdering av din søknad.
-                      Har du sendt en søknad og ønsker å sende dokumentasjon, kan du gjøre dette under dine søknader.
-                    </BodyLong>
-                  </Panel>
-                </section>
+                {/* @ts-ignore */}
+                {innholdsseksjoner?.map(({ title, innhold }, index) => (
+                  <section key={index}>
+                    <Panel>
+                      <Heading spacing level="2" size="large">
+                        {title}
+                      </Heading>
+                      {/* bør styles til bodylong*/}
+                      <PortableText value={innhold} />
+                    </Panel>
+                  </section>
+                ))}
               </div>
             </div>
           </div>
