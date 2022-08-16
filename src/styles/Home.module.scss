@@ -1,5 +1,9 @@
 @use "styles/globals" as common;
 
+.container {
+  scroll-behavior: smooth;
+}
+
 .main {
   max-width: 90rem;
   min-height: 22.5rem;
@@ -18,7 +22,7 @@
 
     .layoutContainer {
       display: flex;
-      flex-direction: row;
+      flex-flow: row wrap;
       max-width: 67.5rem;
       margin-top: 3rem;
       padding: 0 3rem;

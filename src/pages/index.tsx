@@ -1,14 +1,13 @@
+import { Heading, Panel } from "@navikt/ds-react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.scss";
-import Header from "../components/header/Header";
-import LeftMenu from "../components/left-menu/LeftMenu";
-import React from "react";
-import { BodyLong, Heading, Menu, Panel } from "@navikt/ds-react";
-import { sanityClient } from "../sanity/client";
-import { produktsideQuery } from "../sanity/groq/produktside/produktsideQuery";
-import { PortableText } from "@portabletext/react";
+import Header from "components/header/Header";
+import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
+import PortableTextContent from "components/portable-text-content/PortableTextContent";
+import { sanityClient } from "sanity/client";
+import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import styles from "styles/Home.module.scss";
+import createHashLinkIdFromString from "utils/createHashLinkIdFromString";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -27,7 +26,16 @@ const Home: NextPage = ({ sanityData }: any) => {
     oppsett: { title, kortFortalt },
   } = sanityData;
 
-  console.log(sanityData);
+  const kortFortaltLink = {
+    anchorId: "kort-fortalt",
+    linkText: "Kort fortalt",
+  };
+
+  const links = innholdsseksjoner.map((item) => ({
+    anchorId: createHashLinkIdFromString(item.title),
+    linkText: item.title,
+  }));
+
   return (
     <div className={styles.container}>
       <Head>
@@ -39,46 +47,30 @@ const Home: NextPage = ({ sanityData }: any) => {
         <div className={styles.productPage}>
           <Header />
 
-          <div></div>
-
           <div className={styles.content}>
             <div className={styles.layoutContainer}>
-              <div>
-                <LeftMenu
-                  title={title}
-                  links={[
-                    {
-                      anchorId: "kort-fortalt",
-                      linkText: "Kort fortalt",
-                    },
-                    {
-                      anchorId: "tekst",
-                      linkText: "Tekst",
-                    },
-                  ]}
-                />
-              </div>
+              <LeftMenuSection menuHeader={title} internalLinks={[kortFortaltLink, ...links]} sticky />
 
               <div className={styles.mainContent}>
-                <section>
+                <section id={createHashLinkIdFromString(kortFortaltLink.linkText)}>
                   <Panel>
                     <Heading spacing level="2" size="large">
                       Kort fortalt
                     </Heading>
                     {/* bør styles til bodylong*/}
-                    <PortableText value={kortFortalt} />
+                    <PortableTextContent value={kortFortalt} />
                   </Panel>
                 </section>
 
                 {/* @ts-ignore */}
                 {innholdsseksjoner?.map(({ title, innhold }, index) => (
-                  <section key={index}>
+                  <section key={index} id={createHashLinkIdFromString(title)}>
                     <Panel>
                       <Heading spacing level="2" size="large">
                         {title}
                       </Heading>
                       {/* bør styles til bodylong*/}
-                      <PortableText value={innhold} />
+                      <PortableTextContent value={innhold} />
                     </Panel>
                   </section>
                 ))}
