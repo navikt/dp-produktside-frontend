@@ -31,6 +31,7 @@ const Home: NextPage = ({ sanityData }: any) => {
     linkText: "Kort fortalt",
   };
 
+  // @ts-ignore
   const links = innholdsseksjoner.map((item) => ({
     anchorId: createHashLinkIdFromString(item.title),
     linkText: item.title,

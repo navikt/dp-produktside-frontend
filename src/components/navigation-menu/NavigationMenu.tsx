@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import { AnchorLink, PageNavScrollDirection } from "./types";
@@ -57,12 +58,6 @@ export default function NavigationMenu({ title, anchorLinks }: Props) {
     }
 
     const sortedLinks = anchorLinks;
-
-    // .sort((a, b) => {
-    //     const elementA = document.getElementById(a.anchorId);
-    //     const elementB = document.getElementById(b.anchorId);
-    //     return elementA.offsetTop - elementB.offsetTop;
-    // });
 
     const currentScrollPositionHandler = debounce(
       () => {
