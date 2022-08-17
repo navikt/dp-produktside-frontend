@@ -17,6 +17,7 @@ export async function getStaticProps() {
     props: {
       sanityData: response,
     },
+    revalidate: 120,
   };
 }
 
