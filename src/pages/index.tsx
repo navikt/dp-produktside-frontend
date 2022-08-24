@@ -23,8 +23,7 @@ export async function getStaticProps() {
 
 const Home: NextPage = ({ sanityData }: any) => {
   const {
-    innholdsseksjoner,
-    oppsett: { title, kortFortalt },
+    oppsett: { title, kortFortalt, innholdsseksjoner },
   } = sanityData;
 
   const kortFortaltLink = {
@@ -33,9 +32,9 @@ const Home: NextPage = ({ sanityData }: any) => {
   };
 
   // @ts-ignore
-  const links = innholdsseksjoner.map((item) => ({
-    anchorId: createHashLinkIdFromString(item.title),
-    linkText: item.title,
+  const links = innholdsseksjoner.map(({ title }) => ({
+    anchorId: createHashLinkIdFromString(title),
+    linkText: title,
   }));
 
   return (
