@@ -1,6 +1,6 @@
+import { Money } from "@navikt/ds-icons";
 import { BodyShort, Detail, Heading } from "@navikt/ds-react";
 import styles from "./Header.module.scss";
-import { Money } from "@navikt/ds-icons";
 
 export default function Header() {
   return (
