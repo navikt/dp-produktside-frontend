@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import debounce from "lodash/debounce";
-import { AnchorLink, PageNavScrollDirection } from "./types";
+import { AnchorLink, NavScrollDirection } from "./types";
 import Config from "config";
-import NavigationSidebar from "./NavigationSidebar";
+import { NavigationSidebar } from "./NavigationSidebar";
 
-export const pageNavigationAnchorOffsetPx = Config.vars.pxPerRem;
+export const navigationAnchorOffsetPx = Config.vars.pxPerRem;
 const menuCurrentIndexMinUpdateRateMs = 1000 / 30;
-
-export const getPageNavigationLinkId = (anchorId: string) => `${anchorId}-a`;
 
 const getCurrentLinkIndex = (links: AnchorLink[]) => {
   const targetElements = links.reduce((elements, link) => {
@@ -46,10 +44,10 @@ interface Props {
   title?: string;
 }
 
-export default function NavigationMenu({ title, anchorLinks }: Props) {
+export function NavigationMenu({ title, anchorLinks }: Props) {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [links, setLinks] = useState<AnchorLink[]>();
-  const scrollDir = useRef<PageNavScrollDirection>("up");
+  const scrollDir = useRef<NavScrollDirection>("up");
   const prevScrollPos = useRef(0);
 
   useEffect(() => {
@@ -90,7 +88,6 @@ export default function NavigationMenu({ title, anchorLinks }: Props) {
     title: title,
     links: links,
     scrollDirection: scrollDir.current,
-    // dupes: anchorLinks.filter((link) => link.isDupe),
   };
 
   return <NavigationSidebar {...props} />;

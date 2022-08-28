@@ -1,22 +1,22 @@
 import { Label } from "@navikt/ds-react";
 import classNames from "classnames";
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { smoothScrollToTarget } from "utils/scroll";
 import styles from "./NavigationLink.module.scss";
+import { navigationAnchorOffsetPx } from "./NavigationMenu";
 import navigationSidebarStyles from "./NavigationSidebar.module.scss";
-import { PageNavScrollDirection } from "./types";
-import { pageNavigationAnchorOffsetPx } from "./NavigationMenu";
+import { NavScrollDirection } from "./types";
 
 interface Props {
   targetId: string;
   children: ReactNode;
   isCurrent?: boolean;
   linkId?: string;
-  scrollDirection?: PageNavScrollDirection;
+  scrollDirection?: NavScrollDirection;
 }
 
-export const NavigationLink = React.memo(({ targetId, isCurrent, scrollDirection, children }: Props) => {
+function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Props) {
   //@ts-ignore
   const setLocationHashAndScrollToTarget = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export const NavigationLink = React.memo(({ targetId, isCurrent, scrollDirection
     //@ts-ignore
     window.history.pushState(window.history.state, undefined, `#${targetId}`);
 
-    smoothScrollToTarget(targetId, pageNavigationAnchorOffsetPx);
+    smoothScrollToTarget(targetId, navigationAnchorOffsetPx);
   };
 
   return (
@@ -50,6 +50,8 @@ export const NavigationLink = React.memo(({ targetId, isCurrent, scrollDirection
       </a>
     </Link>
   );
-});
+}
+
+export const MemoizedNavigationLink = memo(NavigationLink);
 
 NavigationLink.displayName = "NavigationLink";
