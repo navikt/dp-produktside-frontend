@@ -3,4 +3,4 @@ export type AnchorLink = {
   linkText: string;
 };
 
-export type PageNavScrollDirection = "up" | "down";
+export type NavScrollDirection = "up" | "down";

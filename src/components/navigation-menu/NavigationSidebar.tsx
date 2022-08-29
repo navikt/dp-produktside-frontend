@@ -1,17 +1,16 @@
 import { Heading } from "@navikt/ds-react";
-import { useState } from "react";
-import { NavigationLink } from "./NavigationLink";
+import { MemoizedNavigationLink } from "./NavigationLink";
 import styles from "./NavigationSidebar.module.scss";
-import { AnchorLink, PageNavScrollDirection } from "./types";
+import { AnchorLink, NavScrollDirection } from "./types";
 
 interface Props {
   links: AnchorLink[];
   title?: string;
   currentIndex?: number;
-  scrollDirection?: PageNavScrollDirection;
+  scrollDirection?: NavScrollDirection;
 }
 
-const NavigationSidebar = ({ links, title, currentIndex, scrollDirection }: Props) => {
+export function NavigationSidebar({ links, title, currentIndex, scrollDirection }: Props) {
   return (
     <div className={styles.sidebar}>
       {title && (
@@ -24,15 +23,17 @@ const NavigationSidebar = ({ links, title, currentIndex, scrollDirection }: Prop
         <ul className={styles.list}>
           {links.map(({ anchorId, linkText }, index) => (
             <li key={anchorId}>
-              <NavigationLink isCurrent={currentIndex === index} targetId={anchorId} scrollDirection={scrollDirection}>
+              <MemoizedNavigationLink
+                isCurrent={currentIndex === index}
+                targetId={anchorId}
+                scrollDirection={scrollDirection}
+              >
                 {linkText}
-              </NavigationLink>
+              </MemoizedNavigationLink>
             </li>
           ))}
         </ul>
       </nav>
     </div>
   );
-};
-
-export default NavigationSidebar;
+}

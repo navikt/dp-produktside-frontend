@@ -1,6 +1,6 @@
 // TODO: Create test for this utility function?
 
-export default function createHashLinkIdFromString(value: string) {
+export function createHashLinkIdFromString(value: string) {
   return `${value
     .toLowerCase()
     .trim()

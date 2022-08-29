@@ -1,37 +1,16 @@
 @use "styles/globals" as common;
 
-$topOffset: calc(var(--decorator-sticky-offset, 0px) + 1rem);
-$bottomOffset: 2rem;
-
 .sidebar {
-  background-color: var(--navds-semantic-color-component-background-light);
+  background-color: white;
   padding: 1rem 0;
-  margin-right: 2rem;
-  top: $topOffset;
-  min-width: 17rem;
+}
 
-  .title {
-    padding: 1rem;
-  }
+.title {
+  padding: 1rem;
+}
 
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  @media #{common.$mq-screen-tablet-and-desktop} {
-    overflow: auto;
-    max-height: calc(100vh - #{$topOffset} - #{$bottomOffset});
-  }
-
-  &__sticky {
-    position: sticky;
-  }
-
-  & * {
-    word-break: break-word;
-  }
+.list {
+  @include common.unstyled-list();
 }
 
 .navLink {
