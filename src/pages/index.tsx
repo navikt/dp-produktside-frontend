@@ -9,6 +9,7 @@ import PortableTextContent from "components/portable-text-content/PortableTextCo
 import styles from "styles/Home.module.scss";
 import { createHashLinkIdFromString } from "utils/createHashLinkIdFromString";
 import { useIsMobile } from "utils/useIsMobile";
+import { useSanityPreveiw } from "sanity/useSanityPreview";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -24,10 +25,11 @@ export async function getStaticProps() {
 
 const Home: NextPage = ({ sanityData }: any) => {
   const isMobile = useIsMobile();
+  const productData = useSanityPreveiw(sanityData, produktsideQuery);
 
   const {
     oppsett: { title, kortFortalt, innholdsseksjoner },
-  } = sanityData;
+  } = productData;
 
   const kortFortaltLink = {
     anchorId: "kort-fortalt",
