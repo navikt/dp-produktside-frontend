@@ -1,12 +1,17 @@
 import "@navikt/ds-css";
 import type { AppProps } from "next/app";
-import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
-import "../styles/globals.scss";
+import { PreviewBanner } from "components/preview-context/PreviewBanner";
+import { PreviewContextProvider } from "components/preview-context/previewContext";
+import ErrorBoundary from "components/error-boundary/ErrorBoundary";
+import "styles/globals.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary>
-      <Component {...pageProps} />;
+      <PreviewContextProvider>
+        <PreviewBanner />
+        <Component {...pageProps} />;
+      </PreviewContextProvider>
     </ErrorBoundary>
   );
 }
