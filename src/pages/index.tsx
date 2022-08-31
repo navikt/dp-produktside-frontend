@@ -7,7 +7,6 @@ import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import PortableTextContent from "components/portable-text-content/PortableTextContent";
 import styles from "styles/Home.module.scss";
-import { createHashLinkIdFromString } from "utils/createHashLinkIdFromString";
 import { useIsMobile } from "utils/useIsMobile";
 import { useSanityPreveiw } from "sanity/useSanityPreview";
 
@@ -32,18 +31,18 @@ const Home: NextPage = ({ sanityData }: any) => {
   } = productData;
 
   const kortFortaltLink = {
-    anchorId: "kort-fortalt",
+    anchorId: "kort",
     linkText: "Kort fortalt",
   };
 
   // @ts-ignore
-  const links = innholdsseksjoner.map(({ title }) => ({
-    anchorId: createHashLinkIdFromString(title),
+  const links = innholdsseksjoner.map(({ title, anchorId }) => ({
+    anchorId: anchorId,
     linkText: title,
   }));
 
   const KortFortaltComponent = () => (
-    <section id={createHashLinkIdFromString(kortFortaltLink.linkText)}>
+    <section id={kortFortaltLink.anchorId}>
       <Panel>
         <Heading spacing level="2" size="large">
           Kort fortalt
@@ -76,8 +75,8 @@ const Home: NextPage = ({ sanityData }: any) => {
                 {!isMobile && <KortFortaltComponent />}
 
                 {/* @ts-ignore */}
-                {innholdsseksjoner?.map(({ title, innhold }, index) => (
-                  <section key={index} id={createHashLinkIdFromString(title)}>
+                {innholdsseksjoner?.map(({ title, innhold, anchorId }, index) => (
+                  <section key={index} id={anchorId}>
                     <Panel>
                       <Heading spacing level="2" size="large">
                         {title}
