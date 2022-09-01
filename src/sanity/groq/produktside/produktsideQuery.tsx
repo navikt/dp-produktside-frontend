@@ -2,16 +2,17 @@ import { groq } from "next-sanity";
 
 const innholdFields = `innhold [_type == "innholdsseksjonReference"]{
      ...innholdsseksjon-> {
-       title,
-       innhold
+        title,
+        innhold,
+        slug,
      }
 }`;
 
 export const produktsideQuery = groq`{
-    'oppsett': *[_type == "siteSettings"][0] {
+    'oppsett': *[_id == "siteSettings" && __i18n_lang == "nb"][0] {
       title,
       kortFortalt,
-      "innholdsseksjoner": ${innholdFields}
+      "innholdsseksjoner": ${innholdFields},
     },
 }`;
 
