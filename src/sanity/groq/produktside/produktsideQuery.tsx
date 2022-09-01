@@ -4,7 +4,7 @@ const innholdFields = `innhold [_type == "innholdsseksjonReference"]{
      ...innholdsseksjon-> {
         title,
         innhold,
-        "anchorId": slug.current,
+        slug,
      }
 }`;
 

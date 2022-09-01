@@ -36,8 +36,8 @@ const Home: NextPage = ({ sanityData }: any) => {
   };
 
   // @ts-ignore
-  const links = innholdsseksjoner.map(({ title, anchorId }) => ({
-    anchorId: anchorId,
+  const links = innholdsseksjoner.map(({ title, slug }) => ({
+    anchorId: slug?.current,
     linkText: title,
   }));
 
@@ -75,8 +75,8 @@ const Home: NextPage = ({ sanityData }: any) => {
                 {!isMobile && <KortFortaltComponent />}
 
                 {/* @ts-ignore */}
-                {innholdsseksjoner?.map(({ title, innhold, anchorId }, index) => (
-                  <section key={index} id={anchorId}>
+                {innholdsseksjoner?.map(({ title, innhold, slug }, index) => (
+                  <section key={index} id={slug?.current}>
                     <Panel>
                       <Heading spacing level="2" size="large">
                         {title}
