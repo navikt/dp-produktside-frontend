@@ -1,0 +1,9 @@
+{
+  "label": "Your dagpengegrunnlag",
+  "forLavtGrunnlag": "Income under {{G}} does not give right to unemployment benefit.",
+  "sendSøknadLikvel": "Vi anbefaler likevel at du sender søknad så kan NAV vurdere din rett til dagpenger.",
+  "mellom": "Mellom {{over}} og {{under}} G",
+  "tilsammen": "Til sammen",
+  "ukesats": "Dette gir en ukesats (før skatt) på",
+  "kunveiledende": "Disse tallene er kun veiledende."
+}

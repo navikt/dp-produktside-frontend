@@ -1,0 +1,32 @@
+.kalkulator {
+  margin: 3rem 0;
+
+  .inputWrapper {
+    display: flex;
+    justify-content: center;
+
+    input {
+      width: 5.5rem;
+    }
+    align-items: center;
+  }
+}
+
+.resultTable {
+  table {
+    margin: 0.5rem auto 1rem;
+    text-align: right;
+    td {
+      padding: 0.2rem 0.5rem;
+      vertical-align: middle;
+    }
+    tr:nth-last-child(3) ~ tr {
+      font-weight: 600;
+    }
+    tr:nth-last-child(2) {
+      td {
+        padding-top: 0.6rem;
+      }
+    }
+  }
+}
