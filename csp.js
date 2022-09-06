@@ -38,7 +38,7 @@ const csp = {
   ],
   "font-src": ["'self'", "data:", "*.psplugin.com", "*.hotjar.com", "fonts.gstatic.com"],
   "frame-src": ["'self'", "vars.hotjar.com"],
-  "img-src": ["'self'", "*.hotjar.com", "*.nav.no", "data:", "localhost"],
+  "img-src": ["'self'", "*.hotjar.com", "*.nav.no", "data:"],
 };
 
 const stringified = Object.entries(csp)

@@ -26,12 +26,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/",
-        destination: "/dagpenger",
-        permanent: true,
-        basePath: false,
-      },
-      {
         source: "/dagpenger/(.*)",
         destination: "https://www.nav.no/404",
         permanent: true,
