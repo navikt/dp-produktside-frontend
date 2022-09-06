@@ -1,6 +1,5 @@
 import { Accordion, Alert, BodyShort, TextField } from "@navikt/ds-react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
 import { toKR, useGrunnbellop } from "./utils";
@@ -10,7 +9,6 @@ interface ResultatProps {
 }
 
 function Resultat({ grunnlag }: ResultatProps) {
-  const { t } = useTranslation("kalkulator");
   const { G, GtoNOK } = useGrunnbellop();
 
   if (!grunnlag) {
@@ -20,8 +18,10 @@ function Resultat({ grunnlag }: ResultatProps) {
   if (grunnlag < 1.5 * G) {
     return (
       <>
-        <BodyShort>{t("forLavtGrunnlag", { G: `1.5 G (${GtoNOK(1.5)} kroner)` })} </BodyShort>
-        <Alert variant="info">{t("sendSøknadLikvel")}</Alert>
+        <BodyShort>{`Inntekt under 1.5 G ${GtoNOK(1.5)} kroner gir ikke rett til dagpenger.`} </BodyShort>
+        <Alert variant="info">
+          {"Vi anbefaler likevel at du sender søknad så NAV kan vurdere retten din til dagpenger."}
+        </Alert>
       </>
     );
   }
@@ -40,7 +40,7 @@ function Resultat({ grunnlag }: ResultatProps) {
         <tbody>
           <tr>
             <td>
-              <i>{t("mellom", { over: 0, under: 6 })}</i>
+              <i>{"Inntekt opp til 6 G"}</i>
             </td>
             <td>{toKR(mellom0og6g)} x 62.4 %</td>
             <td> {toKR(resultatMellom0og6G)}</td>
@@ -55,16 +55,16 @@ function Resultat({ grunnlag }: ResultatProps) {
             </tr>
           )}
           <tr>
-            <td colSpan={2}>{t("tilsammen")}</td>
+            <td colSpan={2}>{"Totalt"}</td>
             <td>{toKR(totalt)}</td>
           </tr>
           <tr>
-            <td colSpan={2}>{t("ukesats")}</td>
+            <td colSpan={2}>{"Dette gir en ukesats (før skatt) på"}</td>
             <td> {toKR(totalt / 52)}</td>
           </tr>
         </tbody>
       </table>
-      <Alert variant="info">{t("kunveiledende")}</Alert>
+      <Alert variant="info">{"Dette er kun veiledende tall."}</Alert>
     </>
   );
 }
@@ -72,9 +72,6 @@ function Resultat({ grunnlag }: ResultatProps) {
 export function DagpengerKalkulator() {
   const [grunnlag, setGrunnlag] = useState<undefined | number>();
   const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
-  // TODO: International Language?
-  const { t } = useTranslation("kalkulator");
-
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
   // useEffect(() => {
@@ -91,8 +88,10 @@ export function DagpengerKalkulator() {
           <Accordion.Header>Kalkulator</Accordion.Header>
           <Accordion.Content className={styles.inputWrapper}>
             <TextField
-              label={t("label")}
-              type="number"
+              label="Skriv inn din årsinntekt"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               // @ts-ignore
               value={grunnlag || ""}
               onChange={(e) => setGrunnlag(Math.max(0, +e.target.value) || undefined)}
