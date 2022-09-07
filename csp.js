@@ -2,13 +2,16 @@ const csp = {
   "default-src": ["'self'", "tjenester.nav.no", "appres.nav.no"],
   "script-src": [
     "'self'",
+    "'unsafe-eval'",
+    "'unsafe-inline'",
+    "blob:",
     "static.hotjar.com",
     "script.hotjar.com",
     "*.psplugin.com",
     "*.nav.no",
     "in2.taskanalytics.com",
   ],
-  "style-src": ["'self'", "blob:", "*.nav.no"],
+  "style-src": ["'self'", "blob:", "*.nav.no", "'unsafe-inline'"],
   "connect-src": [
     "'self'",
     "*.nav.no",
