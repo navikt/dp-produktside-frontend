@@ -38,7 +38,7 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
     const { Dekorator } = this.props;
 
     return (
-      <Html style={{ scrollBehavior: "smooth" }}>
+      <Html>
         <Head /> {/* Head må først inn, så kan neste blokk inserte elementer */}
         <Dekorator.Styles />
         <Dekorator.Scripts />
