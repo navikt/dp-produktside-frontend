@@ -2,18 +2,16 @@ const csp = {
   "default-src": ["'self'", "tjenester.nav.no", "appres.nav.no"],
   "script-src": [
     "'self'",
-    "appres.nav.no",
     "static.hotjar.com",
     "script.hotjar.com",
     "*.psplugin.com",
     "*.nav.no",
     "in2.taskanalytics.com",
   ],
-  "style-src": ["'self'", "blob:", "*.nav.no", "arbeid.dev.nav.no", "appres.nav.no", "fonts.googleapis.com"],
+  "style-src": ["'self'", "blob:", "*.nav.no"],
   "connect-src": [
     "'self'",
     "*.nav.no",
-    "appres.nav.no",
     "amplitude.nav.no/collect",
     "*.psplugin.com",
     "*.hotjar.com",
@@ -26,7 +24,7 @@ const csp = {
     "ta-survey-v2.herokuapp.com",
     "in2.taskanalytics.com",
   ],
-  "font-src": ["'self'", "data:", "*.psplugin.com", "*.hotjar.com", "fonts.gstatic.com"],
+  "font-src": ["'self'", "data:", "*.psplugin.com", "*.hotjar.com"],
   "frame-src": ["'self'", "vars.hotjar.com"],
   "img-src": ["'self'", "*.hotjar.com", "*.nav.no", "data:"],
 };
