@@ -1,0 +1,11 @@
+{
+  "label": "Skriv inn din årsinntekt",
+  "forLavtGrunnlag": "Inntekt under {{G}} gir ikke rett til dagpenger.",
+  "sendSøknadLikvel": "Vi anbefaler likevel at du sender søknad så NAV kan vurdere retten din til dagpenger.",
+  "mellom": "Inntekt opp til {{under}} G",
+  "tilsammen": "Totalt",
+  "ukesats": "Dette gir en ukesats (før skatt) på",
+  "nyereglerfra": "Beregningen viser hva du kan få i dagpenger fra 1. april 2022.",
+  "kunveiledende": "Dette er kun veiledende tall.",
+  "minimumsinntektKunIOvergang": "Fra 1. april 2022 øker kravet for hvor mye du må ha tjent for å ha rett til dagpenger til {{G}}."
+}

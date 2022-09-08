@@ -1,11 +1,15 @@
 import { PortableText, PortableTextProps } from "@portabletext/react";
-
-/* array of portable text blocks */
-// const value = [];
-
-/* optional object of custom components to use */
-const components = {};
+import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKalkulator";
 
 export default function PortableTextContent({ value }: PortableTextProps) {
-  return <PortableText value={value} components={components} />;
+  return (
+    <PortableText
+      value={value}
+      components={{
+        types: {
+          customComponent: DagpengerKalkulator,
+        },
+      }}
+    />
+  );
 }
