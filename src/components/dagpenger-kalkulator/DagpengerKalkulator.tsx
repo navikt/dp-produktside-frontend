@@ -72,6 +72,7 @@ function Resultat({ grunnlag }: ResultatProps) {
 export function DagpengerKalkulator() {
   const [grunnlag, setGrunnlag] = useState<undefined | number>();
   const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
+
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
   // useEffect(() => {
@@ -82,25 +83,23 @@ export function DagpengerKalkulator() {
   // }, [grunnlag, harLoggetBruk]);
 
   return (
-    <aside className={styles.kalkulator}>
-      <Accordion>
-        <Accordion.Item open={true}>
-          <Accordion.Header>Kalkulator</Accordion.Header>
-          <Accordion.Content className={styles.inputWrapper}>
-            <TextField
-              label="Skriv inn din årsinntekt"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              // @ts-ignore
-              value={grunnlag || ""}
-              onChange={(e) => setGrunnlag(Math.max(0, +e.target.value) || undefined)}
-              placeholder="350 000"
-            />
-          </Accordion.Content>
-          <Resultat grunnlag={debouncedGrunnlag} />
-        </Accordion.Item>
-      </Accordion>
-    </aside>
+    <Accordion className={styles.kalkulator}>
+      <Accordion.Item open={true}>
+        <Accordion.Header>Kalkulator</Accordion.Header>
+        <Accordion.Content className={styles.inputWrapper}>
+          <TextField
+            label="Skriv inn din årsinntekt"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            // @ts-ignore
+            value={grunnlag || ""}
+            onChange={(e) => setGrunnlag(Math.max(0, +e.target.value) || undefined)}
+            placeholder="350 000"
+          />
+        </Accordion.Content>
+        <Resultat grunnlag={debouncedGrunnlag} />
+      </Accordion.Item>
+    </Accordion>
   );
 }

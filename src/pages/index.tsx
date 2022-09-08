@@ -73,7 +73,7 @@ const Home: NextPage = ({ sanityData }: any) => {
 
               <div className={styles.mainCol}>
                 {!isMobile && <KortFortaltComponent />}
-                {console.log("haha", innholdsseksjoner)}
+
                 {/* @ts-ignore */}
                 {innholdsseksjoner?.map(({ title, innhold, slug }, index) => (
                   <section key={index} id={slug?.current}>
