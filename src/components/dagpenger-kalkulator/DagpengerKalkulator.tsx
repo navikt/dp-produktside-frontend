@@ -2,14 +2,14 @@ import { Accordion, Alert, BodyShort, TextField } from "@navikt/ds-react";
 import { useState } from "react";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
-import { toKR, useGrunnbellop } from "./utils";
+import { toKR, useKalkulatorGrunnbelop } from "./utils";
 
 interface ResultatProps {
   grunnlag?: number;
 }
 
 function Resultat({ grunnlag }: ResultatProps) {
-  const { G, GtoNOK } = useGrunnbellop();
+  const { G, GtoNOK } = useKalkulatorGrunnbelop();
 
   if (!grunnlag) {
     return null;
@@ -18,7 +18,7 @@ function Resultat({ grunnlag }: ResultatProps) {
   if (grunnlag < 1.5 * G) {
     return (
       <>
-        <BodyShort>{`Inntekt under 1.5 G ${GtoNOK(1.5)} kroner gir ikke rett til dagpenger.`} </BodyShort>
+        <BodyShort>{`Inntekt under 1.5 G (${GtoNOK(1.5)} kroner) gir ikke rett til dagpenger.`} </BodyShort>
         <Alert variant="info">
           {"Vi anbefaler likevel at du sender søknad så NAV kan vurdere retten din til dagpenger."}
         </Alert>

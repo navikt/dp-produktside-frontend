@@ -1,9 +1,11 @@
-export function useGrunnbellop() {
-  const hardCodedG = 100000;
+import { useGrunnbelop } from "components/grunnbelop-context/grunnbelop-context";
+
+export function useKalkulatorGrunnbelop() {
+  const { grunnbeloep } = useGrunnbelop();
 
   return {
-    GtoNOK: (g: number) => Math.round(g * hardCodedG).toLocaleString("no-NO"),
-    G: hardCodedG,
+    GtoNOK: (g: number) => Math.round(g * grunnbeloep).toLocaleString("no-NO"),
+    G: grunnbeloep,
   };
 }
 
