@@ -14,13 +14,13 @@ import { useSanityPreveiw } from "sanity/useSanityPreview";
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
   const response = await sanityClient.fetch(produktsideQuery);
-  const grunnBelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
-  const grunnBelopData: GrunnbelopData = await grunnBelopResponse.json();
+  const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
+  const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
 
   return {
     props: {
       sanityData: response,
-      grunnBelopData: grunnBelopData,
+      grunnbelopData: grunnbelopData,
     },
     revalidate: 120,
   };
