@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary>
       <PreviewContextProvider>
-        <GrunnbelopProvider value={pageProps.grunnBelopData}>
+        <GrunnbelopProvider grunnbeloep={pageProps.grunnBelopData?.grunnbeloep}>
           <PreviewBanner />
           <Component {...pageProps} />;
         </GrunnbelopProvider>

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 
-interface GrunnbelopData {
+export interface GrunnbelopData {
   dato: string;
   gjennomsnittPerAar: number;
   grunnbeloep: number;
@@ -10,24 +10,37 @@ interface GrunnbelopData {
 }
 
 interface GrunnbelopProviderProps {
-  value: GrunnbelopData;
+  grunnbeloep: number;
   children: ReactNode;
 }
 
-const GrunnbelopContext = createContext<GrunnbelopData | undefined>(undefined);
-
-function GrunnbelopProvider({ value, children }: GrunnbelopProviderProps) {
-  // NOTE: you *might* need to memoize this value
-  // Learn more in http://kcd.im/optimize-context
-  return <GrunnbelopContext.Provider value={value}>{children}</GrunnbelopContext.Provider>;
+interface GrunnbelopContextValues {
+  G: number;
+  GtoNOK: (g: number) => string;
 }
 
-function useGrunnbelop() {
+const GrunnbelopContext = createContext<GrunnbelopContextValues | undefined>(undefined);
+
+export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProviderProps) {
+  // NOTE: you *might* need to memoize this value
+  // Learn more in http://kcd.im/optimize-context
+
+  return (
+    <GrunnbelopContext.Provider
+      value={{
+        G: grunnbeloep,
+        GtoNOK: (g: number) => Math.round(g * grunnbeloep).toLocaleString("no-NO"),
+      }}
+    >
+      {children}
+    </GrunnbelopContext.Provider>
+  );
+}
+
+export function useGrunnbelop() {
   const context = useContext(GrunnbelopContext);
   if (context === undefined) {
     throw new Error("useGrunnbelop must be used within a GrunnbelopContext");
   }
   return context;
 }
-
-export { GrunnbelopProvider, useGrunnbelop };

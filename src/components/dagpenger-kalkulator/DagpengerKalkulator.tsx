@@ -1,15 +1,16 @@
 import { Accordion, Alert, BodyShort, TextField } from "@navikt/ds-react";
+import { useGrunnbelop } from "components/grunnbelop-context/grunnbelop-context";
 import { useState } from "react";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
-import { toKR, useKalkulatorGrunnbelop } from "./utils";
+import { toKR } from "./utils";
 
 interface ResultatProps {
   grunnlag?: number;
 }
 
 function Resultat({ grunnlag }: ResultatProps) {
-  const { G, GtoNOK } = useKalkulatorGrunnbelop();
+  const { G, GtoNOK } = useGrunnbelop();
 
   if (!grunnlag) {
     return null;
