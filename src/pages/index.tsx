@@ -31,16 +31,17 @@ const Home: NextPage = ({ sanityData }: any) => {
   const productData = useSanityPreveiw(sanityData, produktsideQuery);
 
   const {
-    oppsett: { title, kortFortalt, innholdsseksjoner },
+    settings: { title, content },
+    kortFortalt,
   } = productData;
 
   const kortFortaltLink = {
-    anchorId: "kort",
-    linkText: "Kort fortalt",
+    anchorId: kortFortalt?.slug?.current,
+    linkText: kortFortalt?.title,
   };
 
   // @ts-ignore
-  const links = innholdsseksjoner.map(({ title, slug }) => ({
+  const links = content?.map(({ title, slug }) => ({
     anchorId: slug?.current,
     linkText: title,
   }));
@@ -49,10 +50,10 @@ const Home: NextPage = ({ sanityData }: any) => {
     <section id={kortFortaltLink.anchorId}>
       <Panel>
         <Heading spacing level="2" size="large">
-          Kort fortalt
+          {kortFortalt?.title}
         </Heading>
         {/* bør styles til bodylong*/}
-        <PortableTextContent value={kortFortalt} />
+        <PortableTextContent value={kortFortalt?.content} />
       </Panel>
     </section>
   );
@@ -79,14 +80,14 @@ const Home: NextPage = ({ sanityData }: any) => {
                 {!isMobile && <KortFortaltComponent />}
 
                 {/* @ts-ignore */}
-                {innholdsseksjoner?.map(({ title, innhold, slug }, index) => (
+                {content?.map(({ title, content, slug }, index) => (
                   <section key={index} id={slug?.current}>
                     <Panel>
                       <Heading spacing level="2" size="large">
                         {title}
                       </Heading>
                       {/* bør styles til bodylong*/}
-                      <PortableTextContent value={innhold} />
+                      <PortableTextContent value={content} />
                     </Panel>
                   </section>
                 ))}
