@@ -5,7 +5,12 @@ const vars = {
   dekoratorenHeight: 104,
 };
 
+const appUrls = {
+  dagpengerSoknad: "https://www.nav.no/arbeid/dagpenger/soknad-veileder",
+};
+
 const Config = {
+  appUrls,
   vars,
 };
 
