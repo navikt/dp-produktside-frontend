@@ -14,6 +14,7 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
       env: process.env.DEKORATOR_MILJO || "prod",
       breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
       context: "privatperson",
+      utilsBackground: "white",
     };
 
     const Dekorator: DekoratorComponents = await fetchDecoratorReact(dekoratorParams).catch((err) => {

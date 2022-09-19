@@ -5,14 +5,15 @@ import { AnchorLink } from "components/navigation-menu/types";
 import styles from "./LeftMenuSection.module.scss";
 import Config from "config";
 import Link from "next/link";
-
+import { LinkList, SupportLink } from "components/link-list/LinkList";
 interface Props {
   internalLinks: AnchorLink[];
+  supportLinks?: SupportLink[];
   menuHeader: string;
   sticky?: boolean;
 }
 
-export function LeftMenuSection({ internalLinks, menuHeader, sticky }: Props) {
+export function LeftMenuSection({ internalLinks, supportLinks, menuHeader, sticky }: Props) {
   return (
     <section className={classnames(styles.leftMenu, { [styles.leftMenuSticky]: sticky })}>
       <NavigationMenu title={menuHeader} anchorLinks={internalLinks} />
@@ -22,6 +23,8 @@ export function LeftMenuSection({ internalLinks, menuHeader, sticky }: Props) {
           <Button variant="primary">Søk dagpenger</Button>
         </Link>
       </div>
+
+      <LinkList links={supportLinks} title="Nyttig å vite" />
     </section>
   );
 }

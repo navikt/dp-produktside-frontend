@@ -10,9 +10,10 @@ import svgIcon from "../../../public/static-dagpenger.svg";
 export function Header() {
   return (
     <header className={styles.header}>
-      <div className={styles.illustration}>
+      <div className={styles.illustration} aria-hidden="true" role="presentation">
         <Image src={svgIcon} layout="responsive" />
       </div>
+
       <div className={styles.text}>
         <Heading size={"xlarge"} level={"1"}>
           Dagpenger

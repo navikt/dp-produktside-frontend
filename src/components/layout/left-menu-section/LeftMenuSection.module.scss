@@ -14,6 +14,10 @@ $bottomOffset: 2rem;
   & * {
     word-break: break-word;
   }
+
+  > :not(:first-child):not(:last-child) {
+    margin-bottom: 1rem;
+  }
 }
 
 .leftMenuSticky {
@@ -21,7 +25,7 @@ $bottomOffset: 2rem;
 }
 
 .link {
-  background-color: white;
+  background-color: var(--navds-semantic-color-canvas-background-light);
   padding: 1rem;
 
   > * {

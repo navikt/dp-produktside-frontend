@@ -31,7 +31,7 @@ const Home: NextPage = ({ sanityData }: any) => {
   const productData = useSanityPreveiw(sanityData, produktsideQuery);
 
   const {
-    settings: { title, content },
+    settings: { title, content, supportLinks },
     kortFortalt,
   } = productData;
 
@@ -71,26 +71,33 @@ const Home: NextPage = ({ sanityData }: any) => {
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>
-              <div className={styles.leftCol}>
-                {isMobile && <KortFortaltComponent />}
-                <LeftMenuSection menuHeader={title} internalLinks={[kortFortaltLink, ...links]} sticky={!isMobile} />
-              </div>
+              <div className={styles.topRow}>
+                <div className={styles.leftCol}>
+                  {isMobile && <KortFortaltComponent />}
+                  <LeftMenuSection
+                    menuHeader="Innhold"
+                    internalLinks={[kortFortaltLink, ...links]}
+                    supportLinks={supportLinks}
+                    sticky={!isMobile}
+                  />
+                </div>
 
-              <div className={styles.mainCol}>
-                {!isMobile && <KortFortaltComponent />}
+                <div className={styles.mainCol}>
+                  {!isMobile && <KortFortaltComponent />}
 
-                {/* @ts-ignore */}
-                {content?.map(({ title, content, slug }, index) => (
-                  <section key={index} id={slug?.current}>
-                    <Panel>
-                      <Heading spacing level="2" size="large">
-                        {title}
-                      </Heading>
-                      {/* bør styles til bodylong*/}
-                      <PortableTextContent value={content} />
-                    </Panel>
-                  </section>
-                ))}
+                  {/* @ts-ignore */}
+                  {content?.map(({ title, content, slug }, index) => (
+                    <section key={index} id={slug?.current}>
+                      <Panel>
+                        <Heading spacing level="2" size="large">
+                          {title}
+                        </Heading>
+                        {/* bør styles til bodylong*/}
+                        <PortableTextContent value={content} />
+                      </Panel>
+                    </section>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
