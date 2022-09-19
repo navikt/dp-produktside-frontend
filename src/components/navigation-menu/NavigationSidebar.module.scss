@@ -1,7 +1,7 @@
 @use "styles/globals" as common;
 
 .sidebar {
-  background-color: white;
+  background-color: var(--navds-semantic-color-canvas-background-light);
   padding: 1rem 0;
 }
 
