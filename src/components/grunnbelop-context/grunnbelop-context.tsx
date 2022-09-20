@@ -29,7 +29,10 @@ export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProvider
     <GrunnbelopContext.Provider
       value={{
         G: grunnbeloep,
-        GtoNOK: (g: number) => Math.round(g * grunnbeloep).toLocaleString("no-NO"),
+        GtoNOK: (g: number) =>
+          isNaN(g)
+            ? "Her skulle det vært et kronebeløp oversatt fra grunnbeløp, men vi greide ikke å lese tallet "
+            : Math.round(g * grunnbeloep).toLocaleString("no-NO") + " kr",
       }}
     >
       {children}
