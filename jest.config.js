@@ -11,7 +11,7 @@ const customJestConfig = {
     "^.+\\.svg$": "jest-transform-stub",
     "@navikt/ds-react(.*)": "@navikt/ds-react/cjs$1",
     "@navikt/ds-icons(.*)": "@navikt/ds-icons/cjs$1",
-    uuid: require.resolve("uuid"), // Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
+    //uuid: require.resolve("uuid"), // Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
   },
   testEnvironment: "jsdom",
 };

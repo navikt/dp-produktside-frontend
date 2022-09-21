@@ -1,6 +1,6 @@
 import React from "react";
 import { getByText, render } from "@testing-library/react";
-import Header from "./Header";
+import { Header } from "./Header";
 
 describe("header modul", () => {
   test("greier å rendre modul", () => {
