@@ -1,84 +1,65 @@
-@use 'styles/globals' as common;
-@use 'sass:math';
-
-// @use '../../../pages/situation-page/SituationPage' as SituationPage;
-// @use '../../../pages/product-page/ProductPage' as ProductPage;
-// @use '../../../pages/guide-page/GuidePage' as GuidePage;
-$pixel-size-rem: math.div(1, 16);
-
-// In Sass numbers can include units (px/rem/em/vw/cm) witch can fuck up doing math
-@function stripUnit($number) {
-    @if type-of($number) == 'number' and not unitless($number) {
-        @return $number / ($number * 0 + 1);
-    }
-    @return $number;
-}
-
-@function px-to-rem($px) {
-    @return stripUnit($px) * $pixel-size-rem * 1rem;
-}
-
-@function round-rem($value: 0) {
-    $valueUpper: $value + $pixel-size-rem / 2;
-    @return $valueUpper - ($valueUpper % $pixel-size-rem);
-}
+@use "styles/globals" as common;
+@use "sass:math";
 
 .header {
-    display: flex;
-    justify-content: center;
-    background-color: white;
-    padding-bottom: 1.5rem;
-    box-shadow: 0 -4px 0 var(--navds-global-color-green-500) inset;
-    @include common.full-width-mixin;
+  display: flex;
+  justify-content: center;
+  background-color: var(--navds-semantic-color-canvas-background-light);
+  margin: 0 calc((100vw - 100%) / -2);
+  padding: 0 calc((100vw - 100%) / 2);
+  padding-bottom: 1.5rem;
 
-    @media #{common.$mq-screen-mobile} {
-        padding-left: 1rem;
-        padding-right: 1rem;
+  box-shadow: 0 -4px 0 var(--navds-global-color-green-500) inset;
+  @include common.full-width-mixin;
 
-        .illustration {
-            display: none;
-        }
+  @media #{common.$mq-screen-mobile} {
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .illustration {
+      display: none;
     }
+  }
 }
 
 .illustration {
-    width: 5rem;
-    height: 5rem;
-    font-size: 5rem;
-    margin-right: 2rem;
-    pointer-events: none;
+  width: 5rem;
+  height: 5rem;
+  font-size: 5rem;
+  margin-right: 2rem;
+  pointer-events: none;
 }
 
 .text {
-    width: 100%;
-    max-width: 63.5rem;
+  width: 100%;
+  max-width: 63.5rem;
 }
 
 .taglineWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 
-    @media #{common.$mq-screen-mobile} {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  @media #{common.$mq-screen-mobile} {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .taglineLabel {
-    @media #{common.$mq-screen-mobile} {
-        margin-bottom: 0.5rem;
-    }
+  @media #{common.$mq-screen-mobile} {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .divider {
-    padding: 0 1rem;
-    color: var(--navds-global-color-gray-600);
-    @media #{common.$mq-screen-mobile} {
-        display: none;
-    }
+  padding: 0 1rem;
+  color: var(--navds-global-color-gray-600);
+  @media #{common.$mq-screen-mobile} {
+    display: none;
+  }
 }
 
 .modifiedLabel {
-    color: var(--navds-global-color-gray-900);
+  color: var(--navds-global-color-gray-900);
 }

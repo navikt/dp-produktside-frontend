@@ -1,7 +1,6 @@
 FROM node:16 AS builder
 WORKDIR /home/node/app
 
-ENV NODE_ENV=production
 ENV TZ Europe/Oslo
 ENV CI=true
 

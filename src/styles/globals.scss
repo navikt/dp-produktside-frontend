@@ -1,4 +1,4 @@
-
+@use "sass:math";
 
 // Screen size breakpoints
 $mobileMaxWidth: 48rem; // 768px
@@ -7,18 +7,18 @@ $tabletMaxWidth: 64rem; // 1024px
 $desktopMinWidth: $tabletMaxWidth;
 $desktopMaxWidth: 90rem; // 1440px
 
-$mq-screen-mobile: 'only screen and (max-width: #{$mobileMaxWidth})';
-$mq-screen-tablet: 'only screen and (min-width: #{$tabletMinWidth}) and (max-width: #{$tabletMaxWidth})';
-$mq-screen-tablet-and-desktop: 'only screen and (min-width: #{$tabletMinWidth}) ';
-$mq-screen-tablet-and-mobile: 'only screen and (max-width: #{$tabletMaxWidth}) ';
-$mq-screen-desktop: 'only screen and (min-width: #{$desktopMinWidth}) ';
-$mq-screen-desktop-large: 'only screen and (min-width: #{$desktopMaxWidth}) ';
+$mq-screen-mobile: "only screen and (max-width: #{$mobileMaxWidth})";
+$mq-screen-tablet: "only screen and (min-width: #{$tabletMinWidth}) and (max-width: #{$tabletMaxWidth})";
+$mq-screen-tablet-and-desktop: "only screen and (min-width: #{$tabletMinWidth}) ";
+$mq-screen-tablet-and-mobile: "only screen and (max-width: #{$tabletMaxWidth}) ";
+$mq-screen-desktop: "only screen and (min-width: #{$desktopMinWidth}) ";
+$mq-screen-desktop-large: "only screen and (min-width: #{$desktopMaxWidth}) ";
 
 // Index page breakpoints
 $mobileSmallMaxWidth: 30rem; // 480px
 $desktopSmallMaxWidth: 75rem; // 1200px
-$mq-screen-mobile-small: 'only screen and (max-width: #{$mobileSmallMaxWidth})';
-$mq-screen-desktop-small: 'only screen and (max-width: #{$desktopSmallMaxWidth})';
+$mq-screen-mobile-small: "only screen and (max-width: #{$mobileSmallMaxWidth})";
+$mq-screen-desktop-small: "only screen and (max-width: #{$desktopSmallMaxWidth})";
 
 // Max-width for SituationPage & Layouts
 $contentMaxWidth: px-to-rem(900);
@@ -36,6 +36,19 @@ $border-radius-base: 4px;
 $border-radius-large: 6px;
 $border-radius-xlarge: 8px;
 
+$pixel-size-rem: math.div(1, 16);
+
+// Sass numbers can include units (px/rem/em/vw/cm) that could cause problems when doing math.
+@function stripUnit($number) {
+  @if type-of($number) == "number" and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+
+@function px-to-rem($px) {
+  @return stripUnit($px) * $pixel-size-rem * 1rem;
+}
 
 // Makes the element cover the entire screen-width
 @mixin full-width-mixin($left: true, $right: true) {
@@ -51,4 +64,39 @@ $border-radius-xlarge: 8px;
     padding-right: $side-width;
     margin-right: $side-width-negative;
   }
+}
+
+@mixin unstyled-list() {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin panel-focus-mixin($inset: true) {
+  outline: unset;
+  box-shadow: 0 0 0 3px if($inset, inset, null) var(--navds-semantic-color-link);
+}
+
+@mixin link-border-bottom-mixin($underlineDefault: true) {
+  @if $underlineDefault {
+    border-bottom: 1px var(--navds-semantic-color-link) solid;
+  } @else {
+    border-bottom-color: transparent;
+  }
+
+  text-decoration: none;
+  transition: border-bottom-color 0.12s ease-out;
+
+  &:hover,
+  &:focus {
+    @if $underlineDefault {
+      border-bottom-color: transparent;
+    } @else {
+      border-bottom: 1px var(--navds-semantic-color-link) solid;
+    }
+  }
+}
+
+#__next {
+  background-color: var(--navds-semantic-color-canvas-background);
 }

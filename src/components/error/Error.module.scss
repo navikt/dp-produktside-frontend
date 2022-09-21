@@ -1,0 +1,10 @@
+@use "styles/globals" as common;
+
+.container {
+  max-width: common.$contentMaxWidth;
+  margin: 40px 5px;
+
+  @media (min-width: 1025px) {
+    margin: 40px auto;
+  }
+}
