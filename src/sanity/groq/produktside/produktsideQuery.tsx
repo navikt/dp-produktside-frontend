@@ -14,7 +14,11 @@ export const produktsideQuery = groq`{
       ${produktsideSectionReferenceQuery},
       supportLinks,
     },
-    'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == "nb"][0]
+    'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == "nb"][0],
+    "calculatorTexts": *[_type == "produktsideText" && textId match "kalkulator*" && __i18n_lang == "nb"]{
+      ...,
+      "plainText": pt::text(valueBlock)
+    }
 }`;
 
 // TODO: Fix typescript definitions for results returned from produktsideQuery

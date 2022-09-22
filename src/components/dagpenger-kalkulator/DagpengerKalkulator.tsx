@@ -1,9 +1,11 @@
 import { Accordion, Alert, BodyShort, TextField } from "@navikt/ds-react";
 import { useGrunnbelop } from "components/grunnbelop-context/grunnbelop-context";
 import { useState } from "react";
+import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
+import { useSanityData } from "components/sanity-context/sanity-context";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
-import { toKR } from "./utils";
+import { getCalculatorTextFromList, toKR } from "./utils";
 
 interface ResultatProps {
   grunnlag?: number;
@@ -11,6 +13,8 @@ interface ResultatProps {
 
 function Resultat({ grunnlag }: ResultatProps) {
   const { G, GtoNOK } = useGrunnbelop();
+  const { calculatorTexts } = useSanityData();
+  const getCalculatorTextWithTextId = getCalculatorTextFromList(calculatorTexts);
 
   if (!grunnlag) {
     return null;
@@ -19,10 +23,12 @@ function Resultat({ grunnlag }: ResultatProps) {
   if (grunnlag < 1.5 * G) {
     return (
       <>
-        <BodyShort>{`Inntekt under 1.5 G (${GtoNOK(1.5)} kroner) gir ikke rett til dagpenger.`} </BodyShort>
-        <Alert variant="info">
-          {"Vi anbefaler likevel at du sender søknad så NAV kan vurdere retten din til dagpenger."}
-        </Alert>
+        <BodyShort>
+          {/* TODO: Strip the html tags generated from PortaleTextContent 
+          to get the plain text of parsed blocks. */}
+          <PortableTextContent value={getCalculatorTextWithTextId("forLavtGrunnlag", false)} />
+        </BodyShort>
+        <Alert variant="info">{getCalculatorTextWithTextId("sendSoknadLikevel")}</Alert>
       </>
     );
   }
@@ -41,7 +47,7 @@ function Resultat({ grunnlag }: ResultatProps) {
         <tbody>
           <tr>
             <td>
-              <i>{"Inntekt opp til 6 G"}</i>
+              <i>{getCalculatorTextWithTextId("mellom")}</i>
             </td>
             <td>{toKR(mellom0og6g)} x 62.4 %</td>
             <td> {toKR(resultatMellom0og6G)}</td>
@@ -56,16 +62,16 @@ function Resultat({ grunnlag }: ResultatProps) {
             </tr>
           )}
           <tr>
-            <td colSpan={2}>{"Totalt"}</td>
+            <td colSpan={2}>{getCalculatorTextWithTextId("tilsammen")}</td>
             <td>{toKR(totalt)}</td>
           </tr>
           <tr>
-            <td colSpan={2}>{"Dette gir en ukesats (før skatt) på"}</td>
+            <td colSpan={2}>{getCalculatorTextWithTextId("ukesats")}</td>
             <td> {toKR(totalt / 52)}</td>
           </tr>
         </tbody>
       </table>
-      <Alert variant="info">{"Dette er kun veiledende tall."}</Alert>
+      <Alert variant="info">{getCalculatorTextWithTextId("kunveiledende")}</Alert>
     </>
   );
 }
@@ -73,6 +79,8 @@ function Resultat({ grunnlag }: ResultatProps) {
 export function DagpengerKalkulator() {
   const [grunnlag, setGrunnlag] = useState<undefined | number>();
   const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
+  const { calculatorTexts } = useSanityData();
+  const getCalculatorTextWithTextId = getCalculatorTextFromList(calculatorTexts);
 
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
@@ -89,7 +97,7 @@ export function DagpengerKalkulator() {
         <Accordion.Header>Kalkulator</Accordion.Header>
         <Accordion.Content className={styles.inputWrapper}>
           <TextField
-            label="Skriv inn din årsinntekt"
+            label={getCalculatorTextWithTextId("label")}
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
