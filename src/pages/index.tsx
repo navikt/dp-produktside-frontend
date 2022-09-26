@@ -1,5 +1,4 @@
 import { Heading, Panel } from "@navikt/ds-react";
-import type { NextPage } from "next";
 import Head from "next/head";
 import { sanityClient } from "sanity/client";
 import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
@@ -9,7 +8,7 @@ import { PortableTextContent } from "components/portable-text-content/PortableTe
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
-import { useSanityData } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -26,14 +25,14 @@ export async function getStaticProps() {
   };
 }
 
-const Home: NextPage = ({ sanityData }: any) => {
+export default function Home() {
   const isMobile = useIsMobile();
-  const productData = useSanityData();
+  const sanityData = useSanityContext();
 
   const {
     settings: { title, content, supportLinks },
     kortFortalt,
-  } = productData;
+  } = sanityData;
 
   const kortFortaltLink = {
     anchorId: kortFortalt?.slug?.current,
@@ -105,6 +104,4 @@ const Home: NextPage = ({ sanityData }: any) => {
       </main>
     </div>
   );
-};
-
-export default Home;
+}

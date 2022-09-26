@@ -3,7 +3,6 @@ import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKa
 import { GtoNOK } from "./marks/GtoNOK";
 
 export function PortableTextContent({ value }: PortableTextProps) {
-  // @ts-ignore
   return (
     <PortableText
       value={value}

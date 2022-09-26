@@ -1,20 +1,19 @@
-import { Accordion, Alert, BodyShort, TextField } from "@navikt/ds-react";
-import { useGrunnbelop } from "components/grunnbelop-context/grunnbelop-context";
+import { Accordion, Alert, TextField } from "@navikt/ds-react";
+import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import { useState } from "react";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { useSanityData } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
-import { getCalculatorTextFromList, toKR } from "./utils";
+import { toKR } from "./utils";
 
 interface ResultatProps {
   grunnlag?: number;
 }
 
 function Resultat({ grunnlag }: ResultatProps) {
-  const { G, GtoNOK } = useGrunnbelop();
-  const { calculatorTexts } = useSanityData();
-  const getCalculatorTextWithTextId = getCalculatorTextFromList(calculatorTexts);
+  const { G } = useGrunnbelopContext();
+  const { getCalculatorTextWithTextId } = useSanityContext();
 
   if (!grunnlag) {
     return null;
@@ -23,11 +22,8 @@ function Resultat({ grunnlag }: ResultatProps) {
   if (grunnlag < 1.5 * G) {
     return (
       <>
-        <BodyShort>
-          {/* TODO: Strip the html tags generated from PortaleTextContent 
-          to get the plain text of parsed blocks. */}
-          <PortableTextContent value={getCalculatorTextWithTextId("forLavtGrunnlag", false)} />
-        </BodyShort>
+        {/* TODO: Find a way to get the plain text after the blocks are parsed so we can use BodyShort here instead. */}
+        <PortableTextContent value={getCalculatorTextWithTextId("forLavtGrunnlag", false)} />
         <Alert variant="info">{getCalculatorTextWithTextId("sendSoknadLikevel")}</Alert>
       </>
     );
@@ -79,8 +75,7 @@ function Resultat({ grunnlag }: ResultatProps) {
 export function DagpengerKalkulator() {
   const [grunnlag, setGrunnlag] = useState<undefined | number>();
   const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
-  const { calculatorTexts } = useSanityData();
-  const getCalculatorTextWithTextId = getCalculatorTextFromList(calculatorTexts);
+  const { getCalculatorTextWithTextId } = useSanityContext();
 
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
