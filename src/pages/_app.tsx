@@ -5,15 +5,18 @@ import { PreviewContextProvider } from "components/preview-context/previewContex
 import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import "styles/globals.scss";
+import { SanityProvider } from "components/sanity-context/sanity-context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ErrorBoundary>
       <PreviewContextProvider>
-        <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
-          <PreviewBanner />
-          <Component {...pageProps} />;
-        </GrunnbelopProvider>
+        <SanityProvider sanityData={pageProps.sanityData}>
+          <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
+            <PreviewBanner />
+            <Component {...pageProps} />;
+          </GrunnbelopProvider>
+        </SanityProvider>
       </PreviewContextProvider>
     </ErrorBoundary>
   );

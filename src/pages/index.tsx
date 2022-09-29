@@ -1,39 +1,38 @@
 import { Heading, Panel } from "@navikt/ds-react";
-import type { NextPage } from "next";
 import Head from "next/head";
 import { sanityClient } from "sanity/client";
 import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
-import PortableTextContent from "components/portable-text-content/PortableTextContent";
+import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
-import { useSanityPreveiw } from "sanity/useSanityPreview";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
-  const response = await sanityClient.fetch(produktsideQuery);
+  const sanityData = await sanityClient.fetch(produktsideQuery);
   const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
   const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
 
   return {
     props: {
-      sanityData: response,
+      sanityData: sanityData,
       grunnbelopData: grunnbelopData,
     },
     revalidate: 120,
   };
 }
 
-const Home: NextPage = ({ sanityData }: any) => {
+export default function Home() {
   const isMobile = useIsMobile();
-  const productData = useSanityPreveiw(sanityData, produktsideQuery);
+  const sanityData = useSanityContext();
 
   const {
     settings: { title, content, supportLinks },
     kortFortalt,
-  } = productData;
+  } = sanityData;
 
   const kortFortaltLink = {
     anchorId: kortFortalt?.slug?.current,
@@ -105,6 +104,4 @@ const Home: NextPage = ({ sanityData }: any) => {
       </main>
     </div>
   );
-};
-
-export default Home;
+}

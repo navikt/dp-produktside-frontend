@@ -40,10 +40,10 @@ export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProvider
   );
 }
 
-export function useGrunnbelop() {
+export function useGrunnbelopContext() {
   const context = useContext(GrunnbelopContext);
   if (context === undefined) {
-    throw new Error("useGrunnbelop must be used within a GrunnbelopContext");
+    throw new Error("useGrunnbelopContext must be used within a GrunnbelopContext");
   }
   return context;
 }
