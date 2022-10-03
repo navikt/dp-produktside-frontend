@@ -2,6 +2,7 @@ import { groq } from "next-sanity";
 
 const produktsideSectionReferenceQuery = `content [_type == "produktsideSectionReference"]{
      ...produktsideSection-> {
+        iconName,
         title,
         content,
         slug,
