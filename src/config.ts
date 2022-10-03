@@ -7,6 +7,7 @@ const vars = {
 
 const appUrls = {
   dagpengerSoknad: "https://www.nav.no/arbeid/dagpenger/soknad-veileder",
+  produktsideAnchorUrl: (anchorId: string) => `https://www.nav.no/arbeid/dagpenger#${anchorId}`,
 };
 
 const Config = {

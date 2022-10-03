@@ -55,6 +55,7 @@ $verticalMargin: 1.75rem;
         .topRow {
           display: flex;
           flex-direction: column;
+          margin-top: 1.75rem;
 
           @media #{common.$mq-screen-tablet-and-desktop} {
             flex-direction: row;
@@ -64,6 +65,7 @@ $verticalMargin: 1.75rem;
 
         .leftCol {
           max-width: $sectionMaxWidth;
+          margin-bottom: 2rem;
 
           > section {
             margin-bottom: 2rem;

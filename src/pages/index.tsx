@@ -1,4 +1,3 @@
-import { Heading, Panel } from "@navikt/ds-react";
 import Head from "next/head";
 import { sanityClient } from "sanity/client";
 import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
@@ -9,6 +8,7 @@ import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
 import { useSanityContext } from "components/sanity-context/sanity-context";
+import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -46,15 +46,10 @@ export default function Home() {
   }));
 
   const KortFortaltComponent = () => (
-    <section id={kortFortaltLink.anchorId}>
-      <Panel>
-        <Heading spacing level="2" size="large">
-          {kortFortalt?.title}
-        </Heading>
-        {/* bør styles til bodylong*/}
-        <PortableTextContent value={kortFortalt?.content} />
-      </Panel>
-    </section>
+    <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId} iconProps={true}>
+      {/* bør styles til bodylong*/}
+      <PortableTextContent value={kortFortalt?.content} />
+    </SectionWithHeader>
   );
 
   return (
@@ -85,16 +80,11 @@ export default function Home() {
                   {!isMobile && <KortFortaltComponent />}
 
                   {/* @ts-ignore */}
-                  {content?.map(({ title, content, slug }, index) => (
-                    <section key={index} id={slug?.current}>
-                      <Panel>
-                        <Heading spacing level="2" size="large">
-                          {title}
-                        </Heading>
-                        {/* bør styles til bodylong*/}
-                        <PortableTextContent value={content} />
-                      </Panel>
-                    </section>
+                  {content?.map(({ title, content, slug, iconName }, index) => (
+                    <SectionWithHeader key={index} title={title} anchorId={slug?.current} iconName={iconName}>
+                      {/* bør styles til bodylong*/}
+                      <PortableTextContent value={content} />
+                    </SectionWithHeader>
                   ))}
                 </div>
               </div>
