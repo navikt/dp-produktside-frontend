@@ -38,6 +38,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
             popoverText="Lenken er kopiert"
             size="small"
             icon={<LinkIcon title="Kopier lenke" />}
+            popoverPlacement="right"
           >
             Kopier lenke
           </CopyToClipboard>
