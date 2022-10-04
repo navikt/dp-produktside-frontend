@@ -46,7 +46,7 @@ export default function Home() {
   }));
 
   const KortFortaltComponent = () => (
-    <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId} iconProps={true}>
+    <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId}>
       {/* bør styles til bodylong*/}
       <PortableTextContent value={kortFortalt?.content} />
     </SectionWithHeader>

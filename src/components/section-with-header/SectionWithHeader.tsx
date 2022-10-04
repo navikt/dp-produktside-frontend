@@ -10,13 +10,13 @@ import styles from "./SectionWithHeader.module.scss";
 interface Props {
   anchorId: string;
   children: ReactNode;
-  iconName: string;
+  iconName?: string;
   title: string;
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
   // @ts-ignore
-  const Icon = NavIcons[iconName];
+  const Icon = NavIcons?.[iconName];
 
   return (
     <section id={Icon ? undefined : anchorId} className={Icon && styles.withIcon}>
@@ -38,6 +38,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
             popoverText="Lenken er kopiert"
             size="small"
             icon={<LinkIcon title="Kopier lenke" />}
+            popoverPlacement="right"
           >
             Kopier lenke
           </CopyToClipboard>
