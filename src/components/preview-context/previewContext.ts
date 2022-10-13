@@ -5,7 +5,6 @@ const initState = {
   previewMode: false,
   showDrafts: false,
   dataset: sanityConfig.dataset,
-  devBanner: false,
 };
 
 type State = typeof initState;
