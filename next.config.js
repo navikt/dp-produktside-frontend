@@ -23,16 +23,16 @@ const nextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: "/dagpenger/(.*)",
-        destination: "https://www.nav.no/404",
-        permanent: true,
-        basePath: false,
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: "/dagpenger/(.*)",
+  //       destination: "https://www.nav.no/404",
+  //       permanent: true,
+  //       basePath: false,
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;

@@ -10,8 +10,11 @@ const appUrls = {
   produktsideAnchorUrl: (anchorId: string) => `https://www.nav.no/arbeid/dagpenger#${anchorId}`,
 };
 
+const basePath = "/dagpenger";
+
 const Config = {
   appUrls,
+  basePath,
   vars,
 };
 
