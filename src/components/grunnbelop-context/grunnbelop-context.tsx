@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 
+//todo: hvordan håndterer vi hvis vi ikke har grunnbelopdata?
 export interface GrunnbelopData {
   dato: string;
   gjennomsnittPerAar: number;

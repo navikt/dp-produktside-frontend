@@ -6,7 +6,7 @@ import svgIcon from "../../../public/static-dagpenger.svg";
 // TODO: Finn en bedre måte å hente SVG-ikon på?
 // NextJS klarer ikke bruke public-pathen når man bruker src="/static-dagpenger.svg".
 // Sannsynligvis fordi vi har en src-mappe, men det gjenstår å undersøke dette.
-
+//todo: legg inn logikk for sist oppdatert
 export function Header() {
   return (
     <header className={styles.header}>

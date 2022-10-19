@@ -24,6 +24,10 @@ export async function revisionsFetcher(docId: string): Promise<Revision[]> {
     });
 
     // https://stackoverflow.com/questions/60634337/when-using-fetch-how-to-convert-response-body-from-application-x-ndjson-to-appli
+    if (response.status != 200) {
+      // TODO logg til amplitude/sentry?
+      return [];
+    }
     const text = await response.text();
     const revisions: RawRevision[] | undefined = text.match(/.+/g)?.map((it) => JSON.parse(it));
 

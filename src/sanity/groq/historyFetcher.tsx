@@ -8,7 +8,7 @@ export interface HistoriskDokument {
   _rev: string;
   _updatedAt: string;
   kortFortalt?: SanityBlock[];
-  innhold?: SanityBlock[];
+  content?: SanityBlock[];
   title: string;
 }
 
