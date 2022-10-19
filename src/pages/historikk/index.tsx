@@ -1,6 +1,6 @@
 import { ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import Config from "config";
-import { addDays, formatISO, max, min, subDays } from "date-fns";
+import { addDays, max, min, subDays } from "date-fns";
 import isBefore from "date-fns/isBefore";
 import { useEffect, useState } from "react";
 import styles from "styles/Historikk.module.scss";
@@ -10,6 +10,7 @@ import { Revision, revisionsFetcher } from "sanity/groq/revisionsFetcher";
 import { HistorikkResponse, HistoriskDokument } from "../../sanity/groq/historyFetcher";
 import { SectionWithHeader } from "../../components/section-with-header/SectionWithHeader";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
+import { PortableText } from "@portabletext/react";
 
 interface Props {
   revisionsProduktsideSettings: Revision[];
@@ -32,6 +33,8 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
   const [selectedDate, setSelectedDate] = useState(new Date());
   // const [selectedRevision, setSelectedRevision] = useState<Revision | undefined>(undefined);
   const [kortFortaltData, setKortFortaltData] = useState<HistoriskDokument | undefined>(undefined);
+  const [sectionData, setSectionData] = useState<HistoriskDokument[] | undefined>(undefined);
+
   const [selectedRevisionData, setSelectedRevisionData] = useState<HistoriskDokument | undefined>(undefined);
   const revisionDates = revisionsProduktsideSettings.map(({ timestamp }) => convertTimestampToDate(timestamp));
 
@@ -61,17 +64,26 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
         `${Config.basePath}/api/history?requestId=${produktsideKortFortaltId}&time=${timestamp}`
       ).then((res) => res.json());
 
+      const produktsideSectionDocumentIds = produktsideSettingsData?.documents?.[0]?.content?.map(
+        (section) => section?.produktsideSection?._ref
+      );
+
+      const produktsideSectionData = await fetch(
+        `${Config.basePath}/api/history?requestId=${produktsideSectionDocumentIds}&time=${timestamp}`
+      ).then((res) => res.json());
+
       setSelectedRevisionData(produktsideSettingsData?.documents?.[0]);
       setKortFortaltData(produktsideKortFortaltData?.documents?.[0]);
+      setSectionData(produktsideSectionData?.documents);
+
       // console.log(produktsideSettingsData);
-      console.log(produktsideKortFortaltData);
+      console.log(produktsideSectionData);
     })();
   }, [selectedDate]);
 
   if (revisionsProduktsideSettings.length <= 0) {
     return <div>her skulle det vært noe historikk :scream:</div>;
   }
-
 
   return (
     <div className={styles.container}>
@@ -99,20 +111,26 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
 
       {selectedRevisionData && (
         <>
-          <section>
-            <>
-              Hei var det:
-              {selectedRevisionData.content?.map((seksjon) => (
-                <SectionWithHeader
-                  key={seksjon?.produktsideSection?._ref}
-                  anchorId="enseksjon"
-                  title={seksjon?.produktsideSection?._ref}
-                >
-                  lenke til innholdsseksjon
-                </SectionWithHeader>
-              ))}
-            </>
-          </section>
+          {selectedRevisionData.content?.map((seksjon) => {
+            const section = sectionData?.find(({ _id }) => _id == seksjon?.produktsideSection?._ref);
+
+            if (!section) {
+              return null;
+            }
+
+            return (
+              <SectionWithHeader
+                key={section?._id}
+                anchorId={section?.slug?.current}
+                title={section?.title}
+                iconName={section?.iconName}
+              >
+                <p>{`Oppdatert ${section?._updatedAt}`}</p>
+                {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                <PortableText value={section?.content} />
+              </SectionWithHeader>
+            );
+          })}
         </>
       )}
 
