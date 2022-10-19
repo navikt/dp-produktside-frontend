@@ -21,10 +21,10 @@ const { projectId, dataset } = sanityConfig;
 
 export async function historyFetcher(
   docId?: string | string[],
-  revision?: string | string[]
+  time?: string | string[]
 ): Promise<HistorikkResponse | null> {
   try {
-    const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/documents/${docId}?revision=${revision}`;
+    const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/documents/${docId}?time=${time}`;
 
     const response = await fetch(url, {
       headers: {
