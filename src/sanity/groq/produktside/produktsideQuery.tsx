@@ -9,6 +9,12 @@ const produktsideSectionReferenceQuery = `content [_type == "produktsideSectionR
      }
 }`;
 
+export const produktsideSectionIdsQuery = groq`{
+  'sectionIds': *[_type == "produktsideSection"]{
+    _id
+  }
+}`;
+
 export const produktsideQuery = groq`{
     'settings': *[_id == "produktsideSettings" && __i18n_lang == "nb"][0] {
       title,

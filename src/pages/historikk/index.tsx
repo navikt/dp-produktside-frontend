@@ -1,4 +1,4 @@
-import { ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
+import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import Config from "config";
 import { addDays, max, min, subDays } from "date-fns";
 import { useEffect, useState } from "react";
@@ -15,35 +15,46 @@ import { PortableTextContent } from "components/portable-text-content/PortableTe
 import { PortableText } from "@portabletext/react";
 import Error from "components/error/Error";
 import { sanityClient } from "sanity/client";
-import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import { produktsideQuery, produktsideSectionIdsQuery } from "sanity/groq/produktside/produktsideQuery";
 import { GrunnbelopData, useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
+import isSameDay from "date-fns/isSameDay";
 
 interface Props {
-  revisionsProduktsideSettings: Revision[];
+  revisions: Revision[];
 }
 
 const produktsideSettingsId = "produktsideSettings";
 const produktsideKortFortaltId = "produktsideKortFortalt";
+const produktsideSectionType = "produktsideSection";
 
 export async function getStaticProps() {
+  const sanityData = await sanityClient.fetch(produktsideQuery);
+  const sectionIdsData = await sanityClient.fetch(produktsideSectionIdsQuery);
+  const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
   const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
   const revisionsProduktsideKortFortalt = await revisionsFetcher(produktsideKortFortaltId);
-  const sanityData = await sanityClient.fetch(produktsideQuery);
+  const revisionsProduktsideSection = await revisionsFetcher(sectionIdsArray);
+
+  const revisions = [
+    ...revisionsProduktsideSettings,
+    ...revisionsProduktsideKortFortalt,
+    ...revisionsProduktsideSection,
+  ];
 
   return {
-    props: { sanityData, revisionsProduktsideSettings, revisionsProduktsideKortFortalt },
+    props: { sanityData, revisions },
     revalidate: 120,
   };
 }
 
-export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) {
+export default function HistorikkIndex({ revisions }: Props) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [settingsData, setSettingsData] = useState<HistoryProduktsideSettings | undefined>(undefined);
   const [kortFortaltData, setKortFortaltData] = useState<HistoryProduktsideKortFortalt | undefined>(undefined);
   const [sectionData, setSectionData] = useState<HistoryProduktsideSection[] | undefined>(undefined);
-  const { G, setGValue } = useGrunnbelopContext();
+  const { setGValue } = useGrunnbelopContext();
 
-  const revisionDates = revisionsProduktsideSettings.map(({ timestamp }) => convertTimestampToDate(timestamp));
+  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
 
   useEffect(() => {
     (async function () {
@@ -82,28 +93,37 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
     })();
   }, [selectedDate]);
 
-  if (!revisionsProduktsideSettings.length) {
+  if (!revisions.length) {
     return <Error />;
   }
 
   return (
     <div className={styles.container}>
-      <>
-        <UNSAFE_DatePicker.Standalone
-          onSelect={(date: Date | undefined) => {
-            if (date) {
-              setSelectedDate(date);
-            }
-          }}
-          dropdownCaption
-          // fromDate={subDays(min(revisionDates), 1)}
-          // toDate={addDays(max(revisionDates), 1)}
-          fromDate={new Date(2021, 1, 1)}
-          toDate={new Date()}
-        />
+      <UNSAFE_DatePicker.Standalone
+        onSelect={(date: Date | undefined) => {
+          if (date) {
+            setSelectedDate(date);
+          }
+        }}
+        dropdownCaption
+        fromDate={subDays(min(revisionDates), 1)}
+        toDate={addDays(max(revisionDates), 1)}
+      />
 
-        <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>
-      </>
+      <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>
+
+      <ReadMore header="Endringer denne dagen" className={styles.readMore}>
+        {revisions
+          ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate))
+          ?.map(({ id, timestamp }) => (
+            <Button
+              size="small"
+              key={timestamp}
+              className={styles.button}
+              onClick={() => setSelectedDate(convertTimestampToDate(timestamp))}
+            >{`${formatTimestamp(timestamp)}`}</Button>
+          ))}
+      </ReadMore>
 
       {kortFortaltData && (
         <SectionWithHeader anchorId={kortFortaltData?.slug?.current} title={kortFortaltData?.title}>
@@ -136,12 +156,6 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
           })}
         </>
       )}
-
-      <ReadMore header="Debug revisions">
-        {revisionsProduktsideSettings?.map(({ id, timestamp }) => (
-          <p key={id}>{`${formatTimestamp(timestamp)}`}</p>
-        ))}
-      </ReadMore>
     </div>
   );
 }

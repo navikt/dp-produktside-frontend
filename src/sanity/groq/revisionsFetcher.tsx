@@ -13,7 +13,7 @@ export interface Revision extends Omit<RawRevision, "author" | "documentIDs" | "
 const token = process.env.SANITY_READ_TOKEN;
 const { projectId, dataset } = sanityConfig;
 
-export async function revisionsFetcher(docId: string): Promise<Revision[]> {
+export async function revisionsFetcher(docId: string | string[]): Promise<Revision[]> {
   try {
     const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/transactions/${docId}?excludeContent=true`;
 
