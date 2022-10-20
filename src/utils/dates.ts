@@ -1,3 +1,5 @@
+import format from "date-fns/format";
+
 export function convertTimestampToDate(timestamp: string) {
   return new Date(timestamp);
 }
@@ -12,4 +14,8 @@ export function formatLocaleDateAndTime(date: Date) {
 
 export function formatTimestamp(timestamp: string) {
   return formatLocaleDateAndTime(convertTimestampToDate(timestamp));
+}
+
+export function toISOString(date: Date) {
+  return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
 }

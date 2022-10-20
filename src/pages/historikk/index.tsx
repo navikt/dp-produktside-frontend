@@ -1,16 +1,22 @@
 import { ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import Config from "config";
 import { addDays, max, min, subDays } from "date-fns";
-import isBefore from "date-fns/isBefore";
 import { useEffect, useState } from "react";
 import styles from "styles/Historikk.module.scss";
-import { getLastElementFromArray } from "utils/arrays";
-import { convertTimestampToDate, formatLocaleDate, formatTimestamp } from "utils/dates";
+import { convertTimestampToDate, formatLocaleDate, formatTimestamp, toISOString } from "utils/dates";
 import { Revision, revisionsFetcher } from "sanity/groq/revisionsFetcher";
-import { HistorikkResponse, HistoriskDokument } from "../../sanity/groq/historyFetcher";
+import {
+  HistoryProduktsideKortFortalt,
+  HistoryProduktsideSection,
+  HistoryProduktsideSettings,
+} from "../../sanity/groq/historyFetcher";
 import { SectionWithHeader } from "../../components/section-with-header/SectionWithHeader";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { PortableText } from "@portabletext/react";
+import Error from "components/error/Error";
+import { sanityClient } from "sanity/client";
+import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import { GrunnbelopData, useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 
 interface Props {
   revisionsProduktsideSettings: Revision[];
@@ -22,29 +28,22 @@ const produktsideKortFortaltId = "produktsideKortFortalt";
 export async function getStaticProps() {
   const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
   const revisionsProduktsideKortFortalt = await revisionsFetcher(produktsideKortFortaltId);
+  const sanityData = await sanityClient.fetch(produktsideQuery);
 
   return {
-    props: { revisionsProduktsideSettings, revisionsProduktsideKortFortalt },
+    props: { sanityData, revisionsProduktsideSettings, revisionsProduktsideKortFortalt },
     revalidate: 120,
   };
 }
 
 export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  // const [selectedRevision, setSelectedRevision] = useState<Revision | undefined>(undefined);
-  const [kortFortaltData, setKortFortaltData] = useState<HistoriskDokument | undefined>(undefined);
-  const [sectionData, setSectionData] = useState<HistoriskDokument[] | undefined>(undefined);
+  const [settingsData, setSettingsData] = useState<HistoryProduktsideSettings | undefined>(undefined);
+  const [kortFortaltData, setKortFortaltData] = useState<HistoryProduktsideKortFortalt | undefined>(undefined);
+  const [sectionData, setSectionData] = useState<HistoryProduktsideSection[] | undefined>(undefined);
+  const { G, setGValue } = useGrunnbelopContext();
 
-  const [selectedRevisionData, setSelectedRevisionData] = useState<HistoriskDokument | undefined>(undefined);
   const revisionDates = revisionsProduktsideSettings.map(({ timestamp }) => convertTimestampToDate(timestamp));
-
-  // useEffect(() => {
-  //   const revisionsBeforeSelectedDate = revisionsProduktsideSettings.filter(({ timestamp }) =>
-  //     isBefore(convertTimestampToDate(timestamp), selectedDate)
-  //   );
-  //   const lastRevision = getLastElementFromArray(revisionsBeforeSelectedDate);
-  //   setSelectedRevision(lastRevision);
-  // }, [selectedDate]);
 
   useEffect(() => {
     (async function () {
@@ -53,36 +52,38 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
       }
 
       //todo: fix timezone offset for selectedDate
-      const timestamp = selectedDate.toISOString();
+      const timestamp = toISOString(selectedDate);
+
+      const grunnbelopResponse = await fetch(`https://g.nav.no/api/v1/grunnbeloep?dato=${timestamp}`);
+      const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+      setGValue(grunnbelopData?.grunnbeloep);
+
       console.log(timestamp);
+      const historyApi = (requestId: string | string[]) =>
+        `${Config.basePath}/api/history?requestId=${requestId}&time=${timestamp}`;
 
-      const produktsideSettingsData = await fetch(
-        `${Config.basePath}/api/history?requestId=${produktsideSettingsId}&time=${timestamp}`
-      ).then((res) => res.json());
+      const produktsideSettingsData = await fetch(historyApi(produktsideSettingsId)).then((res) => res.json());
 
-      const produktsideKortFortaltData = await fetch(
-        `${Config.basePath}/api/history?requestId=${produktsideKortFortaltId}&time=${timestamp}`
-      ).then((res) => res.json());
+      const produktsideKortFortaltData = await fetch(historyApi(produktsideKortFortaltId)).then((res) => res.json());
 
       const produktsideSectionDocumentIds = produktsideSettingsData?.documents?.[0]?.content?.map(
         (section) => section?.produktsideSection?._ref
       );
 
-      const produktsideSectionData = await fetch(
-        `${Config.basePath}/api/history?requestId=${produktsideSectionDocumentIds}&time=${timestamp}`
-      ).then((res) => res.json());
+      const produktsideSectionData = await fetch(historyApi(produktsideSectionDocumentIds)).then((res) => res.json());
 
-      setSelectedRevisionData(produktsideSettingsData?.documents?.[0]);
+      setSettingsData(produktsideSettingsData?.documents?.[0]);
       setKortFortaltData(produktsideKortFortaltData?.documents?.[0]);
       setSectionData(produktsideSectionData?.documents);
 
-      // console.log(produktsideSettingsData);
+      console.log(produktsideSettingsData);
+      console.log(produktsideKortFortaltData);
       console.log(produktsideSectionData);
     })();
   }, [selectedDate]);
 
-  if (revisionsProduktsideSettings.length <= 0) {
-    return <div>her skulle det vært noe historikk :scream:</div>;
+  if (!revisionsProduktsideSettings.length) {
+    return <Error />;
   }
 
   return (
@@ -95,8 +96,10 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
             }
           }}
           dropdownCaption
-          fromDate={subDays(min(revisionDates), 1)}
-          toDate={addDays(max(revisionDates), 1)}
+          // fromDate={subDays(min(revisionDates), 1)}
+          // toDate={addDays(max(revisionDates), 1)}
+          fromDate={new Date(2021, 1, 1)}
+          toDate={new Date()}
         />
 
         <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>
@@ -109,9 +112,9 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
         </SectionWithHeader>
       )}
 
-      {selectedRevisionData && (
+      {settingsData && (
         <>
-          {selectedRevisionData.content?.map((seksjon) => {
+          {settingsData.content?.map((seksjon) => {
             const section = sectionData?.find(({ _id }) => _id == seksjon?.produktsideSection?._ref);
 
             if (!section) {
@@ -127,7 +130,7 @@ export default function HistorikkIndex({ revisionsProduktsideSettings }: Props) 
               >
                 <p>{`Oppdatert ${section?._updatedAt}`}</p>
                 {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                <PortableText value={section?.content} />
+                <PortableTextContent value={section?.content} />
               </SectionWithHeader>
             );
           })}
