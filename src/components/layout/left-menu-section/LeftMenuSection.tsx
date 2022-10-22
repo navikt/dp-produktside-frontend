@@ -5,7 +5,9 @@ import { AnchorLink } from "components/navigation-menu/types";
 import styles from "./LeftMenuSection.module.scss";
 import Config from "config";
 import Link from "next/link";
-import { LinkList, SupportLink } from "components/link-list/LinkList";
+import { LinkList } from "components/link-list/LinkList";
+import { SupportLink } from "sanity/types";
+
 interface Props {
   internalLinks: AnchorLink[];
   supportLinks?: SupportLink[];

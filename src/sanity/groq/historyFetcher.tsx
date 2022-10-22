@@ -1,43 +1,11 @@
-import { SupportLink } from "components/link-list/LinkList";
 import { sanityConfig } from "sanity/client";
-import { SanityBlock } from "sanity/types";
 
-export interface CommonDocumentFields {
-  _type: "produktsideSettings" | "produktsideKortFortalt" | "produktsideSection";
-  _createdAt: string;
-  _id: string;
-  _rev: string;
-  _updatedAt: string;
-  __i18n_lang: string;
-  title?: string;
-  content?: SanityBlock;
-}
-
-interface Slug {
-  _type: "slug";
-  current: string;
-}
-
-export interface HistoryProduktsideSettings extends CommonDocumentFields {
-  _type: "produktsideSettings";
-  supportLinks?: SupportLink[];
-}
-export interface HistoryProduktsideKortFortalt extends CommonDocumentFields {
-  _type: "produktsideKortFortalt";
-  slug?: Slug;
-}
-export interface HistoryProduktsideSection extends CommonDocumentFields {
-  _type: "produktsideSection";
-  slug?: Slug;
-  iconName?: string;
-}
+const token = process.env.SANITY_READ_TOKEN;
+const { projectId, dataset } = sanityConfig;
 
 export interface HistorikkResponse<T> {
   documents: T[];
 }
-
-const token = process.env.SANITY_READ_TOKEN;
-const { projectId, dataset } = sanityConfig;
 
 export async function historyFetcher<T>(
   docId?: string | string[],
@@ -51,8 +19,9 @@ export async function historyFetcher<T>(
         authorization: `Bearer ${token}`,
       },
     });
+    const jsonResponse = await response.json();
 
-    return response.json();
+    return jsonResponse;
   } catch (e) {
     // TODO logg til amplitude/sentry?
     console.error(e);

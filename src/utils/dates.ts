@@ -1,19 +1,26 @@
 import format from "date-fns/format";
+import nb from "date-fns/locale/nb";
+
+const AppLocale = nb;
 
 export function convertTimestampToDate(timestamp: string) {
   return new Date(timestamp);
 }
 
-//todo: bruk datefns format
 export function formatLocaleDate(date: Date) {
-  return date.toLocaleString("nb-NO", { dateStyle: "full" });
+  return format(date, "P", { locale: AppLocale });
 }
+
+export function formatLocaleTime(date: Date) {
+  return format(date, "p", { locale: AppLocale });
+}
+
 export function formatLocaleDateAndTime(date: Date) {
-  return date.toLocaleString("nb-NO", { dateStyle: "full", timeStyle: "short" });
+  return format(date, "Pp", { locale: AppLocale });
 }
 
 export function formatTimestamp(timestamp: string) {
-  return formatLocaleDateAndTime(convertTimestampToDate(timestamp));
+  return formatLocaleTime(convertTimestampToDate(timestamp));
 }
 
 export function toISOString(date: Date) {

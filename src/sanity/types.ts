@@ -31,3 +31,39 @@ export type SanityBlock = {
   level?: number;
   listItem?: "bullet";
 };
+
+export interface CommonDocumentFields {
+  _type: "produktsideSettings" | "produktsideKortFortalt" | "produktsideSection";
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  __i18n_lang: string;
+  title?: string;
+  content?: SanityBlock[];
+}
+
+export interface Slug {
+  _type: "slug";
+  current: string;
+}
+
+export interface SupportLink {
+  title: string;
+  url: string;
+  targetBlank: boolean;
+}
+
+export interface HistoryProduktsideSettings extends CommonDocumentFields {
+  _type: "produktsideSettings";
+  supportLinks?: SupportLink[];
+}
+export interface HistoryProduktsideKortFortalt extends CommonDocumentFields {
+  _type: "produktsideKortFortalt";
+  slug?: Slug;
+}
+export interface HistoryProduktsideSection extends CommonDocumentFields {
+  _type: "produktsideSection";
+  slug?: Slug;
+  iconName?: string;
+}
