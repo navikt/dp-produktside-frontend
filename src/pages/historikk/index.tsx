@@ -1,26 +1,18 @@
 import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import Error from "components/error/Error";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { addDays, max, min, subDays } from "date-fns";
-import isSameDay from "date-fns/isSameDay";
-import router from "next/router";
-import { useEffect } from "react";
+import { addDays, max, min, subDays, isSameDay } from "date-fns";
 import { sanityClient } from "sanity/client";
 import { produktsideQuery, produktsideSectionIdsQuery } from "sanity/groq/produktside/produktsideQuery";
 import { Revision, revisionsFetcher } from "sanity/groq/revisionsFetcher";
 import styles from "styles/Historikk.module.scss";
-import { createBigIntLiteral } from "typescript";
-import {
-  convertTimestampToDate,
-  formatLocaleDate,
-  formatLocaleDateAndTime,
-  formatTimestamp,
-  toISOString,
-} from "utils/dates";
+import { convertTimestampToDate, formatLocaleDate, formatTimestamp, toISOString } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
-import { useQueryState } from "utils/useQueryState";
 import { SectionWithHeader } from "../../components/section-with-header/SectionWithHeader";
+import { useQueryState } from "utils/useQueryState/useQueryState";
+import { queryTypes } from "utils/useQueryState/defs";
+
 interface Props {
   revisions: Revision[];
 }
@@ -49,16 +41,12 @@ export async function getStaticProps() {
 }
 
 export default function HistorikkIndex({ revisions }: Props) {
-  // const [selectedTime, setSelectedTime] = useState(toISOString(new Date()));
-  const initialTime = toISOString(new Date());
-  const [query, setQueryParams] = useQueryState({ time: initialTime });
-  const selectedTime = query?.time as string;
-  const setSelectedTime = (time: string) => setQueryParams({ time: time });
-  const selectedDate = convertTimestampToDate(selectedTime);
+  const [selectedDate, setSelectedDate] = useQueryState("time", queryTypes.isoDateTime.withDefault(new Date()));
+  const selectedTimestamp = toISOString(selectedDate);
 
   const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
-  const { settings, kortFortalt, contentSections } = useHistoryData(selectedTime);
-  useHistoryGrunnbelop(selectedTime);
+  const { settings, kortFortalt, contentSections } = useHistoryData(selectedTimestamp);
+  useHistoryGrunnbelop(selectedTimestamp);
   console.log(settings, kortFortalt, contentSections);
 
   if (!revisions.length) {
@@ -68,10 +56,10 @@ export default function HistorikkIndex({ revisions }: Props) {
   return (
     <div className={styles.container}>
       <UNSAFE_DatePicker.Standalone
-        // selected={selectedDate}
+        selected={selectedDate}
         onSelect={(date: Date | undefined) => {
           if (date) {
-            setSelectedTime(toISOString(date));
+            setSelectedDate(date, { shallow: true });
           }
         }}
         dropdownCaption
@@ -79,7 +67,7 @@ export default function HistorikkIndex({ revisions }: Props) {
         toDate={addDays(max(revisionDates), 1)}
       />
 
-      {/* <p>{`Valgt dato: ${formatLocaleDateAndTime(convertTimestampToDate(selectedTime))}`}</p> */}
+      <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>
 
       <ReadMore header="Endringer denne dagen" className={styles.readMore}>
         {revisions
@@ -89,7 +77,7 @@ export default function HistorikkIndex({ revisions }: Props) {
               size="small"
               key={timestamp}
               className={styles.button}
-              onClick={() => setSelectedTime(timestamp)}
+              onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
             >{`${formatTimestamp(timestamp)}`}</Button>
           ))}
       </ReadMore>
