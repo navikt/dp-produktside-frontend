@@ -1,6 +1,6 @@
 import { Button } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
-import Error from "../error/Error";
+import { Error } from "../error/Error";
 import styles from "./ErrorBoundary.module.scss";
 
 interface Props {

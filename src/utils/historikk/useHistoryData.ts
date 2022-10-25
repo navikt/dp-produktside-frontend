@@ -2,7 +2,6 @@ import Config from "config";
 import { useEffect, useState } from "react";
 import { HistorikkResponse } from "sanity/groq/historyFetcher";
 import { HistoryProduktsideKortFortalt, HistoryProduktsideSection, HistoryProduktsideSettings } from "sanity/types";
-import { toISOString } from "utils/dates";
 
 const produktsideSettingsId = "produktsideSettings";
 const produktsideKortFortaltId = "produktsideKortFortalt";
@@ -13,15 +12,15 @@ interface HistoryData {
   contentSections?: HistoryProduktsideSection[];
 }
 
-export function useHistoryData(timestamp: string) {
+export function useHistoryData(timestamp?: string) {
   const [historyData, setHistoryData] = useState<HistoryData>({});
 
   useEffect(() => {
-    (async function () {
-      if (!timestamp) {
-        return;
-      }
+    if (!timestamp) {
+      return;
+    }
 
+    (async function () {
       async function fetchHistoryApi<T>(requestId: string | string[]) {
         const historyResponse = await fetch(`${Config.basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
         const historyData = await historyResponse.json();
