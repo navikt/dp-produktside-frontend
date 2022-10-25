@@ -7,7 +7,13 @@ import svgIcon from "../../../public/static-dagpenger.svg";
 // NextJS klarer ikke bruke public-pathen når man bruker src="/static-dagpenger.svg".
 // Sannsynligvis fordi vi har en src-mappe, men det gjenstår å undersøke dette.
 //todo: legg inn logikk for sist oppdatert
-export function Header() {
+
+interface Props {
+  title?: string;
+  lastUpdated?: string;
+}
+
+export function Header({ title, lastUpdated }: Props) {
   return (
     <header className={styles.header}>
       <div className={styles.illustration} aria-hidden="true" role="presentation">
@@ -16,7 +22,7 @@ export function Header() {
 
       <div className={styles.text}>
         <Heading size={"xlarge"} level={"1"}>
-          Dagpenger
+          {title}
         </Heading>
         <div className={styles.taglineWrapper}>
           <BodyShort size="small" className={styles.taglineLabel}>
@@ -26,7 +32,7 @@ export function Header() {
             {"|"}
           </span>
           <Detail size="small" uppercase>
-            <span className={styles.modifiedLabel}>I går</span>
+            <span className={styles.modifiedLabel}>{`${lastUpdated}`}</span>
           </Detail>
         </div>
       </div>

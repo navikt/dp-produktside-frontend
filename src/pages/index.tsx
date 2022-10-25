@@ -1,14 +1,14 @@
 import Head from "next/head";
-import { sanityClient } from "sanity/client";
-import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
-import styles from "styles/Home.module.scss";
-import { useIsMobile } from "utils/useIsMobile";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { sanityClient } from "sanity/client";
+import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import styles from "styles/Home.module.scss";
+import { useIsMobile } from "utils/useIsMobile";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -30,7 +30,7 @@ export default function Home() {
   const sanityData = useSanityContext();
 
   const {
-    settings: { title, content, supportLinks },
+    settings: { title, content, supportLinks, _updatedAt },
     kortFortalt,
   } = sanityData;
 
@@ -61,7 +61,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.productPage}>
-          <Header />
+          <Header title={title} lastUpdated={_updatedAt} />
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>
