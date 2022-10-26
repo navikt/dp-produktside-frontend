@@ -1,7 +1,7 @@
 import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import { addDays, isSameDay, max, min, startOfDay, subDays } from "date-fns";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Error } from "components/error/Error";
 import { Header } from "components/header/Header";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
@@ -23,6 +23,7 @@ import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
 import { useIsFirstRender } from "utils/useIsFirstRender";
 import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
+import { HistoryProduktsideSection, HistorySectionIds } from "sanity/types";
 
 interface Props {
   revisions: Revision[];
@@ -33,7 +34,7 @@ const produktsideKortFortaltId = "produktsideKortFortalt";
 
 export async function getStaticProps() {
   const sanityData = await sanityClient.fetch(produktsideQuery);
-  const sectionIdsData = await sanityClient.fetch(produktsideSectionIdsQuery);
+  const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery);
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
   const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
   const revisionsProduktsideKortFortalt = await revisionsFetcher(produktsideKortFortaltId);
@@ -56,15 +57,23 @@ export default function HistorikkIndex({ revisions }: Props) {
     parse: (v: string) => new Date(v),
     serialize: (v: Date) => toISOString(v),
   });
-  const setSelectedDateShallow = (date: Date) => setSelectedDate(startOfDay(date), { shallow: true });
+  const setSelectedDateShallow = useCallback(
+    (date: Date) => {
+      setSelectedDate(startOfDay(date), { shallow: true });
+    },
+    [setSelectedDate]
+  );
 
-  // brukes for å unngå hydration problemer
+  {
+    /* Usikker på om dette er den beste måten, men inntil videre
+   bruker jeg denen for å unngå hydration problemer. */
+  }
   const isFirstRender = useIsFirstRender();
   const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
   const router = useRouter();
   const fromDate = subDays(min(revisionDates), 1);
   const toDate = addDays(max(revisionDates), 1);
-  const isValidDate = dateIsValidAndWithinRange(selectedDate ?? undefined, { start: fromDate, end: toDate });
+  const isValidDate = dateIsValidAndWithinRange(selectedDate, { start: fromDate, end: toDate });
   const selectedTimestamp = isValidDate ? toISOString(selectedDate as Date) : undefined;
 
   const historyData = useHistoryData(selectedTimestamp);
@@ -79,22 +88,26 @@ export default function HistorikkIndex({ revisions }: Props) {
     if (!isValidDate) {
       setSelectedDateShallow(toDate);
     }
-  }, [selectedDate, isValidDate, toDate, router.isReady]);
+  }, [setSelectedDateShallow, isValidDate, toDate, router.isReady]);
 
   if (revisions.length <= 0) {
     return <Error />;
   }
 
-  const settingsSections = settings?.content?.map((settingsSection) => {
+  // TODO: Fiks typescript
+  // @ts-ignore
+  const settingsSections: HistoryProduktsideSection[] = settings?.content?.map((settingsSection) => {
     const section = contentSections?.find(({ _id }) => _id == settingsSection?.produktsideSection?._ref);
 
-    return section ? section : null;
+    if (section) {
+      return section;
+    }
   });
 
   return (
     <div className={styles.container}>
       <UNSAFE_DatePicker.Standalone
-        selected={isFirstRender ? undefined : selectedDate}
+        selected={!isFirstRender && isValidDate ? selectedDate : undefined}
         onSelect={(date: Date | undefined) => {
           if (date) {
             setSelectedDateShallow(date);
@@ -105,9 +118,9 @@ export default function HistorikkIndex({ revisions }: Props) {
         toDate={toDate}
       />
 
-      {!isFirstRender && <p>{`Valgt dato: ${isValidDate ? formatLocaleDate(selectedDate) : "Ugyldig dato"}`}</p>}
+      {!isFirstRender && isValidDate && <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>}
 
-      {!isFirstRender && (
+      {!isFirstRender && isValidDate && (
         <ReadMore header="Endringer denne dagen" className={styles.readMore}>
           {revisions &&
             revisions
@@ -131,12 +144,15 @@ export default function HistorikkIndex({ revisions }: Props) {
             <div className={homeStyles.layoutContainer}>
               <div className={homeStyles.topRow}>
                 <div className={homeStyles.leftCol}>
-                  {settingsSections && kortFortalt && (
+                  {settings && kortFortalt && (
                     <LeftMenuSection
                       menuHeader="Innhold"
                       internalLinks={[
                         { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
-                        ...settingsSections?.map(({ title, slug }) => ({ anchorId: slug?.current, linkText: title })),
+                        ...settingsSections?.map(({ title, slug }) => ({
+                          anchorId: slug?.current,
+                          linkText: title,
+                        })),
                       ]}
                       supportLinks={settings?.supportLinks}
                       sticky={true}
@@ -153,18 +169,15 @@ export default function HistorikkIndex({ revisions }: Props) {
                   )}
 
                   {settings &&
-                    settingsSections?.map((settingsSection) => (
-                      <SectionWithHeader
-                        key={settingsSection?._id}
-                        anchorId={settingsSection?.slug?.current}
-                        title={settingsSection?.title}
-                        iconName={settingsSection?.iconName}
-                      >
-                        <p>{`Oppdatert ${settingsSection?._updatedAt}`}</p>
-                        {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                        <PortableTextContent value={settingsSection?.content} />
-                      </SectionWithHeader>
-                    ))}
+                    settingsSections?.map(
+                      ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
+                        <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
+                          <p>{`Oppdatert ${_updatedAt}`}</p>
+                          {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                          <PortableTextContent value={content} />
+                        </SectionWithHeader>
+                      )
+                    )}
                 </div>
               </div>
             </div>

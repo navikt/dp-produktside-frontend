@@ -31,7 +31,10 @@ export function useHistoryData(timestamp?: string) {
       const produktsideSettingsData = await fetchHistoryApi<HistoryProduktsideSettings>(produktsideSettingsId);
       const produktsideKortFortaltData = await fetchHistoryApi<HistoryProduktsideKortFortalt>(produktsideKortFortaltId);
 
+      // TODO: Fiks typescript
+      // @ts-ignore
       const produktsideSectionDocumentIds = produktsideSettingsData?.documents?.[0]?.content?.map(
+        // @ts-ignore
         (section) => section?.produktsideSection?._ref
       );
 

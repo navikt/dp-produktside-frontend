@@ -11,7 +11,7 @@ interface Props {
   anchorId?: string;
   children: ReactNode;
   iconName?: string;
-  title: string;
+  title?: string;
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
@@ -28,9 +28,11 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
         )}
 
         <div className={styles.heading}>
-          <Heading size="large" level="2" className={styles.title}>
-            {title}
-          </Heading>
+          {title && (
+            <Heading size="large" level="2" className={styles.title}>
+              {title}
+            </Heading>
+          )}
 
           {anchorId && (
             <CopyToClipboard

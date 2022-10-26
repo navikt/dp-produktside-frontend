@@ -12,7 +12,7 @@ export function useSanityPreview<Data>(initialData: Data, query: string, params?
 
   useEffect(() => {
     enablePreview && dispatch({ previewMode: true, dataset: dataset, showDrafts: true });
-  }, [enablePreview, dataset]);
+  }, [enablePreview, dataset, dispatch]);
 
   const usePreviewSubscription = useMemo(() => createPreviewSubscriptionHook({ ...sanityConfig, dataset }), [dataset]);
 

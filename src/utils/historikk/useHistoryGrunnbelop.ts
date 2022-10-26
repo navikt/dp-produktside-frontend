@@ -14,5 +14,5 @@ export function useHistoryGrunnbelop(timestamp?: string) {
       const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
       setGValue(grunnbelopData?.grunnbeloep);
     })();
-  }, [timestamp]);
+  }, [timestamp, setGValue]);
 }

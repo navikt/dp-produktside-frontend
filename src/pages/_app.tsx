@@ -7,7 +7,13 @@ import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import "styles/globals.scss";
 import { SanityProvider } from "components/sanity-context/sanity-context";
 
-function MyApp({ Component, pageProps }: AppProps) {
+// TODO: Fix typescript for this
+interface PageProps {
+  sanityData?: any;
+  grunnbelopData?: any;
+}
+
+function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   return (
     <ErrorBoundary>
       <PreviewContextProvider>

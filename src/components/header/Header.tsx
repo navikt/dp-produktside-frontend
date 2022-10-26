@@ -17,7 +17,7 @@ export function Header({ title, lastUpdated }: Props) {
   return (
     <header className={styles.header}>
       <div className={styles.illustration} aria-hidden="true" role="presentation">
-        <Image src={svgIcon} layout="responsive" />
+        <Image src={svgIcon} layout="responsive" alt="Ikon for dagpenger" />
       </div>
 
       <div className={styles.text}>
