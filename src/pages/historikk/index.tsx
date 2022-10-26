@@ -21,7 +21,7 @@ import {
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
 import { useIsFirstRender } from "utils/useIsFirstRender";
-import { useQueryState } from "utils/useQueryState/useQueryState";
+import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 
 interface Props {
@@ -56,11 +56,10 @@ export default function HistorikkIndex({ revisions }: Props) {
     parse: (v: string) => new Date(v),
     serialize: (v: Date) => toISOString(v),
   });
-  // brukes for å unngå hydration problemer
-  const isFirstRender = useIsFirstRender();
-
   const setSelectedDateShallow = (date: Date) => setSelectedDate(startOfDay(date), { shallow: true });
 
+  // brukes for å unngå hydration problemer
+  const isFirstRender = useIsFirstRender();
   const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
   const router = useRouter();
   const fromDate = subDays(min(revisionDates), 1);
@@ -106,9 +105,7 @@ export default function HistorikkIndex({ revisions }: Props) {
         toDate={toDate}
       />
 
-      {isFirstRender ? undefined : (
-        <p>{`Valgt dato: ${isValidDate ? formatLocaleDate(selectedDate) : "Ugyldig dato"}`}</p>
-      )}
+      {!isFirstRender && <p>{`Valgt dato: ${isValidDate ? formatLocaleDate(selectedDate) : "Ugyldig dato"}`}</p>}
 
       {!isFirstRender && (
         <ReadMore header="Endringer denne dagen" className={styles.readMore}>
@@ -129,6 +126,7 @@ export default function HistorikkIndex({ revisions }: Props) {
       <main className={homeStyles.main}>
         <div className={homeStyles.productPage}>
           {settings && <Header title={settings?.title} lastUpdated={settings?._updatedAt} />}
+
           <div className={homeStyles.content}>
             <div className={homeStyles.layoutContainer}>
               <div className={homeStyles.topRow}>
@@ -155,20 +153,18 @@ export default function HistorikkIndex({ revisions }: Props) {
                   )}
 
                   {settings &&
-                    settingsSections?.map((settingsSection) => {
-                      return (
-                        <SectionWithHeader
-                          key={settingsSection?._id}
-                          anchorId={settingsSection?.slug?.current}
-                          title={settingsSection?.title}
-                          iconName={settingsSection?.iconName}
-                        >
-                          <p>{`Oppdatert ${settingsSection?._updatedAt}`}</p>
-                          {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                          <PortableTextContent value={settingsSection?.content} />
-                        </SectionWithHeader>
-                      );
-                    })}
+                    settingsSections?.map((settingsSection) => (
+                      <SectionWithHeader
+                        key={settingsSection?._id}
+                        anchorId={settingsSection?.slug?.current}
+                        title={settingsSection?.title}
+                        iconName={settingsSection?.iconName}
+                      >
+                        <p>{`Oppdatert ${settingsSection?._updatedAt}`}</p>
+                        {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                        <PortableTextContent value={settingsSection?.content} />
+                      </SectionWithHeader>
+                    ))}
                 </div>
               </div>
             </div>

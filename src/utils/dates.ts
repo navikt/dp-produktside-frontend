@@ -29,10 +29,11 @@ export function toISOString(date: Date) {
   return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'", { locale: AppLocale });
 }
 
-export function dateIsValidAndWithinRange(date?: Date, interval?: Interval): date is Date {
+export function dateIsValidAndWithinRange(date?: Date, interval?: Interval) {
   if (!date || !interval?.start || !interval?.end) {
     return false;
   }
+  
   return (
     isValidDate(date) &&
     isWithinInterval(date as Date, { start: subDays(interval?.start, 1), end: addDays(interval?.end, 1) })
