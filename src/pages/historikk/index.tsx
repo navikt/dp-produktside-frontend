@@ -1,7 +1,6 @@
 import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
-import { addDays, isSameDay, max, min, startOfDay, subDays } from "date-fns";
-import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { addDays, endOfDay, isSameDay, isWithinInterval, max, min, subDays } from "date-fns";
+import { useCallback } from "react";
 import { Error } from "components/error/Error";
 import { Header } from "components/header/Header";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
@@ -13,9 +12,9 @@ import styles from "styles/Historikk.module.scss";
 import homeStyles from "styles/Home.module.scss";
 import {
   convertTimestampToDate,
-  dateIsValidAndWithinRange,
-  formatLocaleDate,
+  formatLocaleDateAndTime,
   formatTimestamp,
+  isValidDate,
   toISOString,
 } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
@@ -53,46 +52,34 @@ export async function getStaticProps() {
 }
 
 export default function HistorikkIndex({ revisions }: Props) {
+  const isFirstRender = useIsFirstRender();
+  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
+  {
+    /* Datoer blir satt til slutten av dagen 
+    fordi man ønsker all historikk til slutten av den dagen */
+  }
+  const fromDate = endOfDay(subDays(min(revisionDates), 1));
+  const toDate = endOfDay(addDays(max(revisionDates), 1));
+
   const [selectedDate, setSelectedDate] = useQueryState("timestamp", {
     parse: (v: string) => new Date(v),
     serialize: (v: Date) => toISOString(v),
   });
   const setSelectedDateShallow = useCallback(
     (date: Date) => {
-      setSelectedDate(startOfDay(date), { shallow: true });
+      setSelectedDate(endOfDay(date), { shallow: true });
     },
     [setSelectedDate]
   );
 
-  {
-    /* Usikker på om dette er den beste måten, men inntil videre
-   bruker jeg denen for å unngå hydration problemer. */
-  }
-  const isFirstRender = useIsFirstRender();
-  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
-  const router = useRouter();
-  const fromDate = subDays(min(revisionDates), 1);
-  const toDate = addDays(max(revisionDates), 1);
-  const isValidDate = dateIsValidAndWithinRange(selectedDate, { start: fromDate, end: toDate });
-  const selectedTimestamp = isValidDate ? toISOString(selectedDate as Date) : undefined;
+  const isValidSelectedDate =
+    isValidDate(selectedDate) && isWithinInterval(selectedDate, { start: fromDate, end: toDate });
 
+  const selectedTimestamp = isValidSelectedDate ? toISOString(selectedDate!) : undefined;
+
+  useHistoryGrunnbelop(selectedTimestamp);
   const historyData = useHistoryData(selectedTimestamp);
   const { settings, kortFortalt, contentSections } = historyData;
-  useHistoryGrunnbelop(selectedTimestamp);
-
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-
-    if (!isValidDate) {
-      setSelectedDateShallow(toDate);
-    }
-  }, [setSelectedDateShallow, isValidDate, toDate, router.isReady]);
-
-  if (revisions.length <= 0) {
-    return <Error />;
-  }
 
   // TODO: Fiks typescript
   // @ts-ignore
@@ -104,13 +91,25 @@ export default function HistorikkIndex({ revisions }: Props) {
     }
   });
 
+  {
+    /* Usikker på om dette faktisk løser roten av hydration-problemene, 
+    men inntil videre bruker jeg denne for å unngå det. */
+  }
+  if (isFirstRender) {
+    return null;
+  }
+
+  if (revisions.length <= 0) {
+    return <Error />;
+  }
+
   return (
     <div className={styles.container}>
       <UNSAFE_DatePicker.Standalone
-        selected={!isFirstRender && isValidDate ? selectedDate : undefined}
+        selected={selectedDate || undefined}
         onSelect={(date: Date | undefined) => {
           if (date) {
-            setSelectedDateShallow(date);
+            setSelectedDateShallow(endOfDay(date));
           }
         }}
         dropdownCaption
@@ -118,72 +117,73 @@ export default function HistorikkIndex({ revisions }: Props) {
         toDate={toDate}
       />
 
-      {!isFirstRender && isValidDate && <p>{`Valgt dato: ${formatLocaleDate(selectedDate)}`}</p>}
+      {!isValidSelectedDate && <p>Ugyldig dato</p>}
 
-      {!isFirstRender && isValidDate && (
-        <ReadMore header="Endringer denne dagen" className={styles.readMore}>
-          {revisions &&
-            revisions
-              ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate))
-              ?.map(({ timestamp }) => (
-                <Button
-                  size="small"
-                  key={timestamp}
-                  className={styles.button}
-                  onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
-                >{`${formatTimestamp(timestamp)}`}</Button>
-              ))}
-        </ReadMore>
-      )}
+      {isValidSelectedDate && (
+        <>
+          <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
 
-      <main className={homeStyles.main}>
-        <div className={homeStyles.productPage}>
-          {settings && <Header title={settings?.title} lastUpdated={settings?._updatedAt} />}
+          <ReadMore header="Endringer denne dagen" className={styles.readMore}>
+            {revisions &&
+              revisions
+                ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
+                ?.map(({ timestamp }) => (
+                  <Button
+                    size="small"
+                    key={timestamp}
+                    className={styles.button}
+                    onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
+                  >{`${formatTimestamp(timestamp)}`}</Button>
+                ))}
+          </ReadMore>
 
-          <div className={homeStyles.content}>
-            <div className={homeStyles.layoutContainer}>
-              <div className={homeStyles.topRow}>
-                <div className={homeStyles.leftCol}>
-                  {settings && kortFortalt && (
-                    <LeftMenuSection
-                      menuHeader="Innhold"
-                      internalLinks={[
-                        { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
-                        ...settingsSections?.map(({ title, slug }) => ({
-                          anchorId: slug?.current,
-                          linkText: title,
-                        })),
-                      ]}
-                      supportLinks={settings?.supportLinks}
-                      sticky={true}
-                    />
-                  )}
-                </div>
+          {settings && kortFortalt && (
+            <main className={homeStyles.main}>
+              <div className={homeStyles.productPage}>
+                <Header title={settings?.title} lastUpdated={settings?._updatedAt} />
 
-                <div className={homeStyles.mainCol}>
-                  {kortFortalt && (
-                    <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
-                      <p>{`Oppdatert ${kortFortalt?._updatedAt}`}</p>
-                      <PortableTextContent value={kortFortalt?.content} />
-                    </SectionWithHeader>
-                  )}
+                <div className={homeStyles.content}>
+                  <div className={homeStyles.layoutContainer}>
+                    <div className={homeStyles.topRow}>
+                      <div className={homeStyles.leftCol}>
+                        <LeftMenuSection
+                          menuHeader="Innhold"
+                          internalLinks={[
+                            { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
+                            ...settingsSections?.map(({ title, slug }) => ({
+                              anchorId: slug?.current,
+                              linkText: title,
+                            })),
+                          ]}
+                          supportLinks={settings?.supportLinks}
+                          sticky={true}
+                        />
+                      </div>
 
-                  {settings &&
-                    settingsSections?.map(
-                      ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
-                        <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
-                          <p>{`Oppdatert ${_updatedAt}`}</p>
-                          {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                          <PortableTextContent value={content} />
+                      <div className={homeStyles.mainCol}>
+                        <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
+                          <p>{`Oppdatert ${kortFortalt?._updatedAt}`}</p>
+                          <PortableTextContent value={kortFortalt?.content} />
                         </SectionWithHeader>
-                      )
-                    )}
+
+                        {settingsSections?.map(
+                          ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
+                            <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
+                              <p>{`Oppdatert ${_updatedAt}`}</p>
+                              {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                              <PortableTextContent value={content} />
+                            </SectionWithHeader>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </main>
+            </main>
+          )}
+        </>
+      )}
     </div>
   );
 }

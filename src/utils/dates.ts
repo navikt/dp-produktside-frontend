@@ -1,6 +1,5 @@
-import { addDays, Interval, isValid as isValidDate, subDays } from "date-fns";
+import { isValid } from "date-fns";
 import format from "date-fns/format";
-import isWithinInterval from "date-fns/isWithinInterval";
 import nb from "date-fns/locale/nb";
 
 const AppLocale = nb;
@@ -25,17 +24,10 @@ export function formatTimestamp(timestamp: string) {
   return formatLocaleTime(convertTimestampToDate(timestamp));
 }
 
-export function toISOString(date: Date) {
-  return format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'", { locale: AppLocale });
+export function isValidDate(date?: Date | null): date is Date {
+  return isValid(date);
 }
 
-export function dateIsValidAndWithinRange(date?: Date | null, interval?: Interval): date is Date {
-  if (!interval?.start || !interval?.end) {
-    return false;
-  }
-
-  return (
-    isValidDate(date) &&
-    isWithinInterval(date as Date, { start: subDays(interval?.start, 1), end: addDays(interval?.end, 1) })
-  );
+export function toISOString(date: Date) {
+  return date.toISOString();
 }
