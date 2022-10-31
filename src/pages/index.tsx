@@ -9,6 +9,8 @@ import { sanityClient } from "sanity/client";
 import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
+import { convertTimestampToDate, isValidDate, toISOString } from "utils/dates";
+import { max } from "date-fns";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -45,6 +47,21 @@ export default function Home() {
     linkText: title,
   }));
 
+  const lastUpdatedDates = [
+    _updatedAt,
+    kortFortalt?._updatedAt,
+    //@ts-ignore
+    ...(content?.map((section) => {
+      if (section?._updatedAt) {
+        return section?._updatedAt;
+      }
+    }) ?? []),
+  ]
+    .map((timestamp) => convertTimestampToDate(timestamp))
+    .filter((date) => isValidDate(date));
+
+  const lastUpdated = toISOString(max(lastUpdatedDates));
+
   const KortFortaltComponent = () => (
     <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId}>
       {/* bør styles til bodylong*/}
@@ -61,7 +78,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.productPage}>
-          <Header title={title} lastUpdated={_updatedAt} />
+          <Header title={title} lastUpdated={lastUpdated} />
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>

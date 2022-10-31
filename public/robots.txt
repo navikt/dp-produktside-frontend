@@ -1,0 +1,5 @@
+User-agent: Googlebot
+Disallow: https://www.nav.no/dagpenger/historikk
+
+User-agent: Googlebot
+Disallow: https://arbeid.ekstern.dev.nav.no/dagpenger/historikk

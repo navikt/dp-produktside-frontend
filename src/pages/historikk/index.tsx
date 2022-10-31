@@ -16,6 +16,7 @@ import {
   formatTimestamp,
   isValidDate,
   toISOString,
+  formatLocaleRelativeDate,
 } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
@@ -110,7 +111,7 @@ function HistorikkIndex({ revisions }: Props) {
 
       {selectedDate && !isValidSelectedDate && <p>Ugyldig dato</p>}
 
-      {isValidSelectedDate && (
+      {selectedDate && isValidSelectedDate && (
         <>
           <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
 
@@ -131,7 +132,8 @@ function HistorikkIndex({ revisions }: Props) {
           {settings && kortFortalt && (
             <main className={homeStyles.main}>
               <div className={homeStyles.productPage}>
-                <Header title={settings?.title} lastUpdated={settings?._updatedAt} />
+                {/* TODO: Fiks sist oppdatert dato for historikk i Header */}
+                <Header title={settings?.title} />
 
                 <div className={homeStyles.content}>
                   <div className={homeStyles.layoutContainer}>
@@ -141,10 +143,10 @@ function HistorikkIndex({ revisions }: Props) {
                           menuHeader="Innhold"
                           internalLinks={[
                             { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
-                            ...settingsSections?.map(({ title, slug }) => ({
+                            ...(settingsSections?.map(({ title, slug }) => ({
                               anchorId: slug?.current,
                               linkText: title,
-                            })),
+                            })) ?? []),
                           ]}
                           supportLinks={settings?.supportLinks}
                           sticky={true}
@@ -153,14 +155,16 @@ function HistorikkIndex({ revisions }: Props) {
 
                       <div className={homeStyles.mainCol}>
                         <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
-                          <p>{`Oppdatert ${kortFortalt?._updatedAt}`}</p>
+                          <p>{`Oppdatert ${formatLocaleDateAndTime(
+                            convertTimestampToDate(kortFortalt?._updatedAt)
+                          )}`}</p>
                           <PortableTextContent value={kortFortalt?.content} />
                         </SectionWithHeader>
 
                         {settingsSections?.map(
                           ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
                             <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
-                              <p>{`Oppdatert ${_updatedAt}`}</p>
+                              <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
                               {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
                               <PortableTextContent value={content} />
                             </SectionWithHeader>
@@ -179,7 +183,8 @@ function HistorikkIndex({ revisions }: Props) {
   );
 }
 
-// TODO: Fix SSR properly sometime
+// TODO: Aktiver ssr og finn en måte å håndtere SSR i Historikk.
+// Datepicker og useQueryState er lite ssr-vennlige.
 export default dynamic(() => Promise.resolve(HistorikkIndex), {
   ssr: false,
 });

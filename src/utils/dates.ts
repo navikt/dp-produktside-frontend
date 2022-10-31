@@ -1,4 +1,4 @@
-import { isValid } from "date-fns";
+import { formatRelative, isValid } from "date-fns";
 import format from "date-fns/format";
 import nb from "date-fns/locale/nb";
 
@@ -22,6 +22,10 @@ export function formatLocaleDateAndTime(date: Date) {
 
 export function formatTimestamp(timestamp: string) {
   return formatLocaleTime(convertTimestampToDate(timestamp));
+}
+
+export function formatLocaleRelativeDate(date: Date, baseDate: Date = new Date()) {
+  return formatRelative(date, baseDate, { locale: AppLocale });
 }
 
 export function isValidDate(date?: Date | null): date is Date {

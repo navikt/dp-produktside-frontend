@@ -6,6 +6,7 @@ const produktsideSectionReferenceQuery = `content [_type == "produktsideSectionR
         title,
         content,
         slug,
+        _updatedAt,
      }
 }`;
 
