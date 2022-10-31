@@ -2,13 +2,7 @@ import React from "react";
 import { BodyShort, Heading } from "@navikt/ds-react";
 import styles from "./LinkList.module.scss";
 import Link from "next/link";
-
-export interface SupportLink {
-  title: string;
-  url: string;
-  targetBlank: boolean;
-}
-
+import { SupportLink } from "sanity/types";
 interface Props {
   title?: string;
   links?: SupportLink[];

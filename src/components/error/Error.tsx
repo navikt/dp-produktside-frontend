@@ -3,7 +3,7 @@ import { Alert, BodyShort, Detail } from "@navikt/ds-react";
 import { SEO } from "../SEO";
 import styles from "./Error.module.scss";
 
-export default function Error() {
+export function Error() {
   return (
     <div className={styles.container}>
       <SEO title={"Teknisk feil"} description="Beklager, det skjedde en teknisk feil." />

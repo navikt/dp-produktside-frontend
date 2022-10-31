@@ -7,7 +7,7 @@ import styles from "./PortableTextContent.module.scss";
 export function PortableTextContent({ value }: PortableTextProps) {
   return (
     <PortableText
-      value={value}
+      value={value || []}
       components={{
         marks: { GtoNOK: GtoNOK },
         types: {

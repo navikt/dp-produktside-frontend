@@ -5,17 +5,17 @@ import {
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
+const dekoratorParams: DekoratorProps = {
+  // @ts-ignore
+  env: process.env.DEKORATOR_MILJO || "prod",
+  breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
+  context: "privatperson",
+  utilsBackground: "white",
+};
+
 export default class MyDocument extends Document<{ Dekorator: DekoratorComponents }> {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
-
-    const dekoratorParams: DekoratorProps = {
-      // @ts-ignore
-      env: process.env.DEKORATOR_MILJO || "prod",
-      breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
-      context: "privatperson",
-      utilsBackground: "white",
-    };
 
     const Dekorator: DekoratorComponents = await fetchDecoratorReact(dekoratorParams).catch((err) => {
       // eslint-disable-next-line no-console

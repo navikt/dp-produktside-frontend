@@ -6,7 +6,14 @@ const produktsideSectionReferenceQuery = `content [_type == "produktsideSectionR
         title,
         content,
         slug,
+        _updatedAt,
      }
+}`;
+
+export const produktsideSectionIdsQuery = groq`{
+  'sectionIds': *[_type == "produktsideSection"]{
+    _id
+  }
 }`;
 
 export const produktsideQuery = groq`{
@@ -14,6 +21,7 @@ export const produktsideQuery = groq`{
       title,
       ${produktsideSectionReferenceQuery},
       supportLinks,
+      _updatedAt,
     },
     'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == "nb"][0],
     "calculatorTexts": *[_type == "produktsideText" && textId match "kalkulator*" && __i18n_lang == "nb"]{

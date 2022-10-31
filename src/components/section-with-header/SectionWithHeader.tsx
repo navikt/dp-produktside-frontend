@@ -8,10 +8,10 @@ import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";
 
 interface Props {
-  anchorId: string;
+  anchorId?: string;
   children: ReactNode;
   iconName?: string;
-  title: string;
+  title?: string;
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
@@ -28,20 +28,24 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
         )}
 
         <div className={styles.heading}>
-          <Heading size="large" level="2" className={styles.title}>
-            {title}
-          </Heading>
+          {title && (
+            <Heading size="large" level="2" className={styles.title}>
+              {title}
+            </Heading>
+          )}
 
-          <CopyToClipboard
-            className={styles.copyLink}
-            copyText={Config.appUrls.produktsideAnchorUrl(anchorId)}
-            popoverText="Lenken er kopiert"
-            size="small"
-            icon={<LinkIcon title="Kopier lenke" />}
-            popoverPlacement="right"
-          >
-            Kopier lenke
-          </CopyToClipboard>
+          {anchorId && (
+            <CopyToClipboard
+              className={styles.copyLink}
+              copyText={Config.appUrls.produktsideAnchorUrl(anchorId)}
+              popoverText="Lenken er kopiert"
+              size="small"
+              icon={<LinkIcon title="Kopier lenke" />}
+              popoverPlacement="right"
+            >
+              Kopier lenke
+            </CopyToClipboard>
+          )}
         </div>
 
         {children}

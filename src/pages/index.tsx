@@ -1,14 +1,16 @@
 import Head from "next/head";
-import { sanityClient } from "sanity/client";
-import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
-import styles from "styles/Home.module.scss";
-import { useIsMobile } from "utils/useIsMobile";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { sanityClient } from "sanity/client";
+import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import styles from "styles/Home.module.scss";
+import { useIsMobile } from "utils/useIsMobile";
+import { convertTimestampToDate, isValidDate, toISOString } from "utils/dates";
+import { max } from "date-fns";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -30,7 +32,7 @@ export default function Home() {
   const sanityData = useSanityContext();
 
   const {
-    settings: { title, content, supportLinks },
+    settings: { title, content, supportLinks, _updatedAt },
     kortFortalt,
   } = sanityData;
 
@@ -44,6 +46,21 @@ export default function Home() {
     anchorId: slug?.current,
     linkText: title,
   }));
+
+  const lastUpdatedDates = [
+    _updatedAt,
+    kortFortalt?._updatedAt,
+    //@ts-ignore
+    ...(content?.map((section) => {
+      if (section?._updatedAt) {
+        return section?._updatedAt;
+      }
+    }) ?? []),
+  ]
+    .map((timestamp) => convertTimestampToDate(timestamp))
+    .filter((date) => isValidDate(date));
+
+  const lastUpdated = toISOString(max(lastUpdatedDates));
 
   const KortFortaltComponent = () => (
     <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId}>
@@ -61,7 +78,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.productPage}>
-          <Header />
+          <Header title={title} lastUpdated={lastUpdated} />
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>

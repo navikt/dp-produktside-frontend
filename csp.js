@@ -24,6 +24,7 @@ const csp = {
     "api.puzzel.com",
     "nav.boost.ai",
     "rt6o382n.api.sanity.io",
+    "rt6o382n.apicdn.sanity.io",
     "ta-survey-v2.herokuapp.com",
     "in2.taskanalytics.com",
   ],
