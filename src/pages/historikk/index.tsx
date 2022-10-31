@@ -19,10 +19,10 @@ import {
 } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
-import { useIsFirstRender } from "utils/useIsFirstRender";
 import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { HistoryProduktsideSection, HistorySectionIds } from "sanity/types";
+import dynamic from "next/dynamic";
 
 interface Props {
   revisions: Revision[];
@@ -51,8 +51,7 @@ export async function getStaticProps() {
   };
 }
 
-export default function HistorikkIndex({ revisions }: Props) {
-  const isFirstRender = useIsFirstRender();
+function HistorikkIndex({ revisions }: Props) {
   const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
   {
     /* Datoer blir satt til slutten av dagen 
@@ -91,14 +90,6 @@ export default function HistorikkIndex({ revisions }: Props) {
     }
   });
 
-  {
-    /* Usikker på om dette faktisk løser roten av hydration-problemene, 
-    men inntil videre bruker jeg denne for å unngå det. */
-  }
-  if (isFirstRender) {
-    return null;
-  }
-
   if (revisions.length <= 0) {
     return <Error />;
   }
@@ -117,7 +108,7 @@ export default function HistorikkIndex({ revisions }: Props) {
         toDate={toDate}
       />
 
-      {!isValidSelectedDate && <p>Ugyldig dato</p>}
+      {selectedDate && !isValidSelectedDate && <p>Ugyldig dato</p>}
 
       {isValidSelectedDate && (
         <>
@@ -187,3 +178,8 @@ export default function HistorikkIndex({ revisions }: Props) {
     </div>
   );
 }
+
+// TODO: Fix SSR properly sometime
+export default dynamic(() => Promise.resolve(HistorikkIndex), {
+  ssr: false,
+});
