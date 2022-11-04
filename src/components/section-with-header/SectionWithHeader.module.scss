@@ -70,18 +70,8 @@ $iconContainerRadius: common.px-to-rem(64px / 2);
     }
   }
 
-  // TODO: Dette er midlertidig kode. Legg til CSS-reset og håndter dette globalt etterhvert.
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p {
+  ul,
+  ol {
     margin-top: 0;
-  }
-
-  h5 {
-    margin-bottom: 0;
   }
 }
