@@ -1,51 +1,52 @@
-import { Accordion, BodyLong, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText, PortableTextProps } from "@portabletext/react";
-import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKalkulator";
-import { GtoNOK } from "./marks/GtoNOK";
-import styles from "./PortableTextContent.module.scss";
+import { useFilterContext } from "components/filter/FilterContext";
+import { HorizontalFilterMenu } from "components/filter/FilterMenu";
+import { commonComponents } from "./components";
+import { commonMarks } from "./marks/marks";
+import { commonBlockStyles } from "./styles";
 
 export function PortableTextContent({ value }: PortableTextProps) {
+  const { selectedFilters, setSelectedFilters } = useFilterContext();
+
+  const HorizontalFilterComponent = () => (
+    <HorizontalFilterMenu
+      selectedFilters={selectedFilters}
+      onChange={(val) => {
+        setSelectedFilters(val);
+      }}
+    />
+  );
+
   return (
     <PortableText
       value={value || []}
       components={{
-        block: {
-          normal: ({ children }) => <BodyLong spacing>{children}</BodyLong>,
-          h3: ({ children }) => (
-            <Heading level="3" size="medium" spacing>
-              {children}
-            </Heading>
-          ),
-          h4: ({ children }) => (
-            <Heading level="4" size="small" spacing>
-              {children}
-            </Heading>
-          ),
-          h5: ({ children }) => (
-            <Heading level="5" size="xsmall" spacing>
-              {children}
-            </Heading>
-          ),
-          h6: ({ children }) => (
-            <Heading level="6" size="xsmall" spacing>
-              {children}
-            </Heading>
-          ),
-        },
-        marks: { GtoNOK: GtoNOK },
+        block: commonBlockStyles,
+        marks: commonMarks,
         types: {
-          customComponent: DagpengerKalkulator,
-          produktsideAccordion: ({ value }) => (
-            <Accordion.Item>
-              <Accordion.Header>{value.title}</Accordion.Header>
-              <Accordion.Content className={styles.whiteSpacePreline}>{value.content}</Accordion.Content>
-            </Accordion.Item>
-          ),
-          produktsideReadMore: ({ value }) => (
-            <ReadMore className={styles.whiteSpacePreline} header={value.title} size={value.size}>
-              {value.content}
-            </ReadMore>
-          ),
+          produktsideFilteredContent: ({ value }) => {
+            const shouldShowFilteredContent =
+              selectedFilters?.length === 0 ||
+              value?.filters?.length === 0 ||
+              value?.filters?.some((filter: string) => selectedFilters.includes(filter));
+
+            if (!shouldShowFilteredContent) {
+              return null;
+            }
+
+            return (
+              <PortableText
+                value={value?.content || []}
+                components={{
+                  block: commonBlockStyles,
+                  marks: commonMarks,
+                  types: commonComponents,
+                }}
+              />
+            );
+          },
+          produktsideFilterMenu: () => <HorizontalFilterComponent />,
+          ...commonComponents,
         },
       }}
     />
