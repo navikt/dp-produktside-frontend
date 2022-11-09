@@ -27,8 +27,8 @@ export function FilterMenu({
       }}
       value={selectedFilters}
     >
-      <Checkbox value="arbeidsledig">Arbeidsledig</Checkbox>
-      <Checkbox value="permittert">Permittert</Checkbox>
+      <Checkbox value="arbeidsledig">Jeg er arbeidsledig</Checkbox>
+      <Checkbox value="permittert">Jeg er permittert</Checkbox>
       <FilterExplanation selectedFilters={selectedFilters} availableFilters={availableFilters} />
     </CheckboxGroup>
   );
