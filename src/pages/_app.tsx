@@ -6,6 +6,7 @@ import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-con
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import "styles/globals.scss";
 import { SanityProvider } from "components/sanity-context/sanity-context";
+import { FilterContextProvider } from "components/filter/FilterContext";
 
 // TODO: Fix typescript for this
 interface PageProps {
@@ -17,12 +18,14 @@ function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   return (
     <ErrorBoundary>
       <PreviewContextProvider>
-        <SanityProvider sanityData={pageProps.sanityData}>
-          <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
-            <PreviewBanner />
-            <Component {...pageProps} />;
-          </GrunnbelopProvider>
-        </SanityProvider>
+        <FilterContextProvider>
+          <SanityProvider sanityData={pageProps.sanityData}>
+            <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
+              <PreviewBanner />
+              <Component {...pageProps} />;
+            </GrunnbelopProvider>
+          </SanityProvider>
+        </FilterContextProvider>
       </PreviewContextProvider>
     </ErrorBoundary>
   );

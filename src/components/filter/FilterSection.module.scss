@@ -1,0 +1,10 @@
+.container {
+  box-shadow: inset 0 0 0 8px var(--navds-semantic-color-focus-inverted);
+  border-radius: 0.2rem;
+  background-color: var(--navds-semantic-color-component-background-light);
+  padding: 1.6rem;
+
+  .description {
+    margin: 1.5rem 0;
+  }
+}

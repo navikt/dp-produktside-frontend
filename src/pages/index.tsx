@@ -11,6 +11,9 @@ import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
 import { convertTimestampToDate, isValidDate, toISOString } from "utils/dates";
 import { max } from "date-fns";
+import { FilterSection } from "components/filter/FilterSection";
+import { FilterMenu } from "components/filter/FilterMenu";
+import { useFilterContext } from "components/filter/FilterContext";
 
 export async function getStaticProps() {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -30,6 +33,7 @@ export async function getStaticProps() {
 export default function Home() {
   const isMobile = useIsMobile();
   const sanityData = useSanityContext();
+  const { selectedFilters, setSelectedFilters } = useFilterContext();
 
   const {
     settings: { title, content, supportLinks, _updatedAt },
@@ -69,6 +73,17 @@ export default function Home() {
     </SectionWithHeader>
   );
 
+  const FilterComponent = () => (
+    <FilterSection>
+      <FilterMenu
+        selectedFilters={selectedFilters}
+        onChange={(val) => {
+          setSelectedFilters(val);
+        }}
+      />
+    </FilterSection>
+  );
+
   return (
     <div className={styles.rootContainer}>
       <Head>
@@ -85,6 +100,7 @@ export default function Home() {
               <div className={styles.topRow}>
                 <div className={styles.leftCol}>
                   {isMobile && <KortFortaltComponent />}
+                  {isMobile && <FilterComponent />}
                   <LeftMenuSection
                     menuHeader="Innhold"
                     internalLinks={[kortFortaltLink, ...links]}
@@ -95,6 +111,7 @@ export default function Home() {
 
                 <div className={styles.mainCol}>
                   {!isMobile && <KortFortaltComponent />}
+                  {!isMobile && <FilterComponent />}
 
                   {/* @ts-ignore */}
                   {content?.map(({ title, content, slug, iconName }, index) => (
