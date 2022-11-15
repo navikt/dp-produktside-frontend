@@ -24,18 +24,17 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
       : {};
 
     return (
-      <Link href={value?.url} passHref>
-        <Button
-          className={styles.button}
-          as="a"
-          target={value?.targetBlank ? "_blank" : "_self"}
-          size={value?.size}
-          variant={value?.variant}
-          {...iconProps}
-        >
-          {value?.title}
-        </Button>
-      </Link>
+      <Button
+        className={styles.button}
+        as="a"
+        target={value?.targetBlank ? "_blank" : "_self"}
+        size={value?.size}
+        variant={value?.variant}
+        {...iconProps}
+        href={value?.url}
+      >
+        {value?.title}
+      </Button>
     );
   },
   produktsideReadMore: ({ value }) => (
