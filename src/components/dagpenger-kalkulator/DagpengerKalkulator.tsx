@@ -1,11 +1,12 @@
-import { Alert, BodyShort, Button, Radio, RadioGroup, Table, TextField } from "@navikt/ds-react";
+import { Alert, BodyShort, Button, Radio, RadioGroup, Select, Table, TextField } from "@navikt/ds-react";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { useDebouncedValue } from "utils/useDebouncedValue";
 import styles from "./DagpengerKalkulator.module.scss";
 import { toKR } from "./utils";
+import { bool } from "prop-types";
 
 interface ResultatProps {
   grunnlag?: number;
@@ -75,6 +76,10 @@ function Resultat({ grunnlag }: ResultatProps) {
             <Table.DataCell>{getCalculatorTextWithTextId("ukesats")}</Table.DataCell>
             <Table.DataCell>{toKR(totalt / 52)}</Table.DataCell>
           </Table.Row>
+          <Table.Row shadeOnHover={false}>
+            <Table.DataCell>barnetillegg hver uke</Table.DataCell>
+            <Table.DataCell>barn x 170</Table.DataCell>
+          </Table.Row>
 
           <Table.Row shadeOnHover={false}>
             <Table.DataCell>{getCalculatorTextWithTextId("tilsammen")}</Table.DataCell>
@@ -93,6 +98,17 @@ export function DagpengerKalkulator() {
   const [grunnlag, setGrunnlag] = useState<undefined | number>();
   const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
   const { getCalculatorTextWithTextId } = useSanityContext();
+  const [harBarn, setHarBarn] = useState<undefined | boolean>(undefined);
+  const barnevalg = () => {
+    let options = [];
+    for (let i = 1; i < 10; i++) {
+      options.push(<option value={i}>{i}</option>);
+    }
+    return options;
+  };
+  useEffect(() => {
+    console.log("barn bool:", harBarn);
+  }, [harBarn]);
 
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
@@ -117,10 +133,16 @@ export function DagpengerKalkulator() {
         size="medium"
       />
 
-      <RadioGroup legend="Velg din aldersgruppe." onChange={(val: any) => setVal(val)} value={val}>
+      <RadioGroup legend="Har du barn under 18 år?" onChange={(val: any) => setHarBarn(val)} value={harBarn}>
         <Radio value="true">Ja</Radio>
         <Radio value="false">Nei</Radio>
       </RadioGroup>
+      {harBarn && (
+        <Select label="Hvor mange barn snakker vi om">
+          <option value="">Velg antall barn under 18 år</option>
+          {barnevalg()}
+        </Select>
+      )}
 
       <Button className={styles.button} variant="secondary">
         Beregn hva jeg kan få
