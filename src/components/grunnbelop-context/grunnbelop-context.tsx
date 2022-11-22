@@ -16,7 +16,7 @@ interface GrunnbelopProviderProps {
 }
 
 interface GrunnbelopContextValues {
-  G: number;
+  gValue: number;
   GtoNOK: (g: number) => string;
   setGValue: Dispatch<SetStateAction<number>>;
 }
@@ -31,7 +31,7 @@ export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProvider
   return (
     <GrunnbelopContext.Provider
       value={{
-        G: gValue,
+        gValue: gValue,
         setGValue: setGValue,
         GtoNOK: (g: number) =>
           isNaN(g)
