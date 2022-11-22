@@ -1,4 +1,5 @@
 import "@navikt/ds-css";
+import "@navikt/ds-css-internal";
 import type { AppProps } from "next/app";
 import { PreviewBanner } from "components/preview-context/PreviewBanner";
 import { PreviewContextProvider } from "components/preview-context/previewContext";

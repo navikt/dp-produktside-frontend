@@ -1,6 +1,5 @@
 import { Button, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
-import { useSanityContext } from "components/sanity-context/sanity-context";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./DagpengerKalkulator.module.scss";
 import { ResultTables } from "./ResultTables";
 
@@ -13,13 +12,12 @@ function convertBooleanToString(value?: boolean) {
 }
 
 export function DagpengerKalkulator() {
-  const { getCalculatorTextWithTextId } = useSanityContext();
   const [grunnlag, setGrunnlag] = useState<number | undefined>();
   const [hasChildren, setHasChildren] = useState<boolean | undefined>(undefined);
   const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [showResult, setShowResult] = useState<boolean>();
-
   const childrenOptions = Array.from({ length: 10 }, (_, i) => <option value={i + 1}>{i + 1}</option>);
+  const resultRef = useRef<HTMLDivElement | null>(null);
 
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
@@ -42,19 +40,20 @@ export function DagpengerKalkulator() {
       onSubmit={(event) => {
         event.preventDefault();
         setShowResult(true);
+        resultRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }}
     >
       <TextField
         className={styles.textField}
-        label={getCalculatorTextWithTextId("label")}
-        type="text"
+        label="Hva har du hatt i inntekt de siste 12 månedene?"
+        type="number"
         inputMode="numeric"
         pattern="[0-9]*"
         value={grunnlag || ""}
         onChange={(e) => {
           setGrunnlag(Math.max(0, +e.target.value) || undefined);
         }}
-        placeholder="350 000"
+        placeholder="700 000"
         size="medium"
         required
       />
@@ -92,7 +91,9 @@ export function DagpengerKalkulator() {
         Beregn hva jeg kan få
       </Button>
 
-      {grunnlag && showResult && <ResultTables grunnlag={grunnlag} numberOfChildren={numberOfChildren} />}
+      <div ref={resultRef} className={styles.resultTablesContainer}>
+        {grunnlag && showResult && <ResultTables grunnlag={grunnlag} numberOfChildren={numberOfChildren} />}
+      </div>
     </form>
   );
 }

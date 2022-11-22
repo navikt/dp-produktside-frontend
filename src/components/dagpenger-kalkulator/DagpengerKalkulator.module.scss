@@ -7,16 +7,18 @@
   }
 
   .radioGroup {
-    margin-bottom: 1rem;
   }
 
   .select {
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
 
   .button {
     max-width: fit-content;
-    margin: 0 auto;
-    margin-bottom: 2rem;
+    margin: 1rem auto;
+  }
+
+  .resultTablesContainer {
+    scroll-margin-top: 0.75rem;
   }
 }

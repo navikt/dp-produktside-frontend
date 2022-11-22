@@ -1,10 +1,8 @@
-import { Alert, Table, BodyShort } from "@navikt/ds-react";
+import { Alert, BodyShort, Table } from "@navikt/ds-react";
+import { LegacyRef } from "react";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { useSanityContext } from "components/sanity-context/sanity-context";
 import { toKR } from "./utils";
 import styles from "./ResultTables.module.scss";
-
 interface ResultTablesProps {
   grunnlag: number;
   numberOfChildren: number;
@@ -12,22 +10,21 @@ interface ResultTablesProps {
 
 export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) {
   const { gValue } = useGrunnbelopContext();
-  const { getCalculatorTextWithTextId } = useSanityContext();
 
   if (grunnlag < 1.5 * gValue) {
     return (
-      <>
-        {/* TODO: Find a way to get the plain text after the blocks are parsed so we can use BodyShort here instead. */}
-        <PortableTextContent value={getCalculatorTextWithTextId("forLavtGrunnlag", false)} />
-        <Alert variant="info">{getCalculatorTextWithTextId("sendSoknadLikevel")}</Alert>
-      </>
+      <Alert className={styles.alertInfoText} variant="info">
+        Inntekt under 1.5 G (167 216 kr) gir ikke rett til dagpenger. Vi anbefaler likevel at du sender søknad så kan
+        NAV vurdere din rett til dagpenger.
+      </Alert>
     );
   }
 
   const mellom0og6g = Math.max(0, Math.min(grunnlag, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
+  const dagpengerPerWeek = resultatMellom0og6G / 52;
   const barnetilleggPerWeek = 17 * 5 * numberOfChildren;
-  const totalt = resultatMellom0og6G + barnetilleggPerWeek;
+  const totalPerWeek = dagpengerPerWeek + barnetilleggPerWeek;
 
   return (
     <>
@@ -78,9 +75,9 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
 
           <Table.Row shadeOnHover={false}>
             <Table.HeaderCell scope="row" align="left">
-              {getCalculatorTextWithTextId("ukesats")}
+              {`${toKR(resultatMellom0og6G)}/52 uker`}
             </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(totalt / 52)}</Table.DataCell>
+            <Table.DataCell align="right">{toKR(dagpengerPerWeek)}</Table.DataCell>
           </Table.Row>
 
           <Table.Row shadeOnHover={false}>
@@ -92,9 +89,9 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
 
           <Table.Row shadeOnHover={false}>
             <Table.HeaderCell scope="row" align="left">
-              {getCalculatorTextWithTextId("tilsammen")}
+              Beregnet utbetaling per uke
             </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(totalt)}</Table.DataCell>
+            <Table.DataCell align="right">{toKR(totalPerWeek)}</Table.DataCell>
           </Table.Row>
         </Table.Body>
       </Table>
@@ -102,7 +99,7 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
       <BodyShort className={styles.infoText}>Alle tall er før skatt.</BodyShort>
 
       <Alert className={styles.alertInfoText} variant="info">
-        {getCalculatorTextWithTextId("kunveiledende")}
+        Dette er kun en veiledende utregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
       </Alert>
     </>
   );
