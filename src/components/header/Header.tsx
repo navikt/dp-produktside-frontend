@@ -27,7 +27,7 @@ export function Header({ title, lastUpdated }: Props) {
       </div>
 
       <div className={styles.text}>
-        <Heading size={"xlarge"} level={"1"}>
+        <Heading size={"xlarge"} level={"1"} spacing>
           {title}
         </Heading>
         <div className={styles.taglineWrapper}>
@@ -37,8 +37,8 @@ export function Header({ title, lastUpdated }: Props) {
           <span aria-hidden="true" className={styles.divider}>
             {"|"}
           </span>
-          <Detail size="small" uppercase>
-            <span className={styles.modifiedLabel}>{formattedLastUpdated}</span>
+          <Detail size="small">
+            <span className={styles.modifiedLabel}>Oppdatert {formattedLastUpdated}</span>
           </Detail>
         </div>
       </div>
