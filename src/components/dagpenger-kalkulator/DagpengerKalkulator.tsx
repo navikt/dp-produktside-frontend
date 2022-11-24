@@ -1,82 +1,39 @@
-import { Accordion, Alert, TextField } from "@navikt/ds-react";
-import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import { useState } from "react";
-import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { useSanityContext } from "components/sanity-context/sanity-context";
-import { useDebouncedValue } from "utils/useDebouncedValue";
+import { Button, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import styles from "./DagpengerKalkulator.module.scss";
-import { toKR } from "./utils";
+import { ResultTables } from "./ResultTables";
 
-interface ResultatProps {
-  grunnlag?: number;
+function convertStringToBoolean(value?: string): boolean {
+  return value === "true";
 }
 
-function Resultat({ grunnlag }: ResultatProps) {
-  const { G } = useGrunnbelopContext();
-  const { getCalculatorTextWithTextId } = useSanityContext();
-
-  if (!grunnlag) {
-    return null;
-  }
-
-  if (grunnlag < 1.5 * G) {
-    return (
-      <>
-        {/* TODO: Find a way to get the plain text after the blocks are parsed so we can use BodyShort here instead. */}
-        <PortableTextContent value={getCalculatorTextWithTextId("forLavtGrunnlag", false)} />
-        <Alert variant="info">{getCalculatorTextWithTextId("sendSoknadLikevel")}</Alert>
-      </>
-    );
-  }
-
-  //const under3G = Math.min(grunnlag, 3 * G);
-  const mellom0og6g = Math.max(0, Math.min(grunnlag, 6 * G));
-  const over6G = Math.max(0, grunnlag - 6 * G);
-
-  //const resultatUnder3G = under3G * 0.624;
-  const resultatMellom0og6G = mellom0og6g * 0.624;
-  const totalt = resultatMellom0og6G;
-
-  return (
-    <>
-      <table className={styles.resultTable}>
-        <tbody>
-          <tr>
-            <td>
-              <i>{getCalculatorTextWithTextId("mellom")}</i>
-            </td>
-            <td>{toKR(mellom0og6g)} x 62.4 %</td>
-            <td> {toKR(resultatMellom0og6G)}</td>
-          </tr>
-          {over6G > 0 && (
-            <tr>
-              <td>
-                <i>Inntekt over 6 G</i>
-              </td>
-              <td>{toKR(over6G)} x 0 %</td>
-              <td>{toKR(0)}</td>
-            </tr>
-          )}
-          <tr>
-            <td colSpan={2}>{getCalculatorTextWithTextId("tilsammen")}</td>
-            <td>{toKR(totalt)}</td>
-          </tr>
-          <tr>
-            <td colSpan={2}>{getCalculatorTextWithTextId("ukesats")}</td>
-            <td> {toKR(totalt / 52)}</td>
-          </tr>
-        </tbody>
-      </table>
-      <Alert variant="info">{getCalculatorTextWithTextId("kunveiledende")}</Alert>
-    </>
-  );
+interface FormValues {
+  grunnlag: number;
+  hasChildren: string;
+  numberOfChildren: number;
 }
 
 export function DagpengerKalkulator() {
-  const [grunnlag, setGrunnlag] = useState<undefined | number>();
-  const debouncedGrunnlag = useDebouncedValue(grunnlag, 300);
-  const { getCalculatorTextWithTextId } = useSanityContext();
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
+  const {
+    register,
+    control,
+    formState: { errors },
+    handleSubmit,
+    watch,
+  } = useForm<FormValues>();
+  const watchGrunnlag = watch("grunnlag");
+  const watchHasChildren = watch("hasChildren");
+  const watchNumberOfChildren = watch("numberOfChildren");
+  const hasChildren = convertStringToBoolean(watchHasChildren);
 
+  const childrenOptions = Array.from({ length: 10 }, (_, i) => (
+    <option value={i + 1} key={i + 1}>
+      {i + 1}
+    </option>
+  ));
   // TODO: Logg kalkulator bruk?
   // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
   // useEffect(() => {
@@ -86,24 +43,75 @@ export function DagpengerKalkulator() {
   //   }
   // }, [grunnlag, harLoggetBruk]);
 
+  useEffect(() => {
+    if (showResult) {
+      setShowResult(false);
+    }
+  }, [watchGrunnlag, watchHasChildren, watchNumberOfChildren]);
+
+  function onSubmit() {
+    setShowResult(true);
+    resultTablesContainerRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
-    <Accordion className={styles.kalkulator}>
-      <Accordion.Item open={true}>
-        <Accordion.Header>Kalkulator</Accordion.Header>
-        <Accordion.Content className={styles.inputWrapper}>
-          <TextField
-            label={getCalculatorTextWithTextId("label")}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            // @ts-ignore
-            value={grunnlag || ""}
-            onChange={(e) => setGrunnlag(Math.max(0, +e.target.value) || undefined)}
-            placeholder="350 000"
-          />
-        </Accordion.Content>
-        <Resultat grunnlag={debouncedGrunnlag} />
-      </Accordion.Item>
-    </Accordion>
+    <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
+      <TextField
+        {...register("grunnlag", {
+          required: "Du må skrive inn inntekt",
+          pattern: {
+            value: /^[0-9]+$/,
+            message: "Vennligst skriv et gyldig heltall",
+          },
+        })}
+        className={styles.textField}
+        label="Hva har du hatt i inntekt de siste 12 månedene?"
+        type="text"
+        inputMode="numeric"
+        size="medium"
+        error={errors?.grunnlag?.message as string}
+      />
+
+      <Controller
+        control={control}
+        name="hasChildren"
+        rules={{ required: "Du må svare på om du forsørger barn under 18 år" }}
+        render={({ field: { value, onChange, onBlur, name, ref }, fieldState: { error } }) => (
+          <RadioGroup
+            ref={ref}
+            className={styles.radioGroup}
+            name={name}
+            legend="Forsørger du barn under 18 år?"
+            onChange={onChange}
+            onBlur={onBlur}
+            value={value}
+            error={error?.message}
+          >
+            <Radio value="true">Ja</Radio>
+            <Radio value="false">Nei</Radio>
+          </RadioGroup>
+        )}
+      />
+
+      {hasChildren && (
+        <Select
+          {...register("numberOfChildren", { required: "Du må velge antall barn", shouldUnregister: true })}
+          className={styles.select}
+          label="Hvor mange barn under 18 år forsørger du?"
+          error={errors?.numberOfChildren?.message as string}
+        >
+          <option value="">Velg antall barn under 18 år</option>
+          {childrenOptions}
+        </Select>
+      )}
+
+      <Button type="submit" className={styles.button} variant="secondary">
+        Beregn hva jeg kan få
+      </Button>
+
+      <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
+        {showResult && <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />}
+      </div>
+    </form>
   );
 }

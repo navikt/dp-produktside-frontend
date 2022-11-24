@@ -1,32 +1,24 @@
-.kalkulator {
-  margin: 3rem 0;
+.container {
+  display: flex;
+  flex-direction: column;
 
-  .inputWrapper {
-    display: flex;
-    justify-content: center;
-
-    input {
-      width: 5.5rem;
-    }
-    align-items: center;
+  .textField {
+    margin-bottom: 1rem;
   }
-}
 
-.resultTable {
-  table {
-    margin: 0.5rem auto 1rem;
-    text-align: right;
-    td {
-      padding: 0.2rem 0.5rem;
-      vertical-align: middle;
-    }
-    tr:nth-last-child(3) ~ tr {
-      font-weight: 600;
-    }
-    tr:nth-last-child(2) {
-      td {
-        padding-top: 0.6rem;
-      }
-    }
+  .radioGroup {
+  }
+
+  .select {
+    margin-top: 1rem;
+  }
+
+  .button {
+    max-width: fit-content;
+    margin: 1rem auto;
+  }
+
+  .resultTablesContainer {
+    scroll-margin-top: 0.75rem;
   }
 }
