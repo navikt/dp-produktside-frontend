@@ -79,12 +79,12 @@ $pixel-size-rem: math.div(1, 16);
 
 @mixin panel-focus-mixin($inset: true) {
   outline: unset;
-  box-shadow: 0 0 0 3px if($inset, inset, null) var(--navds-semantic-color-link);
+  box-shadow: 0 0 0 3px if($inset, inset, null) var(--a-text-action);
 }
 
 @mixin link-border-bottom-mixin($underlineDefault: true) {
   @if $underlineDefault {
-    border-bottom: 1px var(--navds-semantic-color-link) solid;
+    border-bottom: 1px var(--a-text-action) solid;
   } @else {
     border-bottom-color: transparent;
   }
@@ -97,11 +97,11 @@ $pixel-size-rem: math.div(1, 16);
     @if $underlineDefault {
       border-bottom-color: transparent;
     } @else {
-      border-bottom: 1px var(--navds-semantic-color-link) solid;
+      border-bottom: 1px var(--a-text-action) solid;
     }
   }
 }
 
 #__next {
-  background-color: var(--navds-semantic-color-canvas-background);
+  background-color: var(--a-bg-subtle);
 }

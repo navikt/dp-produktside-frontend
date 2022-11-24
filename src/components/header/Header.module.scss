@@ -4,12 +4,12 @@
 .header {
   display: flex;
   justify-content: center;
-  background-color: var(--navds-semantic-color-canvas-background-light);
+  background-color: var(--a-bg-default);
   margin: 0 calc((100vw - 100%) / -2);
   padding: 0 calc((100vw - 100%) / 2);
   padding-bottom: 1.5rem;
 
-  box-shadow: 0 -4px 0 var(--navds-global-color-green-500) inset;
+  box-shadow: 0 -4px 0 var(--a-green-500) inset;
   @include common.full-width-mixin;
 
   @media #{common.$mq-screen-mobile} {
@@ -54,12 +54,12 @@
 
 .divider {
   padding: 0 1rem;
-  color: var(--navds-global-color-gray-600);
+  color: var(--a-gray-600);
   @media #{common.$mq-screen-mobile} {
     display: none;
   }
 }
 
 .modifiedLabel {
-  color: var(--navds-global-color-gray-900);
+  color: var(--a-gray-900);
 }

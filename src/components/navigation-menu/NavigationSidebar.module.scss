@@ -1,7 +1,7 @@
 @use "styles/globals" as common;
 
 .sidebar {
-  background-color: var(--navds-semantic-color-canvas-background-light);
+  background-color: var(--a-bg-default);
   padding: 1rem 0;
 }
 
@@ -24,17 +24,17 @@
   }
 
   &:hover {
-    background-color: var(--navds-global-color-blue-100);
-    color: var(--navds-global-color-gray-900);
+    background-color: var(--a-blue-100);
+    color: var(--a-gray-900);
 
     .decor {
-      background-color: var(--navds-semantic-color-link);
+      background-color: var(--a-text-action);
     }
   }
 
   &:focus {
     outline: 0;
-    box-shadow: 0 0 0 3px var(--navds-semantic-color-focus) inset;
+    box-shadow: 0 0 0 3px var(--a-border-focus) inset;
   }
 
   &.up {
@@ -79,7 +79,7 @@
       visibility: visible;
       min-width: $decorWidth;
       margin: (-$verticalPadding) $decorWidth (-$verticalPadding) (-$decorWidth - $horizontalPadding);
-      background-color: var(--navds-semantic-color-link);
+      background-color: var(--a-text-action);
 
       transform: scaleY(0);
 
