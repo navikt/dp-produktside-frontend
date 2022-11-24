@@ -57,12 +57,17 @@ export function DagpengerKalkulator() {
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        {...register("grunnlag", { required: "Du må skrive inn inntekt" })}
+        {...register("grunnlag", {
+          required: "Du må skrive inn inntekt",
+          pattern: {
+            value: /^[0-9]+$/,
+            message: "Vennligst skriv et gyldig heltall",
+          },
+        })}
         className={styles.textField}
         label="Hva har du hatt i inntekt de siste 12 månedene?"
-        type="number"
+        type="text"
         inputMode="numeric"
-        pattern="[0-9]*"
         size="medium"
         error={errors?.grunnlag?.message as string}
       />
