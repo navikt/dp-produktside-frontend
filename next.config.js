@@ -14,6 +14,7 @@ const nextConfig = {
   swcMinify: true,
   basePath: "/dagpenger",
   productionBrowserSourceMaps: true,
+  output: "standalone",
   sassOptions: {
     includePaths: [path.join(__dirname, "src")],
   },
