@@ -13,10 +13,9 @@ import homeStyles from "styles/Home.module.scss";
 import {
   convertTimestampToDate,
   formatLocaleDateAndTime,
-  formatTimestamp,
+  formatTimestampAsLocaleTime,
   isValidDate,
   toISOString,
-  formatLocaleRelativeDate,
 } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
@@ -125,7 +124,7 @@ function HistorikkIndex({ revisions }: Props) {
                     key={timestamp}
                     className={styles.button}
                     onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
-                  >{`${formatTimestamp(timestamp)}`}</Button>
+                  >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
                 ))}
           </ReadMore>
 
