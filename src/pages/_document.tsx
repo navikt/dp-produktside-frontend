@@ -1,13 +1,15 @@
 import {
   Components as DekoratorComponents,
+  Env,
   fetchDecoratorReact,
   Props as DekoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
+const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<Env, "localhost">;
+
 const dekoratorParams: DekoratorProps = {
-  // @ts-ignore
-  env: process.env.DEKORATOR_MILJO || "prod",
+  env: decoratorEnv,
   breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
   context: "privatperson",
   utilsBackground: "white",
@@ -40,7 +42,9 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
 
     return (
       <Html>
-        <Head /> {/* Head må først inn, så kan neste blokk inserte elementer */}
+        <Head>
+          <meta name="robots" content="noindex,nofollow" />
+        </Head>
         <Dekorator.Styles />
         <Dekorator.Scripts />
         <body>
