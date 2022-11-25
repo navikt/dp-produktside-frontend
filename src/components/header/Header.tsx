@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./Header.module.scss";
 //@ts-ignore
 import svgIcon from "../../../public/static-dagpenger.svg";
-import { convertTimestampToDate, formatLocaleRelativeDate } from "utils/dates";
+import { formatLocaleDateWithMonthText } from "utils/dates";
 // TODO: Finn en bedre måte å hente SVG-ikon på?
 // NextJS klarer ikke bruke public-pathen når man bruker src="/static-dagpenger.svg".
 // Sannsynligvis fordi vi har en src-mappe, men det gjenstår å undersøke dette.
@@ -11,14 +11,11 @@ import { convertTimestampToDate, formatLocaleRelativeDate } from "utils/dates";
 
 interface Props {
   title?: string;
-  lastUpdated?: string;
+  lastUpdated?: Date;
 }
 
 export function Header({ title, lastUpdated }: Props) {
-  const baseDate = new Date();
-  const formattedLastUpdated = lastUpdated
-    ? formatLocaleRelativeDate(convertTimestampToDate(lastUpdated), baseDate)
-    : "";
+  const formattedLastUpdated = lastUpdated ? `Oppdatert ${formatLocaleDateWithMonthText(lastUpdated)}` : "";
 
   return (
     <header className={styles.header}>
@@ -38,7 +35,7 @@ export function Header({ title, lastUpdated }: Props) {
             {"|"}
           </span>
           <Detail size="small">
-            <span className={styles.modifiedLabel}>Oppdatert {formattedLastUpdated}</span>
+            <span className={styles.modifiedLabel}>{formattedLastUpdated}</span>
           </Detail>
         </div>
       </div>

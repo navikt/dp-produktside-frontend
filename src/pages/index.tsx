@@ -9,7 +9,7 @@ import { sanityClient } from "sanity/client";
 import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
-import { convertTimestampToDate, isValidDate, toISOString } from "utils/dates";
+import { convertTimestampToDate, isValidDate } from "utils/dates";
 import { max } from "date-fns";
 import { FilterSection } from "components/filter/FilterSection";
 import { FilterMenu } from "components/filter/FilterMenu";
@@ -64,7 +64,7 @@ export default function Home() {
     .map((timestamp) => convertTimestampToDate(timestamp))
     .filter((date) => isValidDate(date));
 
-  const lastUpdated = toISOString(max(lastUpdatedDates));
+  const lastUpdated = max(lastUpdatedDates);
 
   const KortFortaltComponent = () => (
     <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId}>
