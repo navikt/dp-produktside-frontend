@@ -8,8 +8,13 @@ const myAppDirectives = {
   "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io"],
 };
 
+const isProd = process.env.NODE_ENV === "production";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Use the CDN in production and localhost for development.
+  assetPrefix: isProd ? "https://cdn.nav.no/teamdagpenger/dp-produktside-frontend/<env>" : undefined,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   reactStrictMode: true,
   swcMinify: true,
   basePath: "/dagpenger",
