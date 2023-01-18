@@ -1,17 +1,8 @@
 **
 
-!src/**
-!public/**
-!next*
-!jest*
-!cypress/testData/**
+!next.config.js
+!package.json
 
-!sentry*
-!*.json
-!.npmrc
-!.babelrc
-!.sentryclirc
-
-!csp.js
-!prepare.js
-!triggBygg.md
+!public/
+!.next/standalone/
+!.next/static/

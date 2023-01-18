@@ -10,6 +10,8 @@ const myAppDirectives = {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  assetPrefix: process.env.ASSET_PREFIX,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   reactStrictMode: true,
   swcMinify: true,
   basePath: "/dagpenger",
