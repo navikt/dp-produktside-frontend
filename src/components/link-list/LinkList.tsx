@@ -2,7 +2,7 @@ import React from "react";
 import { BodyShort, Heading } from "@navikt/ds-react";
 import styles from "./LinkList.module.scss";
 import Link from "next/link";
-import { SupportLink } from "sanity/types";
+import { SupportLink } from "sanity-utils/types";
 interface Props {
   title?: string;
   links?: SupportLink[];
@@ -24,12 +24,10 @@ export function LinkList({ title, links }: Props) {
       <nav className={styles.linkList}>
         {/* TODO: Legge til nofollowurl for eksterne lenker her for bedre SEO */}
         {links?.map(({ url, title, targetBlank }, index) => (
-          <Link href={url} key={index}>
-            <a className={styles.link} target={targetBlank ? "_blank" : "_self"}>
-              <BodyShort className={styles.linkText} as={"span"}>
-                {title}
-              </BodyShort>
-            </a>
+          <Link href={url} key={index} className={styles.link} target={targetBlank ? "_blank" : "_self"}>
+            <BodyShort className={styles.linkText} as={"span"}>
+              {title}
+            </BodyShort>
           </Link>
         ))}
       </nav>

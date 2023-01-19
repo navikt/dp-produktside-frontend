@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { historyFetcher } from "sanity/groq/historyFetcher";
+import { historyFetcher } from "sanity-utils/groq/historyFetcher";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {

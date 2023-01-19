@@ -1,4 +1,4 @@
-import { sanityConfig } from "sanity/client";
+import { sanityConfig } from "sanity-utils/client";
 
 interface RawRevision {
   author: string;

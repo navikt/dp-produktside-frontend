@@ -5,9 +5,9 @@ import { Error } from "components/error/Error";
 import { Header } from "components/header/Header";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { sanityClient } from "sanity/client";
-import { produktsideQuery, produktsideSectionIdsQuery } from "sanity/groq/produktside/produktsideQuery";
-import { Revision, revisionsFetcher } from "sanity/groq/revisionsFetcher";
+import { sanityClient } from "sanity-utils/client";
+import { produktsideQuery, produktsideSectionIdsQuery } from "sanity-utils/groq/produktside/produktsideQuery";
+import { Revision, revisionsFetcher } from "sanity-utils/groq/revisionsFetcher";
 import styles from "styles/Historikk.module.scss";
 import homeStyles from "styles/Home.module.scss";
 import {
@@ -21,7 +21,7 @@ import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
 import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
-import { HistoryProduktsideSection, HistorySectionIds } from "sanity/types";
+import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
 import dynamic from "next/dynamic";
 
 interface Props {

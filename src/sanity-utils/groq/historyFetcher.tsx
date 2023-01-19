@@ -1,4 +1,4 @@
-import { sanityConfig } from "sanity/client";
+import { sanityConfig } from "sanity-utils/client";
 
 const token = process.env.SANITY_READ_TOKEN;
 const { projectId, dataset } = sanityConfig;

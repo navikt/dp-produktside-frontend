@@ -1,8 +1,8 @@
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { urlFor } from "../sanity/client";
-import { SanityImage } from "../sanity/types";
+import { urlFor } from "sanity-utils/client";
+import { SanityImage } from "sanity-utils/types";
 
 interface Props {
   title: string;

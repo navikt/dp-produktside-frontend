@@ -5,8 +5,8 @@ import { PortableTextContent } from "components/portable-text-content/PortableTe
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
-import { sanityClient } from "sanity/client";
-import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
+import { sanityClient } from "sanity-utils/client";
+import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
 import { convertTimestampToDate, isValidDate } from "utils/dates";

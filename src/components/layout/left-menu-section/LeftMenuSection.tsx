@@ -6,7 +6,7 @@ import styles from "./LeftMenuSection.module.scss";
 import Config from "config";
 import Link from "next/link";
 import { LinkList } from "components/link-list/LinkList";
-import { SupportLink } from "sanity/types";
+import { SupportLink } from "sanity-utils/types";
 
 interface Props {
   internalLinks: AnchorLink[];
@@ -21,7 +21,7 @@ export function LeftMenuSection({ internalLinks, supportLinks, menuHeader, stick
       <NavigationMenu title={menuHeader} anchorLinks={internalLinks} />
 
       <div className={styles.link}>
-        <Link href={Config.appUrls.dagpengerSoknad}>
+        <Link href={Config.appUrls.dagpengerSoknad} legacyBehavior>
           <Button variant="primary">Søk dagpenger</Button>
         </Link>
       </div>

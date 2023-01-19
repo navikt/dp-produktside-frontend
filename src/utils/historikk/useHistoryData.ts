@@ -1,7 +1,11 @@
 import Config from "config";
 import { useEffect, useState } from "react";
-import { HistorikkResponse } from "sanity/groq/historyFetcher";
-import { HistoryProduktsideKortFortalt, HistoryProduktsideSection, HistoryProduktsideSettings } from "sanity/types";
+import { HistorikkResponse } from "sanity-utils/groq/historyFetcher";
+import {
+  HistoryProduktsideKortFortalt,
+  HistoryProduktsideSection,
+  HistoryProduktsideSettings,
+} from "sanity-utils/types";
 
 const produktsideSettingsId = "produktsideSettings";
 const produktsideKortFortaltId = "produktsideKortFortalt";
