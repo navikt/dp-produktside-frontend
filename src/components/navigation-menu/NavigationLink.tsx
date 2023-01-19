@@ -28,26 +28,28 @@ function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Prop
   };
 
   return (
-    <Link id={`#${targetId}-a`} href={`#${targetId}`} passHref={true} scroll={false}>
-      <a
-        className={classNames(
-          styles.navLink,
-          navigationSidebarStyles.navLink,
-          {
-            [navigationSidebarStyles.up]: scrollDirection === "up",
-          },
-          {
-            [navigationSidebarStyles.down]: scrollDirection === "down",
-          },
-          {
-            [navigationSidebarStyles.current]: isCurrent,
-          }
-        )}
-        onClick={setLocationHashAndScrollToTarget}
-      >
-        <span className={navigationSidebarStyles.decor} aria-hidden={true} />
-        <Label>{children}</Label>
-      </a>
+    <Link
+      id={`#${targetId}-a`}
+      href={`#${targetId}`}
+      passHref={true}
+      scroll={false}
+      className={classNames(
+        styles.navLink,
+        navigationSidebarStyles.navLink,
+        {
+          [navigationSidebarStyles.up]: scrollDirection === "up",
+        },
+        {
+          [navigationSidebarStyles.down]: scrollDirection === "down",
+        },
+        {
+          [navigationSidebarStyles.current]: isCurrent,
+        }
+      )}
+      onClick={setLocationHashAndScrollToTarget}
+    >
+      <span className={navigationSidebarStyles.decor} aria-hidden={true} />
+      <Label>{children}</Label>
     </Link>
   );
 }

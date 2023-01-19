@@ -1,5 +1,5 @@
 import { createReducerContext } from "react-use";
-import { sanityConfig } from "sanity/client";
+import { sanityConfig } from "sanity-utils/client";
 
 const initState = {
   previewMode: false,

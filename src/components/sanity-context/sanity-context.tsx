@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
-import { produktsideQuery } from "sanity/groq/produktside/produktsideQuery";
-import { useSanityPreview } from "sanity/useSanityPreview";
+import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
+import { useSanityPreview } from "sanity-utils/useSanityPreview";
 
 // TODO: Fix any-types when Sanity is upgraded to V3.
 interface SanityProviderProps {
