@@ -3,6 +3,7 @@ import { Link as LinkIcon } from "@navikt/ds-icons";
 import { Heading, Panel } from "@navikt/ds-react";
 import { CopyToClipboard } from "@navikt/ds-react-internal";
 import classNames from "classnames";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 import Config from "config";
 import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
+  const { getGeneralTextWithTextId } = useSanityContext();
   // @ts-ignore
   const Icon = NavIcons?.[iconName];
 
@@ -38,12 +40,12 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
             <CopyToClipboard
               className={styles.copyLink}
               copyText={Config.appUrls.produktsideAnchorUrl(anchorId)}
-              popoverText="Lenken er kopiert"
+              popoverText={getGeneralTextWithTextId("copy-to-clipboard.popover-text")}
               size="small"
-              icon={<LinkIcon title="Kopier lenke" />}
+              icon={<LinkIcon title={getGeneralTextWithTextId("copy-to-clipboard.title")} />}
               popoverPlacement="right"
             >
-              Kopier lenke
+              {getGeneralTextWithTextId("copy-to-clipboard.title")}
             </CopyToClipboard>
           )}
         </div>

@@ -11,8 +11,8 @@ interface SanityProviderProps {
 interface SanityContextValues {
   settings: any;
   kortFortalt: any;
-  calculatorTexts: any;
-  getCalculatorTextWithTextId: (id: string, convertToPlainText?: boolean) => any;
+  generalTexts: any;
+  getGeneralTextWithTextId: (id: string) => string;
 }
 
 const SanityContext = createContext<SanityContextValues | undefined>(undefined);
@@ -39,19 +39,18 @@ export function useSanityContext() {
     throw new Error("useSanityContext must be used within a SanityContext");
   }
 
-  function getCalculatorTextWithTextId(id: string, convertToPlainText: boolean = true) {
-    const calculatorTextId = `kalkulator.${id}`;
+  function getGeneralTextWithTextId(id: string) {
     // @ts-ignore
-    const element = context?.calculatorTexts.find(({ textId }) => textId === calculatorTextId);
+    const element = context?.generalTexts.find(({ textId }) => textId === id);
 
-    if (!element) {
+    if (!element?.textValue) {
       // TODO: Log missing text error with Sentry
-      console.error(`Error, calculatorText with ${calculatorTextId} couldn't be found `);
-      return calculatorTextId;
+      console.error(`Error, generalText with ${id} couldn't be found `);
+      return id;
     }
 
-    return convertToPlainText ? element.plainText : element.valueBlock;
+    return element.textValue;
   }
 
-  return { ...context, getCalculatorTextWithTextId };
+  return { ...context, getGeneralTextWithTextId };
 }

@@ -1,3 +1,4 @@
+import { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
@@ -15,9 +16,9 @@ import { FilterSection } from "components/filter/FilterSection";
 import { FilterMenu } from "components/filter/FilterMenu";
 import { useFilterContext } from "components/filter/FilterContext";
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
-  const sanityData = await sanityClient.fetch(produktsideQuery);
+  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
   const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
   const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
 
@@ -102,7 +103,6 @@ export default function Home() {
                   {isMobile && <KortFortaltComponent />}
                   {isMobile && <FilterComponent />}
                   <LeftMenuSection
-                    menuHeader="Innhold"
                     internalLinks={[kortFortaltLink, ...links]}
                     supportLinks={supportLinks}
                     sticky={!isMobile}

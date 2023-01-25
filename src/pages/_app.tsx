@@ -1,13 +1,19 @@
+import Cookies from "js-cookie";
+import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import { setDefaultOptions } from "date-fns";
+import nb from "date-fns/locale/nb";
+import en from "date-fns/locale/en-GB";
 import "@navikt/ds-css";
 import "@navikt/ds-css-internal";
-import type { AppProps } from "next/app";
+import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
+import ErrorBoundary from "components/error-boundary/ErrorBoundary";
+import { FilterContextProvider } from "components/filter/FilterContext";
+import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
 import { PreviewBanner } from "components/preview-context/PreviewBanner";
 import { PreviewContextProvider } from "components/preview-context/previewContext";
-import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
-import ErrorBoundary from "components/error-boundary/ErrorBoundary";
-import "styles/globals.scss";
 import { SanityProvider } from "components/sanity-context/sanity-context";
-import { FilterContextProvider } from "components/filter/FilterContext";
+import "styles/globals.scss";
 
 // TODO: Fix typescript for this
 interface PageProps {
@@ -15,7 +21,15 @@ interface PageProps {
   grunnbelopData?: any;
 }
 
-function MyApp({ Component, pageProps }: AppProps<PageProps>) {
+export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
+  const router = useRouter();
+
+  onLanguageSelect(({ locale }) => {
+    Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });
+    setDefaultOptions({ locale: locale === "en" ? en : nb });
+    router.push(router.asPath, router.asPath, { locale });
+  });
+
   return (
     <ErrorBoundary>
       <PreviewContextProvider>
@@ -31,5 +45,3 @@ function MyApp({ Component, pageProps }: AppProps<PageProps>) {
     </ErrorBoundary>
   );
 }
-
-export default MyApp;

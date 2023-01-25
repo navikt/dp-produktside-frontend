@@ -1,25 +1,35 @@
 import {
   Components as DekoratorComponents,
   Env,
+  Locale,
   fetchDecoratorReact,
   Props as DekoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<Env, "localhost">;
+const supportedLocales = ["nb", "en"];
+const availableLanguages = supportedLocales.map((locale) => ({
+  locale,
+  url: `https://www.nav.no/dagpenger/${locale}`,
+  handleInApp: true,
+})) as DekoratorProps["availableLanguages"];
 
 const dekoratorParams: DekoratorProps = {
-  env: decoratorEnv,
+  availableLanguages,
   breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
   context: "privatperson",
+  env: decoratorEnv,
   utilsBackground: "white",
 };
 
 export default class MyDocument extends Document<{ Dekorator: DekoratorComponents }> {
   static async getInitialProps(ctx: DocumentContext) {
+    const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
+    const language = locale === undefined ? "nb" : (locale as Locale);
 
-    const Dekorator: DekoratorComponents = await fetchDecoratorReact(dekoratorParams).catch((err) => {
+    const Dekorator: DekoratorComponents = await fetchDecoratorReact({ ...dekoratorParams, language }).catch((err) => {
       // eslint-disable-next-line no-console
       console.error(err);
       const empty = () => <></>;
@@ -34,14 +44,15 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
     return {
       ...initialProps,
       Dekorator,
+      locale: language,
     };
   }
 
   render() {
-    const { Dekorator } = this.props;
+    const { Dekorator, locale } = this.props;
 
     return (
-      <Html>
+      <Html lang={locale}>
         <Head>
           <meta name="robots" content="noindex,nofollow" />
         </Head>

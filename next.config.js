@@ -1,6 +1,9 @@
 const { buildCspHeader } = require("@navikt/nav-dekoratoren-moduler/ssr");
 const path = require("path");
 
+// TODO: Denne bør deles med _document.tsx
+const supportedLocales = ["nb", "en"];
+
 // Direktiver appen vår benytter
 const myAppDirectives = {
   "script-src-elem": ["'self'"],
@@ -12,13 +15,17 @@ const myAppDirectives = {
 const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  reactStrictMode: true,
-  swcMinify: true,
-  productionBrowserSourceMaps: true,
+  i18n: {
+    locales: supportedLocales,
+    defaultLocale: "nb",
+  },
   output: "standalone",
+  productionBrowserSourceMaps: true,
+  reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "src")],
   },
+  swcMinify: true,
   async headers() {
     const env = process.env.DECORATOR_ENV || "prod";
     const csp = await buildCspHeader(myAppDirectives, { env });
