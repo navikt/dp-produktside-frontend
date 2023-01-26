@@ -26,6 +26,7 @@ export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
 
   onLanguageSelect(({ locale }) => {
     Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });
+    // Sets locale for all date-fns functions located in utils/dates
     setDefaultOptions({ locale: locale === "en" ? en : nb });
     router.push(router.asPath, router.asPath, { locale });
   });

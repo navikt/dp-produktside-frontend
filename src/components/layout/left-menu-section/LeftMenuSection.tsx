@@ -16,19 +16,19 @@ interface Props {
 }
 
 export function LeftMenuSection({ internalLinks, supportLinks, sticky }: Props) {
-  const { getGeneralTextWithTextId } = useSanityContext();
+  const { getGeneralText } = useSanityContext();
 
   return (
     <section className={classnames(styles.leftMenu, { [styles.leftMenuSticky]: sticky })}>
-      <NavigationMenu title={getGeneralTextWithTextId("navigation-menu.title")} anchorLinks={internalLinks} />
+      <NavigationMenu title={getGeneralText("navigation-menu.title")} anchorLinks={internalLinks} />
 
       <div className={styles.link}>
         <Link href={Config.appUrls.dagpengerSoknad} legacyBehavior>
-          <Button variant="primary">{getGeneralTextWithTextId("navigation-menu.button-title")}</Button>
+          <Button variant="primary">{getGeneralText("navigation-menu.button-title")}</Button>
         </Link>
       </div>
 
-      <LinkList links={supportLinks} title={getGeneralTextWithTextId("support-links-menu.title")} />
+      <LinkList links={supportLinks} title={getGeneralText("support-links-menu.title")} />
     </section>
   );
 }

@@ -16,10 +16,7 @@ interface Props {
 }
 
 export function Header({ title, lastUpdated }: Props) {
-  const { getGeneralTextWithTextId } = useSanityContext();
-  const formattedLastUpdated = lastUpdated
-    ? `${getGeneralTextWithTextId("header.right-subtitle")} ${formatLocaleDateWithMonthText(lastUpdated)}`
-    : "";
+  const { getGeneralText } = useSanityContext();
 
   return (
     <header className={styles.header}>
@@ -33,14 +30,21 @@ export function Header({ title, lastUpdated }: Props) {
         </Heading>
         <div className={styles.taglineWrapper}>
           <BodyShort size="small" className={styles.taglineLabel}>
-            {getGeneralTextWithTextId("header.left-subtitle")}
+            {getGeneralText("header.left-subtitle")}
           </BodyShort>
-          <span aria-hidden="true" className={styles.divider}>
-            {"|"}
-          </span>
-          <Detail>
-            <span className={styles.modifiedLabel}>{formattedLastUpdated}</span>
-          </Detail>
+          {lastUpdated && (
+            <>
+              <span aria-hidden="true" className={styles.divider}>
+                {"|"}
+              </span>
+              <Detail>
+                <span className={styles.modifiedLabel}>
+                  {`${getGeneralText("header.right-subtitle")} 
+                  ${formatLocaleDateWithMonthText(lastUpdated)}`}
+                </span>
+              </Detail>
+            </>
+          )}
         </div>
       </div>
     </header>

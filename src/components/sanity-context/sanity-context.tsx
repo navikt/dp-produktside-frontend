@@ -12,7 +12,7 @@ interface SanityContextValues {
   settings: any;
   kortFortalt: any;
   generalTexts: any;
-  getGeneralTextWithTextId: (id: string) => string;
+  getGeneralText: (id: string) => string;
 }
 
 const SanityContext = createContext<SanityContextValues | undefined>(undefined);
@@ -39,7 +39,7 @@ export function useSanityContext() {
     throw new Error("useSanityContext must be used within a SanityContext");
   }
 
-  function getGeneralTextWithTextId(id: string) {
+  function getGeneralText(id: string) {
     // @ts-ignore
     const element = context?.generalTexts.find(({ textId }) => textId === id);
 
@@ -52,5 +52,5 @@ export function useSanityContext() {
     return element.textValue;
   }
 
-  return { ...context, getGeneralTextWithTextId };
+  return { ...context, getGeneralText };
 }

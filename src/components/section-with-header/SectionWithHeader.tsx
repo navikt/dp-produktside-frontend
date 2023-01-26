@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
-  const { getGeneralTextWithTextId } = useSanityContext();
+  const { getGeneralText } = useSanityContext();
   // @ts-ignore
   const Icon = NavIcons?.[iconName];
 
@@ -40,12 +40,12 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
             <CopyToClipboard
               className={styles.copyLink}
               copyText={Config.appUrls.produktsideAnchorUrl(anchorId)}
-              popoverText={getGeneralTextWithTextId("copy-to-clipboard.popover-text")}
+              popoverText={getGeneralText("copy-to-clipboard.popover-text")}
               size="small"
-              icon={<LinkIcon title={getGeneralTextWithTextId("copy-to-clipboard.title")} />}
+              icon={<LinkIcon title={getGeneralText("copy-to-clipboard.title")} />}
               popoverPlacement="right"
             >
-              {getGeneralTextWithTextId("copy-to-clipboard.title")}
+              {getGeneralText("copy-to-clipboard.title")}
             </CopyToClipboard>
           )}
         </div>
