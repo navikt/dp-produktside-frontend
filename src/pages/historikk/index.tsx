@@ -32,8 +32,13 @@ const produktsideSettingsId = "produktsideSettings";
 const produktsideKortFortaltId = "produktsideKortFortalt";
 
 export async function getStaticProps() {
-  const sanityData = await sanityClient.fetch(produktsideQuery);
-  const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery);
+  //TODO: Fiks språk når historikk blir rearbeidet
+  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: "nb" });
+  const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery, {
+    baseLang: "nb",
+    lang: "nb",
+  });
+
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
   const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
   const revisionsProduktsideKortFortalt = await revisionsFetcher(produktsideKortFortaltId);
@@ -139,7 +144,6 @@ function HistorikkIndex({ revisions }: Props) {
                     <div className={homeStyles.topRow}>
                       <div className={homeStyles.leftCol}>
                         <LeftMenuSection
-                          menuHeader="Innhold"
                           internalLinks={[
                             { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
                             ...(settingsSections?.map(({ title, slug }) => ({

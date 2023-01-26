@@ -1,33 +1,41 @@
 import { groq } from "next-sanity";
 
-const produktsideSectionReferenceQuery = `content [_type == "produktsideSectionReference"]{
-     ...produktsideSection-> {
-        iconName,
-        title,
-        content,
-        slug,
-        _updatedAt,
-     }
+const settingsGroq = `{
+  title,
+  content [_type == "produktsideSectionReference" ] {
+    ...produktsideSection-> {
+       iconName,
+       title,
+       content,
+       slug,
+       _updatedAt,
+    }
+  },
+  supportLinks,
+  _updatedAt,
 }`;
 
-export const produktsideSectionIdsQuery = groq`{
-  'sectionIds': *[_type == "produktsideSection"]{
-    _id
-  }
+const getAllFieldsGroq = `{
+  ...
 }`;
 
 export const produktsideQuery = groq`{
-    'settings': *[_id == "produktsideSettings" && __i18n_lang == "nb"][0] {
-      title,
-      ${produktsideSectionReferenceQuery},
-      supportLinks,
-      _updatedAt,
+    'settings': *[_id == "produktsideSettings" && __i18n_lang == $baseLang][0] {
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${settingsGroq}, ${settingsGroq})
+
     },
-    'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == "nb"][0],
-    "calculatorTexts": *[_type == "produktsideText" && textId match "kalkulator*" && __i18n_lang == "nb"]{
-      ...,
-      "plainText": pt::text(valueBlock)
+    'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
+    'generalTexts': *[_type == 'produktsideGeneralText' && __i18n_lang == $baseLang]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     }
+}`;
+
+export const produktsideSectionIdsQuery = groq`{
+  'sectionIds': *[_type == "produktsideSection" && __i18n_lang == $lang]{
+    _id
+  }
 }`;
 
 // TODO: Fix typescript definitions for results returned from produktsideQuery

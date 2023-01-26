@@ -7,26 +7,28 @@ import Config from "config";
 import Link from "next/link";
 import { LinkList } from "components/link-list/LinkList";
 import { SupportLink } from "sanity-utils/types";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 
 interface Props {
   internalLinks: AnchorLink[];
   supportLinks?: SupportLink[];
-  menuHeader: string;
   sticky?: boolean;
 }
 
-export function LeftMenuSection({ internalLinks, supportLinks, menuHeader, sticky }: Props) {
+export function LeftMenuSection({ internalLinks, supportLinks, sticky }: Props) {
+  const { getGeneralText } = useSanityContext();
+
   return (
     <section className={classnames(styles.leftMenu, { [styles.leftMenuSticky]: sticky })}>
-      <NavigationMenu title={menuHeader} anchorLinks={internalLinks} />
+      <NavigationMenu title={getGeneralText("navigation-menu.title")} anchorLinks={internalLinks} />
 
       <div className={styles.link}>
         <Link href={Config.appUrls.dagpengerSoknad} legacyBehavior>
-          <Button variant="primary">Søk dagpenger</Button>
+          <Button variant="primary">{getGeneralText("navigation-menu.button-title")}</Button>
         </Link>
       </div>
 
-      <LinkList links={supportLinks} title="Nyttig å vite" />
+      <LinkList links={supportLinks} title={getGeneralText("support-links-menu.title")} />
     </section>
   );
 }

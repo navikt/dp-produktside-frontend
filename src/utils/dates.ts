@@ -1,8 +1,5 @@
 import { isValid } from "date-fns";
 import format from "date-fns/format";
-import nb from "date-fns/locale/nb";
-
-const AppLocale = nb;
 
 type Formats =
   | "P" // 01.01.2022
@@ -15,7 +12,7 @@ export function convertTimestampToDate(timestamp: string) {
 }
 
 export function formatLocaleDate(date: Date, formatString: Formats = "P") {
-  return format(date, formatString, { locale: AppLocale });
+  return format(date, formatString);
 }
 
 export function formatLocaleTime(date: Date) {
