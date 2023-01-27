@@ -16,7 +16,11 @@ export function useSanityPreview<Data>(initialData: Data, query: string, params?
 
   const usePreviewSubscription = useMemo(() => createPreviewSubscriptionHook({ ...sanityConfig, dataset }), [dataset]);
 
-  const { data: previewData, error } = usePreviewSubscription(query, { params, initialData, enabled: enablePreview });
+  const { data: previewData, error } = usePreviewSubscription(query, {
+    params,
+    initialData,
+    enabled: enablePreview,
+  });
 
   if (error) {
     console.error(error);
