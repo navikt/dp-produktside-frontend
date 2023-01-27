@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext } from "react";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { useSanityPreview } from "sanity-utils/useSanityPreview";
@@ -20,8 +21,10 @@ const SanityContext = createContext<SanityContextValues | undefined>(undefined);
 export function SanityProvider({ sanityData, children }: SanityProviderProps) {
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const previewData = useSanityPreview(sanityData, produktsideQuery);
+  const { locale } = useRouter();
+  const previewData = useSanityPreview(sanityData, produktsideQuery, { baseLang: "nb", lang: locale });
 
+  console.log(previewData);
   return (
     <SanityContext.Provider
       value={{
