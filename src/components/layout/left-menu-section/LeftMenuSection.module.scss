@@ -1,4 +1,4 @@
-@use "styles/globals" as common;
+@use "styles/common" as common;
 
 $topOffset: calc(var(--decorator-sticky-offset, 0px) + 1rem);
 $bottomOffset: 2rem;

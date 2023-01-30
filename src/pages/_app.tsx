@@ -13,7 +13,8 @@ import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-con
 import { PreviewBanner } from "components/preview-context/PreviewBanner";
 import { PreviewContextProvider } from "components/preview-context/previewContext";
 import { SanityProvider } from "components/sanity-context/sanity-context";
-import "styles/globals.scss";
+import "styles/global.scss";
+import "styles/common.scss";
 
 // TODO: Fix typescript for this
 interface PageProps {
