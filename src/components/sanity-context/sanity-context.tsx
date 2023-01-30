@@ -24,7 +24,6 @@ export function SanityProvider({ sanityData, children }: SanityProviderProps) {
   const { locale } = useRouter();
   const previewData = useSanityPreview(sanityData, produktsideQuery, { baseLang: "nb", lang: locale });
 
-  console.log(previewData);
   return (
     <SanityContext.Provider
       value={{
