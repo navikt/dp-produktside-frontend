@@ -12,6 +12,7 @@ interface SanityProviderProps {
 interface SanityContextValues {
   settings: any;
   kortFortalt: any;
+  filterSection: any;
   generalTexts: any;
   getGeneralText: (id: string) => string;
 }

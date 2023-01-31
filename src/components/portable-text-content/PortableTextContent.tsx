@@ -1,19 +1,19 @@
 import { PortableText, PortableTextProps } from "@portabletext/react";
-import { useFilterContext } from "components/filter/FilterContext";
-import { HorizontalFilterMenu } from "components/filter/FilterMenu";
+import { useFilterContext } from "components/filter-menu/FilterContext";
+import { FilterMenu } from "components/filter-menu/FilterMenu";
 import Config from "config";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { scrollIntoViewWithOffset } from "utils/scroll";
 import { commonComponents } from "./components";
 import { commonMarks } from "./marks/marks";
 import { commonBlockStyles } from "./styles";
 
-function HorizontalFilterComponent() {
+function FilterMenuComponent() {
   const { selectedFilters, setSelectedFilters } = useFilterContext();
   const [isTriggered, setIsTriggered] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isTriggered) {
       const scrollOffset = Config.vars.dekoratorenHeight;
       scrollIntoViewWithOffset(ref, scrollOffset);
@@ -24,7 +24,7 @@ function HorizontalFilterComponent() {
 
   return (
     <div ref={ref}>
-      <HorizontalFilterMenu
+      <FilterMenu
         selectedFilters={selectedFilters}
         onChange={(val) => {
           setSelectedFilters(val);
@@ -66,7 +66,7 @@ export function PortableTextContent({ value }: PortableTextProps) {
               />
             );
           },
-          produktsideFilterMenu: HorizontalFilterComponent,
+          produktsideFilterMenu: FilterMenuComponent,
           ...commonComponents,
         },
       }}

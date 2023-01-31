@@ -8,11 +8,10 @@ import "@navikt/ds-css";
 import "@navikt/ds-css-internal";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
-import { FilterContextProvider } from "components/filter/FilterContext";
+import { FilterContextProvider } from "components/filter-menu/FilterContext";
 import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
 import { PreviewBanner } from "components/preview-context/PreviewBanner";
 import { PreviewContextProvider } from "components/preview-context/previewContext";
-import { SanityProvider } from "components/sanity-context/sanity-context";
 import "styles/global.scss";
 import "styles/common.scss";
 
@@ -36,12 +35,10 @@ export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
     <ErrorBoundary>
       <PreviewContextProvider>
         <FilterContextProvider>
-          <SanityProvider sanityData={pageProps.sanityData}>
-            <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
-              <PreviewBanner />
-              <Component {...pageProps} />;
-            </GrunnbelopProvider>
-          </SanityProvider>
+          <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
+            <PreviewBanner />
+            <Component {...pageProps} />;
+          </GrunnbelopProvider>
         </FilterContextProvider>
       </PreviewContextProvider>
     </ErrorBoundary>

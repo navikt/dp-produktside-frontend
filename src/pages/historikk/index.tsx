@@ -23,8 +23,10 @@ import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
 import dynamic from "next/dynamic";
+import { SanityProvider } from "components/sanity-context/sanity-context";
 
 interface Props {
+  sanityData: any;
   revisions: Revision[];
 }
 
@@ -56,7 +58,7 @@ export async function getStaticProps() {
   };
 }
 
-function HistorikkIndex({ revisions }: Props) {
+function HistorikkIndex({ sanityData, revisions }: Props) {
   const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
   {
     /* Datoer blir satt til slutten av dagen 
@@ -100,89 +102,91 @@ function HistorikkIndex({ revisions }: Props) {
   }
 
   return (
-    <div className={styles.container}>
-      <UNSAFE_DatePicker.Standalone
-        selected={selectedDate || undefined}
-        onSelect={(date: Date | undefined) => {
-          if (date) {
-            setSelectedDateShallow(endOfDay(date));
-          }
-        }}
-        dropdownCaption
-        fromDate={fromDate}
-        toDate={toDate}
-      />
+    <SanityProvider sanityData={sanityData}>
+      <div className={styles.container}>
+        <UNSAFE_DatePicker.Standalone
+          selected={selectedDate || undefined}
+          onSelect={(date: Date | undefined) => {
+            if (date) {
+              setSelectedDateShallow(endOfDay(date));
+            }
+          }}
+          dropdownCaption
+          fromDate={fromDate}
+          toDate={toDate}
+        />
 
-      {selectedDate && !isValidSelectedDate && <p>Ugyldig dato</p>}
+        {selectedDate && !isValidSelectedDate && <p>Ugyldig dato</p>}
 
-      {selectedDate && isValidSelectedDate && (
-        <>
-          <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
+        {selectedDate && isValidSelectedDate && (
+          <>
+            <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
 
-          <ReadMore header="Endringer denne dagen" className={styles.readMore}>
-            {revisions &&
-              revisions
-                ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
-                ?.map(({ timestamp }) => (
-                  <Button
-                    size="small"
-                    key={timestamp}
-                    className={styles.button}
-                    onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
-                  >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
-                ))}
-          </ReadMore>
+            <ReadMore header="Endringer denne dagen" className={styles.readMore}>
+              {revisions &&
+                revisions
+                  ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
+                  ?.map(({ timestamp }) => (
+                    <Button
+                      size="small"
+                      key={timestamp}
+                      className={styles.button}
+                      onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
+                    >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
+                  ))}
+            </ReadMore>
 
-          {settings && kortFortalt && (
-            <main className={homeStyles.main}>
-              <div className={homeStyles.productPage}>
-                {/* TODO: Fiks sist oppdatert dato for historikk i Header */}
-                <Header title={settings?.title} />
+            {settings && kortFortalt && (
+              <main className={homeStyles.main}>
+                <div className={homeStyles.productPage}>
+                  {/* TODO: Fiks sist oppdatert dato for historikk i Header */}
+                  <Header title={settings?.title} />
 
-                <div className={homeStyles.content}>
-                  <div className={homeStyles.layoutContainer}>
-                    <div className={homeStyles.topRow}>
-                      <div className={homeStyles.leftCol}>
-                        <LeftMenuSection
-                          internalLinks={[
-                            { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
-                            ...(settingsSections?.map(({ title, slug }) => ({
-                              anchorId: slug?.current,
-                              linkText: title,
-                            })) ?? []),
-                          ]}
-                          supportLinks={settings?.supportLinks}
-                          sticky={true}
-                        />
-                      </div>
+                  <div className={homeStyles.content}>
+                    <div className={homeStyles.layoutContainer}>
+                      <div className={homeStyles.topRow}>
+                        <div className={homeStyles.leftCol}>
+                          <LeftMenuSection
+                            internalLinks={[
+                              { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
+                              ...(settingsSections?.map(({ title, slug }) => ({
+                                anchorId: slug?.current,
+                                linkText: title,
+                              })) ?? []),
+                            ]}
+                            supportLinks={settings?.supportLinks}
+                            sticky={true}
+                          />
+                        </div>
 
-                      <div className={homeStyles.mainCol}>
-                        <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
-                          <p>{`Oppdatert ${formatLocaleDateAndTime(
-                            convertTimestampToDate(kortFortalt?._updatedAt)
-                          )}`}</p>
-                          <PortableTextContent value={kortFortalt?.content} />
-                        </SectionWithHeader>
+                        <div className={homeStyles.mainCol}>
+                          <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
+                            <p>{`Oppdatert ${formatLocaleDateAndTime(
+                              convertTimestampToDate(kortFortalt?._updatedAt)
+                            )}`}</p>
+                            <PortableTextContent value={kortFortalt?.content} />
+                          </SectionWithHeader>
 
-                        {settingsSections?.map(
-                          ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
-                            <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
-                              <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
-                              {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                              <PortableTextContent value={content} />
-                            </SectionWithHeader>
-                          )
-                        )}
+                          {settingsSections?.map(
+                            ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
+                              <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
+                                <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
+                                {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                                <PortableTextContent value={content} />
+                              </SectionWithHeader>
+                            )
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </main>
-          )}
-        </>
-      )}
-    </div>
+              </main>
+            )}
+          </>
+        )}
+      </div>
+    </SanityProvider>
   );
 }
 
