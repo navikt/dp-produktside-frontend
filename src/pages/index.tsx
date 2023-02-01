@@ -4,7 +4,7 @@ import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
-import { SanityProvider } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
 import { sanityClient } from "sanity-utils/client";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
@@ -29,12 +29,9 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   };
 }
 
-interface HomeProps {
-  sanityData: any;
-}
-
-export default function Home({ sanityData }: HomeProps) {
+export default function Home() {
   const isMobile = useIsMobile();
+  const sanityData = useSanityContext();
 
   const {
     settings: { title, content, supportLinks, _updatedAt },
@@ -75,48 +72,46 @@ export default function Home({ sanityData }: HomeProps) {
   );
 
   return (
-    <SanityProvider sanityData={sanityData}>
-      <div className={styles.rootContainer}>
-        <Head>
-          <title>{title}</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <div className={styles.rootContainer}>
+      <Head>
+        <title>{title}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <main className={styles.main}>
-          <div className={styles.productPage}>
-            <Header title={title} lastUpdated={lastUpdated} />
+      <main className={styles.main}>
+        <div className={styles.productPage}>
+          <Header title={title} lastUpdated={lastUpdated} />
 
-            <div className={styles.content}>
-              <div className={styles.layoutContainer}>
-                <div className={styles.topRow}>
-                  <div className={styles.leftCol}>
-                    {isMobile && <KortFortaltComponent />}
-                    {isMobile && <FilterSection />}
-                    <LeftMenuSection
-                      internalLinks={[kortFortaltLink, ...links]}
-                      supportLinks={supportLinks}
-                      sticky={!isMobile}
-                    />
-                  </div>
+          <div className={styles.content}>
+            <div className={styles.layoutContainer}>
+              <div className={styles.topRow}>
+                <div className={styles.leftCol}>
+                  {isMobile && <KortFortaltComponent />}
+                  {isMobile && <FilterSection />}
+                  <LeftMenuSection
+                    internalLinks={[kortFortaltLink, ...links]}
+                    supportLinks={supportLinks}
+                    sticky={!isMobile}
+                  />
+                </div>
 
-                  <div className={styles.mainCol}>
-                    {!isMobile && <KortFortaltComponent />}
-                    {!isMobile && <FilterSection />}
+                <div className={styles.mainCol}>
+                  {!isMobile && <KortFortaltComponent />}
+                  {!isMobile && <FilterSection />}
 
-                    {/* @ts-ignore */}
-                    {content?.map(({ title, content, slug, iconName }, index) => (
-                      <SectionWithHeader key={index} title={title} anchorId={slug?.current} iconName={iconName}>
-                        {/* bør styles til bodylong*/}
-                        <PortableTextContent value={content} />
-                      </SectionWithHeader>
-                    ))}
-                  </div>
+                  {/* @ts-ignore */}
+                  {content?.map(({ title, content, slug, iconName }, index) => (
+                    <SectionWithHeader key={index} title={title} anchorId={slug?.current} iconName={iconName}>
+                      {/* bør styles til bodylong*/}
+                      <PortableTextContent value={content} />
+                    </SectionWithHeader>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </SanityProvider>
+        </div>
+      </main>
+    </div>
   );
 }
