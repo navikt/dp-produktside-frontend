@@ -1,5 +1,5 @@
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
-import { filterTexts } from "./filter-texts";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 import { FilterExplanation } from "./FilterExplanation";
 
 interface Props {
@@ -15,25 +15,23 @@ export function FilterMenu({
   availableFilters = ["arbeidsledig", "permittert"],
   selectedFilters,
   onChange,
-  legend = filterTexts.whatIsYourSituation,
+  legend,
 }: Props) {
+  const { getGeneralText } = useSanityContext();
+
   return (
     <CheckboxGroup
       className={className}
       size="small"
-      legend={legend}
+      legend={legend ?? getGeneralText("filter-menu.label")}
       onChange={(val: any[]) => {
         onChange(val);
       }}
       value={selectedFilters}
     >
-      <Checkbox value="arbeidsledig">Jeg er arbeidsledig</Checkbox>
-      <Checkbox value="permittert">Jeg er permittert</Checkbox>
+      <Checkbox value="arbeidsledig">{getGeneralText("filter-menu.unemployed")}</Checkbox>
+      <Checkbox value="permittert">{getGeneralText("filter-menu.layoff")}</Checkbox>
       <FilterExplanation selectedFilters={selectedFilters} availableFilters={availableFilters} />
     </CheckboxGroup>
   );
-}
-
-export function HorizontalFilterMenu({ legend = filterTexts.showingInformationFor, ...restProps }: Props) {
-  return <FilterMenu legend={legend} {...restProps} />;
 }

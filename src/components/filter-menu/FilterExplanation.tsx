@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { useState, useEffect, useRef, useId } from "react";
 import { Information, InformationFilled } from "@navikt/ds-icons";
+import { useSanityContext } from "components/sanity-context/sanity-context";
 import styles from "./FilterExplanation.module.scss";
-import { filterTexts } from "./filter-texts";
 
 interface FilterExplanationProps {
   selectedFilters: string[];
@@ -10,6 +10,7 @@ interface FilterExplanationProps {
 }
 
 export const FilterExplanation = ({ selectedFilters, availableFilters }: FilterExplanationProps) => {
+  const { getGeneralText } = useSanityContext();
   const explanationId = useId();
   const [selectCount, setSelectCount] = useState(0);
   const [showHighlight, setShowHighlight] = useState(false);
@@ -33,9 +34,10 @@ export const FilterExplanation = ({ selectedFilters, availableFilters }: FilterE
     }
   }, [relevantSelectedFilters, selectCount]);
 
-  const { noFiltersSelected, filtersSelected } = filterTexts;
-
-  const filterExplanationText = relevantSelectedFilters.length === 0 ? noFiltersSelected : filtersSelected;
+  const filterExplanationText =
+    relevantSelectedFilters.length === 0
+      ? getGeneralText("filter-explanation.no-filters-selected")
+      : getGeneralText("filter-explanation.filters-selected");
 
   return (
     <div

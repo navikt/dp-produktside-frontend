@@ -23,8 +23,10 @@ import { useQueryState } from "utils/use-query-state/useQueryState";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
 import dynamic from "next/dynamic";
+import { SanityProvider } from "components/sanity-context/sanity-context";
 
 interface Props {
+  sanityData: any;
   revisions: Revision[];
 }
 

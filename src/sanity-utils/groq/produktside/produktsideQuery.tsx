@@ -27,6 +27,9 @@ export const produktsideQuery = groq`{
     'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
+    'filterSection': *[_id == "produktsideFilterSection" && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
     'generalTexts': *[_type == 'produktsideGeneralText' && __i18n_lang == $baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     }

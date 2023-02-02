@@ -12,9 +12,7 @@ import styles from "styles/Home.module.scss";
 import { useIsMobile } from "utils/useIsMobile";
 import { convertTimestampToDate, isValidDate } from "utils/dates";
 import { max } from "date-fns";
-import { FilterSection } from "components/filter/FilterSection";
-import { FilterMenu } from "components/filter/FilterMenu";
-import { useFilterContext } from "components/filter/FilterContext";
+import { FilterSection } from "components/filter-section/FilterSection";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -34,7 +32,6 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 export default function Home() {
   const isMobile = useIsMobile();
   const sanityData = useSanityContext();
-  const { selectedFilters, setSelectedFilters } = useFilterContext();
 
   const {
     settings: { title, content, supportLinks, _updatedAt },
@@ -74,17 +71,6 @@ export default function Home() {
     </SectionWithHeader>
   );
 
-  const FilterComponent = () => (
-    <FilterSection>
-      <FilterMenu
-        selectedFilters={selectedFilters}
-        onChange={(val) => {
-          setSelectedFilters(val);
-        }}
-      />
-    </FilterSection>
-  );
-
   return (
     <div className={styles.rootContainer}>
       <Head>
@@ -101,7 +87,7 @@ export default function Home() {
               <div className={styles.topRow}>
                 <div className={styles.leftCol}>
                   {isMobile && <KortFortaltComponent />}
-                  {isMobile && <FilterComponent />}
+                  {isMobile && <FilterSection />}
                   <LeftMenuSection
                     internalLinks={[kortFortaltLink, ...links]}
                     supportLinks={supportLinks}
@@ -111,7 +97,7 @@ export default function Home() {
 
                 <div className={styles.mainCol}>
                   {!isMobile && <KortFortaltComponent />}
-                  {!isMobile && <FilterComponent />}
+                  {!isMobile && <FilterSection />}
 
                   {/* @ts-ignore */}
                   {content?.map(({ title, content, slug, iconName }, index) => (
