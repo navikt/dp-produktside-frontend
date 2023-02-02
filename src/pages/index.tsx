@@ -13,6 +13,7 @@ import { useIsMobile } from "utils/useIsMobile";
 import { convertTimestampToDate, isValidDate } from "utils/dates";
 import { max } from "date-fns";
 import { FilterSection } from "components/filter-section/FilterSection";
+import { KortFortaltSection } from "components/kort-fortalt-section/KortFortaltSection";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -59,17 +60,10 @@ export default function Home() {
       }
     }) ?? []),
   ]
-    .map((timestamp) => convertTimestampToDate(timestamp))
-    .filter((date) => isValidDate(date));
+    .map(convertTimestampToDate)
+    .filter(isValidDate);
 
   const lastUpdated = max(lastUpdatedDates);
-
-  const KortFortaltComponent = () => (
-    <SectionWithHeader title={kortFortaltLink.linkText} anchorId={kortFortaltLink.anchorId}>
-      {/* bør styles til bodylong*/}
-      <PortableTextContent value={kortFortalt?.content} />
-    </SectionWithHeader>
-  );
 
   return (
     <div className={styles.rootContainer}>
@@ -86,7 +80,7 @@ export default function Home() {
             <div className={styles.layoutContainer}>
               <div className={styles.topRow}>
                 <div className={styles.leftCol}>
-                  {isMobile && <KortFortaltComponent />}
+                  {isMobile && <KortFortaltSection />}
                   {isMobile && <FilterSection />}
                   <LeftMenuSection
                     internalLinks={[kortFortaltLink, ...links]}
@@ -96,7 +90,7 @@ export default function Home() {
                 </div>
 
                 <div className={styles.mainCol}>
-                  {!isMobile && <KortFortaltComponent />}
+                  {!isMobile && <KortFortaltSection />}
                   {!isMobile && <FilterSection />}
 
                   {/* @ts-ignore */}
