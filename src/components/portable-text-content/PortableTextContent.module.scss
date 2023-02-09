@@ -5,3 +5,9 @@
 .button {
   max-width: fit-content;
 }
+
+.typography {
+  &__normalM1 {
+    margin-bottom: var(--a-spacing-1);
+  }
+}

@@ -1,5 +1,6 @@
 import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableTextBlockComponent } from "@portabletext/react";
+import styles from "./PortableTextContent.module.scss";
 
 export const commonBlockStyles:
   | PortableTextBlockComponent
@@ -26,4 +27,5 @@ export const commonBlockStyles:
       {children}
     </Heading>
   ),
+  m1: ({ children }) => <BodyLong className={styles.typography__normalM1}>{children}</BodyLong>,
 };
