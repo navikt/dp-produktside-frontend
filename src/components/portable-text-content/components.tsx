@@ -1,7 +1,6 @@
 import { Accordion, Button, ReadMore } from "@navikt/ds-react";
 import { PortableText, PortableTextTypeComponent } from "@portabletext/react";
 import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKalkulator";
-import Link from "next/link";
 import styles from "./PortableTextContent.module.scss";
 import * as NavIcons from "@navikt/ds-icons";
 

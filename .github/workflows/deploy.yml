@@ -1,8 +1,9 @@
 name: Build and deploy
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - main
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}/dp-produktside-frontend:${{ github.sha }}
