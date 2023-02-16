@@ -14,6 +14,7 @@ interface SanityContextValues {
   kortFortalt: any;
   filterSection: any;
   generalTexts: any;
+  contactOptions: any;
   getGeneralText: (id: string) => string;
 }
 

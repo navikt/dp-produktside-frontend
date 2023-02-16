@@ -14,6 +14,9 @@ import { convertTimestampToDate, isValidDate } from "utils/dates";
 import { max } from "date-fns";
 import { FilterSection } from "components/filter-section/FilterSection";
 import { KortFortaltSection } from "components/kort-fortalt-section/KortFortaltSection";
+import { ContactOption } from "components/contact-option/ContactOption";
+import { Heading } from "@navikt/ds-react";
+import { openChatbot } from "@navikt/nav-dekoratoren-moduler";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -37,6 +40,7 @@ export default function Home() {
   const {
     settings: { title, content, supportLinks, _updatedAt },
     kortFortalt,
+    contactOptions,
   } = sanityData;
 
   const kortFortaltLink = {
@@ -102,6 +106,39 @@ export default function Home() {
                   ))}
                 </div>
               </div>
+              {contactOptions && (
+                <div className={styles.bottomRow}>
+                  <div className={styles.bottomRowLayoutContainer}>
+                    <Heading className={styles.contactOptionsTitle} level="2" size="large" spacing>
+                      {contactOptions.title}
+                    </Heading>
+                    <div className={styles.contactOptionsContainer}>
+                      <ContactOption
+                        contactOption="chat"
+                        title={contactOptions.chatTitle}
+                        content={contactOptions.chatContent}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openChatbot();
+                        }}
+                      />
+                      <ContactOption
+                        contactOption="write"
+                        title={contactOptions.writeTitle}
+                        content={contactOptions.writeContent}
+                        href={contactOptions.writeURL}
+                      />
+
+                      <ContactOption
+                        contactOption="call"
+                        title={contactOptions.callTitle}
+                        content={contactOptions.callContent}
+                        href={contactOptions.callURL}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

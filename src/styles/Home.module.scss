@@ -91,6 +91,59 @@ $verticalMargin: 1.75rem;
             margin-bottom: 2rem;
           }
         }
+        // TODO: Finn en bedre løsning og rydd opp i styling for kontakt oss banneret.
+        .bottomRow {
+          max-width: 57rem;
+          margin-left: $sectionGutterSmall;
+          margin-right: $sectionGutterSmall;
+
+          @media #{common.$mq-screen-desktop} {
+            margin-left: 0;
+            margin-right: 0;
+          }
+
+          .bottomRowLayoutContainer {
+            padding: 4rem calc((100vw - 100%) / 2);
+            margin: 2rem calc((100vw - 100%) / -2) 4rem;
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          .contactOptionsTitle {
+            margin-bottom: 2.5rem;
+          }
+
+          .contactOptionsContainer {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: stretch;
+            width: 100%;
+            $singleColMaxWidth: calc(#{common.$sectionMaxWidth} + 2 * #{common.$padding-sides-mobile});
+            $doubleColMaxWidth: calc(#{common.$contentMaxWidth} + 2 * #{common.$padding-sides-tablet});
+
+            @include common.flex-cols-mixin(3);
+
+            @media #{'only screen and (max-width: #{$doubleColMaxWidth})'} {
+              @include common.flex-cols-mixin(2);
+            }
+
+            @media #{'only screen and (max-width: #{$singleColMaxWidth})'} {
+              @include common.flex-cols-mixin(1);
+            }
+
+            @media #{common.$mq-screen-desktop} {
+              @include common.flex-cols-mixin(3, 2rem);
+            }
+
+            @media #{common.$mq-screen-tablet} {
+              @include common.flex-cols-mixin(2);
+            }
+
+            @media #{common.$mq-screen-mobile} {
+              @include common.flex-cols-mixin(1);
+            }
+          }
+        }
       }
     }
   }

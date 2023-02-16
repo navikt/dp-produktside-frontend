@@ -30,9 +30,12 @@ export const produktsideQuery = groq`{
     'filterSection': *[_id == "produktsideFilterSection" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
+    'contactOptions': *[_type == 'produktsideContactOptions' && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
     'generalTexts': *[_type == 'produktsideGeneralText' && __i18n_lang == $baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
-    }
+    },
 }`;
 
 export const produktsideSectionIdsQuery = groq`{
