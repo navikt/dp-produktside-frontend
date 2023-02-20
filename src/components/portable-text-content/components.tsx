@@ -54,5 +54,7 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
       <PortableText value={value.content} />
     </ReadMore>
   ),
+  // TODO: Fjern denne etterhvert
   customComponent: DagpengerKalkulator,
+  produktsideTempCalculator: DagpengerKalkulator,
 };
