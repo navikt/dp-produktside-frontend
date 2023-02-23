@@ -1,8 +1,8 @@
-import { Alert, BodyShort, Table } from "@navikt/ds-react";
-import { LegacyRef } from "react";
+import { Alert, BodyLong, BodyShort, Heading, Table } from "@navikt/ds-react";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import { toKR } from "./utils";
 import styles from "./ResultTables.module.scss";
+
 interface ResultTablesProps {
   grunnlag: number;
   numberOfChildren: number;
@@ -10,97 +10,51 @@ interface ResultTablesProps {
 
 export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) {
   const { gValue } = useGrunnbelopContext();
-
-  if (grunnlag < 1.5 * gValue) {
-    return (
-      <Alert className={styles.alertInfoText} variant="info">
-        Inntekt under 1.5 G (167 216 kr) gir ikke rett til dagpenger. Vi anbefaler likevel at du sender søknad så kan
-        NAV vurdere din rett til dagpenger.
-      </Alert>
-    );
-  }
-
   const mellom0og6g = Math.max(0, Math.min(grunnlag, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
-  const dagpengerPerWeek = resultatMellom0og6G / 52;
-  const barnetilleggPerWeek = 17 * 5 * numberOfChildren;
-  const totalPerWeek = dagpengerPerWeek + barnetilleggPerWeek;
+  const dagpengerPer2Week = resultatMellom0og6G / 52 / 2;
+  const barnetilleggPer2Week = 17 * 2 * 5 * numberOfChildren;
+  const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
 
   return (
-    <>
-      <Table zebraStripes className={styles.beregningsgrunnlagTable}>
-        <Table.Header>
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="col" align="left">
-              Beregningsgrunnlag
-            </Table.HeaderCell>
-            <Table.HeaderCell scope="col"></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+    <div className={styles.container}>
+      <Heading size="large" level="3" className={styles.title}>
+        Du kan få utbetalt
+      </Heading>
 
-        <Table.Body>
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              Din inntekt opptil 6G
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(mellom0og6g)}</Table.DataCell>
-          </Table.Row>
+      <div className={styles.resultBox}>
+        <Heading size="large" level="3" className={styles.resultBox_title}>
+          {toKR(totalPer2Week)}
+        </Heading>
 
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              Antall barn
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{numberOfChildren}</Table.DataCell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+        <Heading size="small" level="3" className={styles.resultBox_subtitle}>
+          hver 14. dag (før skatt)
+        </Heading>
+      </div>
 
-      <Table zebraStripes className={styles.utregningTable}>
-        <Table.Header>
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="col" align="left">
-              Utregning
-            </Table.HeaderCell>
-            <Table.HeaderCell scope="col"></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <Heading size="medium" level="3" className={styles.resultText_title}>
+        Beregningen din
+      </Heading>
 
-        <Table.Body>
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              62,4 % av inntekt opp til 6G
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(resultatMellom0og6G)}</Table.DataCell>
-          </Table.Row>
+      <BodyLong className={styles.resultText_subtitle}>
+        Vi regner ut 62,4 prosent av din inntekt opp til 6 G. For deg blir det <b>{toKR(resultatMellom0og6G)}</b> i
+        året.
+      </BodyLong>
 
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              {`${toKR(resultatMellom0og6G)}/52 uker`}
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(dagpengerPerWeek)}</Table.DataCell>
-          </Table.Row>
+      <dl className={styles.resultDetailList}>
+        <BodyShort as="dt">Dagpenger</BodyShort>
+        <BodyShort as="dd">{toKR(dagpengerPer2Week)}</BodyShort>
 
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              Barnetillegg per uke
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(barnetilleggPerWeek)}</Table.DataCell>
-          </Table.Row>
+        <BodyShort as="dt">Barnetilegg</BodyShort>
+        <BodyShort as="dd">
+          {toKR(barnetilleggPer2Week)} <span className={styles.weak}>for {numberOfChildren} barn</span>
+        </BodyShort>
 
-          <Table.Row shadeOnHover={false}>
-            <Table.HeaderCell scope="row" align="left">
-              Beregnet utbetaling per uke
-            </Table.HeaderCell>
-            <Table.DataCell align="right">{toKR(totalPerWeek)}</Table.DataCell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+        <hr />
 
-      <BodyShort className={styles.infoText}>Alle tall er før skatt.</BodyShort>
-
-      <Alert className={styles.alertInfoText} variant="info">
-        Dette er kun en veiledende utregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
-      </Alert>
-    </>
+        <BodyShort as="dt">Totalt hver 14.dag før skatt</BodyShort>
+        <BodyShort as="dd">{toKR(totalPer2Week)}</BodyShort>
+      </dl>
+    </div>
   );
 }

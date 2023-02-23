@@ -1,24 +1,78 @@
+@use "styles/common" as common;
+
+$common-border-radius: 5px;
+$common-input-max-width: 118px;
+
 .container {
   display: flex;
   flex-direction: column;
+  background-color: var(--a-purple-50);
+  border-radius: $common-border-radius;
+  position: relative;
+  padding: common.px-to-rem(80px) 1rem common.px-to-rem(20px);
 
-  .textField {
+  .calculatorFieldset {
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+    width: 100%;
     margin-bottom: 1rem;
-  }
 
-  .radioGroup {
-  }
+    .calculatorTitle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px 20px;
+      border-radius: $common-border-radius;
+      background-color: var(--a-purple-200);
+      text-align: center;
+      width: 100%;
+    }
 
-  .select {
-    margin-top: 1rem;
-  }
+    .textField {
+      margin-bottom: 1rem;
 
-  .button {
-    max-width: fit-content;
-    margin: 1rem auto;
+      > :global(.navds-text-field__input) {
+        width: auto;
+        max-width: $common-input-max-width;
+      }
+    }
+
+    .radioGroup {
+      > :global(.navds-radio-buttons) {
+        display: flex;
+        flex-direction: row;
+
+        > :first-child {
+          margin-right: 1rem;
+        }
+      }
+    }
+
+    .select {
+      margin-top: 1rem;
+
+      > :global(.navds-select__container) {
+        width: auto;
+        max-width: $common-input-max-width;
+      }
+    }
+
+    .button {
+      max-width: fit-content;
+      margin: 1rem auto;
+      margin-bottom: 0;
+    }
   }
 
   .resultTablesContainer {
     scroll-margin-top: 0.75rem;
+  }
+
+  .resultInfoText {
+    margin-top: 1rem;
   }
 }

@@ -1,6 +1,8 @@
-import { Button, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Radio, RadioGroup, ReadMore, Select, TextField } from "@navikt/ds-react";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
+import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import styles from "./DagpengerKalkulator.module.scss";
 import { ResultTables } from "./ResultTables";
 
@@ -15,6 +17,7 @@ interface FormValues {
 }
 
 export function DagpengerKalkulator() {
+  const { gValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
   const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
   const {
@@ -34,14 +37,6 @@ export function DagpengerKalkulator() {
       {i + 1}
     </option>
   ));
-  // TODO: Logg kalkulator bruk?
-  // const [harLoggetBruk, setHarLoggetBruk] = useState(false);
-  // useEffect(() => {
-  //   if (!harLoggetBruk && grunnlag) {
-  //     loggKalkulatorbruk("Uinnlogget vanlig");
-  //     setHarLoggetBruk(true);
-  //   }
-  // }, [grunnlag, harLoggetBruk]);
 
   useEffect(() => {
     if (showResult) {
@@ -54,64 +49,133 @@ export function DagpengerKalkulator() {
     resultTablesContainerRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-        {...register("grunnlag", {
-          required: "Du må skrive inn inntekt",
-          pattern: {
-            value: /^[0-9]+$/,
-            message: "Vennligst skriv et gyldig heltall",
-          },
-        })}
-        className={styles.textField}
-        label="Hva har du hatt i inntekt de siste 12 månedene?"
-        type="text"
-        inputMode="numeric"
-        size="medium"
-        error={errors?.grunnlag?.message as string}
-      />
+      <fieldset className={styles.calculatorFieldset}>
+        <legend className={styles.calculatorTitle}>
+          <Heading size="medium" level="3">
+            Kalkulator
+          </Heading>
+        </legend>
 
-      <Controller
-        control={control}
-        name="hasChildren"
-        rules={{ required: "Du må svare på om du forsørger barn under 18 år" }}
-        render={({ field: { value, onChange, onBlur, name, ref }, fieldState: { error } }) => (
-          <RadioGroup
-            ref={ref}
-            className={styles.radioGroup}
-            name={name}
-            legend="Forsørger du barn under 18 år?"
-            onChange={onChange}
-            onBlur={onBlur}
-            value={value}
-            error={error?.message}
+        <Controller
+          control={control}
+          name="grunnlag"
+          rules={{
+            required: "Du må skrive inn inntekt",
+          }}
+          render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+            <NumericFormat
+              name={name}
+              value={value}
+              maxLength={12}
+              allowNegative={false}
+              thousandSeparator=" "
+              onValueChange={(values) => {
+                onChange(values.floatValue);
+              }}
+              type="text"
+              inputMode="numeric"
+              size="medium"
+              className={styles.textField}
+              customInput={TextField}
+              error={error?.message}
+              label="Hva har du hatt i inntekt de siste 12 månedene, eller i gjennomsnitt de siste 36 månedene?"
+              description={
+                <ReadMore header="Hvilke inntekter avgjør hvor mye du kan få?">
+                  <BodyLong spacing>Vi bruker disse inntektene for å beregne hvor mye du kan få i dagpenger:</BodyLong>
+                  <ul>
+                    <li>Arbeidsinntekt</li>
+                    <li>Sykepenger</li>
+                    <li>Omsorgspenger</li>
+                    <li>Pleiepenger</li>
+                    <li>Opplæringspenger</li>
+                    <li>Svangerskapspenger</li>
+                    <li>Foreldrepenger ved fødsel og adopsjon</li>
+                    <li>Dagpenger</li>
+                  </ul>
+                  <br />
+                  <BodyLong>
+                    Inntekt som selvstendig næringsdrivende regnes ikke som arbeidsinntekt. Inntekt som selvstendig
+                    næringsdrivende regnes ikke som arbeidsinntekt.
+                  </BodyLong>
+                </ReadMore>
+              }
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="hasChildren"
+          rules={{ required: "Du må svare på om du forsørger barn under 18 år" }}
+          render={({ field: { value, onChange, onBlur, name, ref }, fieldState: { error } }) => (
+            <RadioGroup
+              ref={ref}
+              className={styles.radioGroup}
+              description={
+                <ReadMore header="Hvorfor spør vi om du forsørger barn?">
+                  <BodyLong>
+                    Forsørger du barn under 18 år, får du et barnetillegg på 35 kroner per barn, 5 dager i uken. Dette
+                    utgjør 175 kroner i uken per barn. Barnet må bo i Norge eller et annet EØS-land. Hvis barnet i løpet
+                    av 12 måneder oppholder seg utenfor disse områdene i mer enn 90 dager, vil du ikke lenger få
+                    barnetillegg.
+                  </BodyLong>
+                </ReadMore>
+              }
+              name={name}
+              legend="Forsørger du barn under 18 år?"
+              onChange={onChange}
+              onBlur={onBlur}
+              value={value}
+              error={error?.message}
+            >
+              <Radio value="true">Ja</Radio>
+              <Radio value="false">Nei</Radio>
+            </RadioGroup>
+          )}
+        />
+
+        {hasChildren && (
+          <Select
+            {...register("numberOfChildren", { required: "Du må velge antall barn", shouldUnregister: true })}
+            className={styles.select}
+            label="Hvor mange barn under 18 år forsørger du?"
+            error={errors?.numberOfChildren?.message as string}
           >
-            <Radio value="true">Ja</Radio>
-            <Radio value="false">Nei</Radio>
-          </RadioGroup>
+            <option value="">Velg antall</option>
+            {childrenOptions}
+          </Select>
         )}
-      />
 
-      {hasChildren && (
-        <Select
-          {...register("numberOfChildren", { required: "Du må velge antall barn", shouldUnregister: true })}
-          className={styles.select}
-          label="Hvor mange barn under 18 år forsørger du?"
-          error={errors?.numberOfChildren?.message as string}
-        >
-          <option value="">Velg antall barn under 18 år</option>
-          {childrenOptions}
-        </Select>
+        <Button type="submit" className={styles.button} variant="secondary">
+          Beregn hva jeg kan få
+        </Button>
+      </fieldset>
+
+      {showResult && (
+        <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
+          {!hasNotEnoughGrunnlag && (
+            <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
+          )}
+          {!hasNotEnoughGrunnlag && (
+            <Alert variant="info" className={styles.resultInfoText}>
+              Dette er kun en veiledende beregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
+            </Alert>
+          )}
+          {hasNotEnoughGrunnlag && (
+            <Alert variant="info" className={styles.resultInfoText}>
+              <Heading spacing size="small" level="3">
+                Du har hatt for lite i inntekt til å ha rett til dagpenger
+              </Heading>
+              Du må ha hatt en inntekt på minst 167 216 kroner (1,5 G) de siste 12 månedene. Vi anbefaler likevel at du
+              sender en søknad. Da vurderer NAV om du allikevel har rett.
+            </Alert>
+          )}
+        </div>
       )}
-
-      <Button type="submit" className={styles.button} variant="secondary">
-        Beregn hva jeg kan få
-      </Button>
-
-      <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
-        {showResult && <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />}
-      </div>
     </form>
   );
 }

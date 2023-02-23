@@ -1,15 +1,62 @@
-.beregningsgrunnlagTable {
-  margin-bottom: 2rem;
-}
+$common-border-radius: 5px;
 
-.utregningTable {
-  margin-bottom: 1rem;
-}
+.container {
+  background-color: var(--a-green-50);
+  padding: 1rem;
+  border-radius: $common-border-radius;
 
-.alertInfoText {
-  margin-bottom: 1rem;
-}
+  .title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
 
-.infoText {
-  margin-bottom: 1rem;
+  .resultBox {
+    text-align: center;
+    color: var(--a-green-900);
+    background-color: var(--a-green-100);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: 1rem;
+    padding: 16px;
+    > * {
+      width: 100%;
+    }
+
+    &_title {
+      margin-bottom: var(--a-spacing-1);
+    }
+    &_subtitle {
+    }
+  }
+
+  .resultText {
+    &_title {
+      margin-bottom: 1rem;
+    }
+
+    &_content {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .resultDetailList {
+    > dt {
+      margin-bottom: 0.25rem;
+    }
+
+    hr {
+      margin-bottom: 0.75rem;
+    }
+
+    > dd {
+      font-weight: var(--a-font-weight-bold);
+      &:not(:last-child) {
+        margin-bottom: 0.75rem;
+      }
+
+      .weak {
+        font-weight: normal;
+      }
+    }
+  }
 }
