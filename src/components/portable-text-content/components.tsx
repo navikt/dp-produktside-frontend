@@ -44,6 +44,7 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
       </Button>
     );
   },
+  produktsideCalculator: DagpengerKalkulator,
   produktsideReadMore: ({ value }) => (
     <ReadMore className={styles.whiteSpacePreline} header={value.title} size={value.size}>
       {value.content}
@@ -54,5 +55,6 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
       <PortableText value={value.content} />
     </ReadMore>
   ),
+  // TODO: Fjern denne etterhvert
   customComponent: DagpengerKalkulator,
 };
