@@ -1,9 +1,11 @@
-$common-border-radius: 5px;
+@use "styles/common" as common;
+
+$common-border-radius: common.px-to-rem(5px);
 
 .container {
   background-color: var(--a-green-50);
-  padding: 1rem;
   border-radius: $common-border-radius;
+  padding: 1rem;
 
   .title {
     text-align: center;
@@ -17,15 +19,14 @@ $common-border-radius: 5px;
     margin-left: -1rem;
     margin-right: -1rem;
     margin-bottom: 1rem;
-    padding: 16px;
+    padding: 1rem;
+
     > * {
       width: 100%;
     }
 
     &_title {
       margin-bottom: var(--a-spacing-1);
-    }
-    &_subtitle {
     }
   }
 

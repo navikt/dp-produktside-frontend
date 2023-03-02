@@ -167,7 +167,7 @@ export function DagpengerKalkulator() {
           )}
           {hasNotEnoughGrunnlag && (
             <Alert variant="info" className={styles.resultInfoText}>
-              <Heading spacing size="small" level="3">
+              <Heading spacing size="small" level="4">
                 Du har hatt for lite i inntekt til å ha rett til dagpenger
               </Heading>
               Du må ha hatt en inntekt på minst 167 216 kroner (1,5 G) de siste 12 månedene. Vi anbefaler likevel at du

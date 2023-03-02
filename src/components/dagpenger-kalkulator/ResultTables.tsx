@@ -18,25 +18,25 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
 
   return (
     <div className={styles.container}>
-      <Heading size="large" level="3" className={styles.title}>
+      <Heading size="large" level="4" className={styles.title}>
         Du kan få utbetalt
       </Heading>
 
       <div className={styles.resultBox}>
-        <Heading size="large" level="3" className={styles.resultBox_title}>
+        <Heading size="large" level="4" className={styles.resultBox_title}>
           {toKR(totalPer2Week)}
         </Heading>
 
-        <Heading size="small" level="3" className={styles.resultBox_subtitle}>
+        <Heading size="small" level="4" className={styles.resultBox_subtitle}>
           hver 14. dag (før skatt)
         </Heading>
       </div>
 
-      <Heading size="medium" level="3" className={styles.resultText_title}>
+      <Heading size="medium" level="4" className={styles.resultText_title}>
         Beregningen din
       </Heading>
 
-      <BodyLong className={styles.resultText_subtitle}>
+      <BodyLong>
         Vi regner ut 62,4 prosent av din inntekt opp til 6 G. For deg blir det <b>{toKR(resultatMellom0og6G)}</b> i
         året.
       </BodyLong>
