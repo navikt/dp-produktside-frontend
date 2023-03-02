@@ -12,7 +12,7 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
   const { gValue } = useGrunnbelopContext();
   const mellom0og6g = Math.max(0, Math.min(grunnlag, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
-  const dagpengerPer2Week = resultatMellom0og6G / 52 / 2;
+  const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
   const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
   const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
 

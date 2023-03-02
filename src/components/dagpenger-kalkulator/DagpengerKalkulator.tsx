@@ -155,27 +155,29 @@ export function DagpengerKalkulator() {
         </Button>
       </fieldset>
 
-      {showResult && (
-        <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
-          {!hasNotEnoughGrunnlag && (
-            <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
-          )}
-          {!hasNotEnoughGrunnlag && (
-            <Alert variant="info" className={styles.resultInfoText}>
-              Dette er kun en veiledende beregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
-            </Alert>
-          )}
-          {hasNotEnoughGrunnlag && (
-            <Alert variant="info" className={styles.resultInfoText}>
-              <Heading spacing size="small" level="4">
-                Du har hatt for lite i inntekt til å ha rett til dagpenger
-              </Heading>
-              Du må ha hatt en inntekt på minst 167 216 kroner (1,5 G) de siste 12 månedene. Vi anbefaler likevel at du
-              sender en søknad. Da vurderer NAV om du allikevel har rett.
-            </Alert>
-          )}
-        </div>
-      )}
+      <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
+        {showResult && (
+          <>
+            {!hasNotEnoughGrunnlag && (
+              <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
+            )}
+            {!hasNotEnoughGrunnlag && (
+              <Alert variant="info" className={styles.resultInfoText}>
+                Dette er kun en veiledende beregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
+              </Alert>
+            )}
+            {hasNotEnoughGrunnlag && (
+              <Alert variant="info" className={styles.resultInfoText}>
+                <Heading spacing size="small" level="4">
+                  Du har hatt for lite i inntekt til å ha rett til dagpenger
+                </Heading>
+                Du må ha hatt en inntekt på minst 167 216 kroner (1,5 G) de siste 12 månedene. Vi anbefaler likevel at
+                du sender en søknad. Da vurderer NAV om du allikevel har rett.
+              </Alert>
+            )}
+          </>
+        )}
+      </div>
     </form>
   );
 }
