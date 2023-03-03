@@ -97,10 +97,7 @@ export function DagpengerKalkulator() {
                     <li>Dagpenger</li>
                   </ul>
                   <br />
-                  <BodyLong>
-                    Inntekt som selvstendig næringsdrivende regnes ikke som arbeidsinntekt. Inntekt som selvstendig
-                    næringsdrivende regnes ikke som arbeidsinntekt.
-                  </BodyLong>
+                  <BodyLong>Inntekt som selvstendig næringsdrivende regnes ikke som arbeidsinntekt.</BodyLong>
                 </ReadMore>
               }
             />
