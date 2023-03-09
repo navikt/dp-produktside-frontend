@@ -1,15 +1,63 @@
-.beregningsgrunnlagTable {
-  margin-bottom: 2rem;
-}
+@use "styles/common" as common;
 
-.utregningTable {
-  margin-bottom: 1rem;
-}
+$common-border-radius: common.px-to-rem(5px);
 
-.alertInfoText {
-  margin-bottom: 1rem;
-}
+.container {
+  background-color: var(--a-green-50);
+  border-radius: $common-border-radius;
+  padding: 1rem;
 
-.infoText {
-  margin-bottom: 1rem;
+  .title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .resultBox {
+    text-align: center;
+    color: var(--a-green-900);
+    background-color: var(--a-green-100);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+
+    > * {
+      width: 100%;
+    }
+
+    &_title {
+      margin-bottom: var(--a-spacing-1);
+    }
+  }
+
+  .resultText {
+    &_title {
+      margin-bottom: 1rem;
+    }
+
+    &_content {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .resultDetailList {
+    > dt {
+      margin-bottom: 0.25rem;
+    }
+
+    hr {
+      margin-bottom: 0.75rem;
+    }
+
+    > dd {
+      font-weight: var(--a-font-weight-bold);
+      &:not(:last-child) {
+        margin-bottom: 0.75rem;
+      }
+
+      .weak {
+        font-weight: normal;
+      }
+    }
+  }
 }
