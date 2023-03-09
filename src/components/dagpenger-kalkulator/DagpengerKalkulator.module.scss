@@ -50,6 +50,9 @@ $common-input-max-width: common.px-to-rem(118px);
           margin-right: 1rem;
         }
       }
+      .radioGroup_description {
+        margin-bottom: var(--a-spacing-4);
+      }
     }
 
     .select {
