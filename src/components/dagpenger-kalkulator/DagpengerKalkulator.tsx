@@ -114,11 +114,14 @@ export function DagpengerKalkulator() {
               className={styles.radioGroup}
               description={
                 <ReadMore header="Hvorfor spør vi om du forsørger barn?">
-                  <BodyLong>
+                  <BodyLong className={styles.radioGroup_description}>
                     Forsørger du barn under 18 år, får du et barnetillegg på 35 kroner per barn, 5 dager i uken. Dette
-                    utgjør 175 kroner i uken per barn. Barnet må bo i Norge eller et annet EØS-land. Hvis barnet i løpet
-                    av 12 måneder oppholder seg utenfor disse områdene i mer enn 90 dager, vil du ikke lenger få
-                    barnetillegg.
+                    utgjør 175 kroner i uken per barn. Hvis du forsørger barnet har du rett til barnetillegg selv om
+                    barnet ikke bor hos deg.
+                  </BodyLong>
+                  <BodyLong>
+                    Barnet må bo i Norge eller et annet EØS-land. Hvis barnet i løpet av 12 måneder oppholder seg
+                    utenfor disse områdene i mer enn 90 dager, vil du ikke lenger få barnetillegg.
                   </BodyLong>
                 </ReadMore>
               }
@@ -155,15 +158,7 @@ export function DagpengerKalkulator() {
       <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
         {showResult && (
           <>
-            {!hasNotEnoughGrunnlag && (
-              <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
-            )}
-            {!hasNotEnoughGrunnlag && (
-              <Alert variant="info" className={styles.resultInfoText}>
-                Dette er kun en veiledende beregning. Når du søker vurderer NAV hvor mye du kan ha rett til i dagpenger.
-              </Alert>
-            )}
-            {hasNotEnoughGrunnlag && (
+            {hasNotEnoughGrunnlag ? (
               <Alert variant="info" className={styles.resultInfoText}>
                 <Heading spacing size="small" level="4">
                   Du har hatt for lite i inntekt til å ha rett til dagpenger
@@ -171,6 +166,15 @@ export function DagpengerKalkulator() {
                 Du må ha hatt en inntekt på minst 167 216 kroner (1,5 G) de siste 12 månedene. Vi anbefaler likevel at
                 du sender en søknad. Da vurderer NAV om du allikevel har rett.
               </Alert>
+            ) : (
+              <>
+                <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
+
+                <Alert variant="info" className={styles.resultInfoText}>
+                  Dette er kun en veiledende beregning basert på at du er 100 prosent arbeidsledig. Når du søker
+                  vurderer NAV hvor mye du kan ha rett til i dagpenger.
+                </Alert>
+              </>
             )}
           </>
         )}
