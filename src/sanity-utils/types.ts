@@ -1,11 +1,10 @@
 import { TypedObject } from "@portabletext/types";
+import { SanityImageObject } from "@sanity/image-url/lib/types/types";
 
-export type SanityImage = {
+export interface SanityImage extends SanityImageObject {
   _type: "image";
-  asset: any;
-  crop: any;
-  hotspot: any;
-};
+  imageAltText: string;
+}
 export interface CommonDocumentFields {
   _type: "produktsideSettings" | "produktsideKortFortalt" | "produktsideSection";
   _createdAt: string;

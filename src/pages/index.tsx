@@ -1,22 +1,22 @@
 import { GetStaticPropsContext } from "next";
-import Head from "next/head";
+import { max } from "date-fns";
+import { Heading } from "@navikt/ds-react";
+import { openChatbot } from "@navikt/nav-dekoratoren-moduler";
+import { ContactOption } from "components/contact-option/ContactOption";
+import { FilterSection } from "components/filter-section/FilterSection";
+import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
 import { Header } from "components/header/Header";
+import { KortFortaltSection } from "components/kort-fortalt-section/KortFortaltSection";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { GrunnbelopData } from "components/grunnbelop-context/grunnbelop-context";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { PageMeta } from "components/PageMeta";
 import { sanityClient } from "sanity-utils/client";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import styles from "styles/Home.module.scss";
-import { useIsMobile } from "utils/useIsMobile";
 import { convertTimestampToDate, isValidDate } from "utils/dates";
-import { max } from "date-fns";
-import { FilterSection } from "components/filter-section/FilterSection";
-import { KortFortaltSection } from "components/kort-fortalt-section/KortFortaltSection";
-import { ContactOption } from "components/contact-option/ContactOption";
-import { Heading } from "@navikt/ds-react";
-import { openChatbot } from "@navikt/nav-dekoratoren-moduler";
+import { useIsMobile } from "utils/useIsMobile";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -41,6 +41,7 @@ export default function Home() {
     settings: { title, content, supportLinks, _updatedAt },
     kortFortalt,
     contactOptions,
+    seo,
   } = sanityData;
 
   const kortFortaltLink = {
@@ -71,10 +72,7 @@ export default function Home() {
 
   return (
     <div className={styles.rootContainer}>
-      <Head>
-        <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <PageMeta title={seo?.title} description={seo?.description} seoImage={seo?.image} />
 
       <main className={styles.main}>
         <div className={styles.productPage}>

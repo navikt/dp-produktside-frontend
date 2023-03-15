@@ -1,12 +1,12 @@
 import React from "react";
 import { Alert, BodyShort, Detail } from "@navikt/ds-react";
-import { SEO } from "../SEO";
+import { PageMeta } from "../PageMeta";
 import styles from "./Error.module.scss";
 
 export function Error() {
   return (
     <div className={styles.container}>
-      <SEO title={"Teknisk feil"} description="Beklager, det skjedde en teknisk feil." />
+      <PageMeta title={"Teknisk feil"} description="Beklager, det skjedde en teknisk feil." />
       <div className={styles.container}>
         <Alert variant="error">
           <BodyShort>Beklager, det skjedde en teknisk feil.</BodyShort>
