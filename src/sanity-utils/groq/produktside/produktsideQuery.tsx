@@ -22,12 +22,14 @@ const getAllFieldsGroq = `{
 export const produktsideQuery = groq`{
     'settings': *[_id == "produktsideSettings" && __i18n_lang == $baseLang][0] {
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${settingsGroq}, ${settingsGroq})
-
     },
     'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
     'filterSection': *[_id == "produktsideFilterSection" && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
+    'seo': *[_id == "produktsideSEO" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
     'contactOptions': *[_type == 'produktsideContactOptions' && __i18n_lang == $baseLang][0]{

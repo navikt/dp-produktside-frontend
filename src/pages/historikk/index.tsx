@@ -1,13 +1,17 @@
-import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
-import { addDays, endOfDay, isSameDay, isWithinInterval, max, min, subDays } from "date-fns";
+import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useCallback } from "react";
+import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
 import { Error } from "components/error/Error";
 import { Header } from "components/header/Header";
-import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
+import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { addDays, endOfDay, isSameDay, isWithinInterval, max, min, subDays } from "date-fns";
 import { sanityClient } from "sanity-utils/client";
 import { produktsideQuery, produktsideSectionIdsQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { Revision, revisionsFetcher } from "sanity-utils/groq/revisionsFetcher";
+import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
 import styles from "styles/Historikk.module.scss";
 import homeStyles from "styles/Home.module.scss";
 import {
@@ -20,10 +24,6 @@ import {
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
 import { useQueryState } from "utils/use-query-state/useQueryState";
-import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
-import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
-import dynamic from "next/dynamic";
-import { SanityProvider } from "components/sanity-context/sanity-context";
 
 interface Props {
   sanityData: any;
@@ -103,6 +103,10 @@ function HistorikkIndex({ revisions }: Props) {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+
       <UNSAFE_DatePicker.Standalone
         selected={selectedDate || undefined}
         onSelect={(date: Date | undefined) => {

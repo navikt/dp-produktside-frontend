@@ -18,6 +18,7 @@ const nextConfig = {
   i18n: {
     locales: supportedLocales,
     defaultLocale: "nb",
+    localeDetection: false,
   },
   output: "standalone",
   productionBrowserSourceMaps: true,

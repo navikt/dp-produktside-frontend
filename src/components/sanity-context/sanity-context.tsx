@@ -15,6 +15,7 @@ interface SanityContextValues {
   filterSection: any;
   generalTexts: any;
   contactOptions: any;
+  seo: any;
   getGeneralText: (id: string) => string;
 }
 

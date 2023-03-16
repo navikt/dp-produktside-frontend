@@ -53,9 +53,7 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
 
     return (
       <Html lang={locale}>
-        <Head>
-          <meta name="robots" content="noindex,nofollow" />
-        </Head>
+        <Head />
         <Dekorator.Styles />
         <Dekorator.Scripts />
         <body>
