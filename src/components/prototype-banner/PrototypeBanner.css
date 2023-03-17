@@ -1,0 +1,53 @@
+.prototype-banner {
+  -webkit-font-smoothing: antialiased;
+  font-size: 20px;
+  font-family: var(--a-font-family);
+  background-color: var(--a-deepblue-800);
+  border-image: repeating-linear-gradient(
+      -64.3deg,
+      var(--a-orange-300),
+      var(--a-orange-300) 10px,
+      var(--a-deepblue-900) 10px,
+      var(--a-deepblue-900) 20px
+    )
+    20;
+  border-top-width: 8px;
+  border-top-style: solid;
+  color: var(--a-deepblue-50);
+  padding: 2rem 1.5rem;
+}
+.prototype-banner__wrapper {
+  max-width: 40rem;
+  gap: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.prototype-banner__icon {
+  background-color: var(--a-deepblue-900);
+  border-radius: 100vw;
+  padding: 0.5rem;
+  width: 4rem;
+  height: 4rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.prototype-banner__icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.prototype-banner__content {
+  max-width: 50ch;
+}
+.prototype-banner__content p {
+  margin: 0;
+}
+.prototype-banner__content a {
+  color: var(--a-blue-300);
+}
+.prototype-banner__content a:hover {
+  color: var(--a-orange-300);
+}

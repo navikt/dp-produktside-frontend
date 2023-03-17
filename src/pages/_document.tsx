@@ -5,6 +5,7 @@ import {
   fetchDecoratorReact,
   Props as DekoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { PrototypeBanner } from "components/prototype-banner/PrototypeBanner";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<Env, "localhost">;
@@ -54,9 +55,13 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
     return (
       <Html lang={locale}>
         <Head />
+
         <Dekorator.Styles />
         <Dekorator.Scripts />
         <body>
+          {/* TODO: Legg til condition for banner når den prodsettes */}
+          {/* TODO: Utforsk rendring av banner med createPortal */}
+          <PrototypeBanner />
           <Dekorator.Header />
           <Main />
           <Dekorator.Footer />
