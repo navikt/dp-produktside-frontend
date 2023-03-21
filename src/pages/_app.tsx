@@ -6,6 +6,7 @@ import nb from "date-fns/locale/nb";
 import en from "date-fns/locale/en-GB";
 import "@navikt/ds-css";
 import "@navikt/ds-css-internal";
+import "components/prototype-banner/PrototypeBanner.css";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import { FilterContextProvider } from "components/filter-menu/FilterContext";
