@@ -46,7 +46,7 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
     );
   },
   produktsideCalculator: DagpengerKalkulator,
-  produktsideMicroCards: ({ value }) => <MicroCards header={value.header} cardList={value.cardList} />,
+  produktsideMicroCards: ({ value }) => <MicroCards title={value.title} cardList={value.cardList} />,
   produktsideReadMore: ({ value }) => (
     <ReadMore className={styles.whiteSpacePreline} header={value.title} size={value.size}>
       {value.content}

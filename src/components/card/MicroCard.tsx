@@ -12,8 +12,8 @@ interface IMicroCard {
 }
 
 interface MicroCardsProps {
-  header?: string;
   cardList: IMicroCard[];
+  title?: string;
 }
 
 const MicroCard = ({ linkText, url, type }: IMicroCard) => {
@@ -24,12 +24,12 @@ const MicroCard = ({ linkText, url, type }: IMicroCard) => {
   );
 };
 
-export const MicroCards = ({ header, cardList }: MicroCardsProps) => {
+export const MicroCards = ({ cardList, title }: MicroCardsProps) => {
   return (
     <>
-      {header && (
+      {title && (
         <BodyShort size="medium" className={styles.header}>
-          {header}
+          {title}
         </BodyShort>
       )}
       <div className={styles.wrapper}>
