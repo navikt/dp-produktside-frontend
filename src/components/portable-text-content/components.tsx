@@ -1,5 +1,6 @@
 import { Accordion, Button, ReadMore } from "@navikt/ds-react";
 import { PortableText, PortableTextTypeComponent } from "@portabletext/react";
+import { MicroCards } from "components/card/MicroCard";
 import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKalkulator";
 import styles from "./PortableTextContent.module.scss";
 import * as NavIcons from "@navikt/ds-icons";
@@ -45,6 +46,7 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
     );
   },
   produktsideCalculator: DagpengerKalkulator,
+  produktsideMicroCards: ({ value }) => <MicroCards title={value.title} cardList={value.cardList} />,
   produktsideReadMore: ({ value }) => (
     <ReadMore className={styles.whiteSpacePreline} header={value.title} size={value.size}>
       {value.content}
@@ -55,6 +57,4 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
       <PortableText value={value.content} />
     </ReadMore>
   ),
-  // TODO: Fjern denne etterhvert
-  customComponent: DagpengerKalkulator,
 };
