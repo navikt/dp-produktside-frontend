@@ -52,7 +52,7 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
 
         <hr />
 
-        <BodyShort as="dt">Totalt hver 14.dag før skatt</BodyShort>
+        <BodyShort as="dt">Totalt hver 14. dag før skatt</BodyShort>
         <BodyShort as="dd">{toKR(totalPer2Week)}</BodyShort>
       </dl>
     </div>
