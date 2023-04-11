@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { useSanityContext } from "components/sanity-context/sanity-context";
+import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import { FilterExplanation } from "./FilterExplanation";
 
 interface Props {
@@ -19,18 +20,44 @@ export function FilterMenu({
 }: Props) {
   const { getGeneralText } = useSanityContext();
 
+  const arbeidsledigLabel = getGeneralText("filter-menu.unemployed");
+  const permittertLabel = getGeneralText("filter-menu.layoff");
+  const checkboxLegend = legend ?? getGeneralText("filter-menu.label");
+
   return (
     <CheckboxGroup
       className={className}
       size="small"
-      legend={legend ?? getGeneralText("filter-menu.label")}
+      legend={checkboxLegend}
       onChange={(val: any[]) => {
         onChange(val);
       }}
       value={selectedFilters}
     >
-      <Checkbox value="arbeidsledig">{getGeneralText("filter-menu.unemployed")}</Checkbox>
-      <Checkbox value="permittert">{getGeneralText("filter-menu.layoff")}</Checkbox>
+      <Checkbox
+        value="arbeidsledig"
+        onChange={(event) => {
+          logAmplitudeEvent(AnalyticsEvents.FILTER, {
+            kategori: checkboxLegend,
+            filternavn: arbeidsledigLabel,
+            avkrysset: event.target.checked,
+          });
+        }}
+      >
+        {arbeidsledigLabel}
+      </Checkbox>
+      <Checkbox
+        value="permittert"
+        onChange={(event) => {
+          logAmplitudeEvent(AnalyticsEvents.FILTER, {
+            kategori: checkboxLegend,
+            filternavn: permittertLabel,
+            avkrysset: event.target.checked,
+          });
+        }}
+      >
+        {permittertLabel}
+      </Checkbox>
       <FilterExplanation selectedFilters={selectedFilters} availableFilters={availableFilters} />
     </CheckboxGroup>
   );

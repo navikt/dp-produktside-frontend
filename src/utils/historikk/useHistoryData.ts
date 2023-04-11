@@ -1,4 +1,4 @@
-import Config from "config";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HistorikkResponse } from "sanity-utils/groq/historyFetcher";
 import {
@@ -17,6 +17,7 @@ interface HistoryData {
 }
 
 export function useHistoryData(timestamp?: string) {
+  const { basePath } = useRouter();
   const [historyData, setHistoryData] = useState<HistoryData>({});
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export function useHistoryData(timestamp?: string) {
 
     (async function () {
       async function fetchHistoryApi<T>(requestId: string | string[]) {
-        const historyResponse = await fetch(`${Config.basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
+        const historyResponse = await fetch(`${basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
         const historyData = await historyResponse.json();
 
         return historyData as HistorikkResponse<T>;
@@ -52,7 +53,7 @@ export function useHistoryData(timestamp?: string) {
 
       setHistoryData(newHistoryData);
     })();
-  }, [timestamp]);
+  }, [basePath, timestamp]);
 
   return historyData;
 }

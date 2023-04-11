@@ -1,10 +1,8 @@
 import { Heading } from "@navikt/ds-react";
-import { TypedObject } from "@portabletext/types";
 import { useFilterContext } from "components/filter-menu/FilterContext";
 import { FilterMenu } from "components/filter-menu/FilterMenu";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { useSanityContext } from "components/sanity-context/sanity-context";
-import { ReactNode } from "react";
 import styles from "./FilterSection.module.scss";
 
 export function FilterSection() {

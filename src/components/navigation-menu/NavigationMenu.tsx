@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import { AnchorLink, NavScrollDirection } from "./types";
-import Config from "config";
+import { vars } from "utils/variables";
 import { NavigationSidebar } from "./NavigationSidebar";
 
-export const navigationAnchorOffsetPx = Config.vars.pxPerRem;
+export const navigationAnchorOffsetPx = vars.pxPerRem;
 const menuCurrentIndexMinUpdateRateMs = 1000 / 30;
 
 const getCurrentLinkIndex = (links: AnchorLink[]) => {
@@ -14,7 +14,7 @@ const getCurrentLinkIndex = (links: AnchorLink[]) => {
     return element ? [...elements, element] : elements;
   }, []);
 
-  const scrollTarget = window.scrollY + Config.vars.dekoratorenHeight;
+  const scrollTarget = window.scrollY + vars.dekoratorenHeight;
 
   const scrolledToTop = !!(targetElements?.length && targetElements[0].offsetTop > scrollTarget);
 

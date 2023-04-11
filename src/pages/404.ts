@@ -1,4 +1,4 @@
-import Config from "config";
+import { appUrls } from "utils/url";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -6,7 +6,7 @@ export default function Custom404() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(Config.appUrls.nav404);
+    router.replace(appUrls.nav404);
   });
 
   return null;

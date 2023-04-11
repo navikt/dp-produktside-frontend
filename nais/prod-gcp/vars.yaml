@@ -2,3 +2,5 @@ dekoratorMiljo: prod
 sanityDataset: production
 ingresses: |
   ingresses:
+    - https://nav.no/dagpenger
+    - https://intern.nav.no/dagpenger

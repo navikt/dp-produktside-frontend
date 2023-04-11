@@ -1,9 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { PortableText, PortableTextProps } from "@portabletext/react";
 import { useFilterContext } from "components/filter-menu/FilterContext";
 import { FilterMenu } from "components/filter-menu/FilterMenu";
-import Config from "config";
-import { useEffect, useRef, useState } from "react";
 import { scrollIntoViewWithOffset } from "utils/scroll";
+import { vars } from "utils/variables";
 import { commonComponents } from "./components";
 import { commonMarks } from "./marks/marks";
 import { commonBlockStyles } from "./styles";
@@ -15,7 +15,7 @@ function FilterMenuComponent() {
 
   useEffect(() => {
     if (isTriggered) {
-      const scrollOffset = Config.vars.dekoratorenHeight;
+      const scrollOffset = vars.dekoratorenHeight;
       scrollIntoViewWithOffset(ref, scrollOffset);
 
       setIsTriggered(false);
