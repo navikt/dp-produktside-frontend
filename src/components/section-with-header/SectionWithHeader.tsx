@@ -45,11 +45,12 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
               size="small"
               icon={<LinkIcon aria-hidden title={title} />}
               popoverPlacement="right"
-              onClick={() => {
-                logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
-                  seksjon: title,
-                });
-              }}
+              // TODO: Legg til denne når komponenten CopyToClipboard er fikset.
+              // onClick={() => {
+              //   logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
+              //     seksjon: title,
+              //   });
+              // }}
             >
               {getGeneralText("copy-to-clipboard.title")}
             </CopyToClipboard>
