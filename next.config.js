@@ -8,7 +8,7 @@ const supportedLocales = ["nb", "en"];
 const myAppDirectives = {
   "script-src-elem": ["'self'"],
   "img-src": ["'self'", "data:"],
-  "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io"],
+  "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io", "amplitude.nav.no/collect"],
 };
 
 /** @type {import('next').NextConfig} */

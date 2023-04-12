@@ -5,6 +5,7 @@ import { NumericFormat } from "react-number-format";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import styles from "./DagpengerKalkulator.module.scss";
 import { ResultTables } from "./ResultTables";
+import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -31,6 +32,8 @@ export function DagpengerKalkulator() {
   const watchHasChildren = watch("hasChildren");
   const watchNumberOfChildren = watch("numberOfChildren");
   const hasChildren = convertStringToBoolean(watchHasChildren);
+  const skjemanavn = "Kalkulator";
+  const skjemaId = "produktside-dagpenger-kalkulator";
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
     <option value={i + 1} key={i + 1}>
@@ -47,6 +50,10 @@ export function DagpengerKalkulator() {
   function onSubmit() {
     setShowResult(true);
     resultTablesContainerRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    logAmplitudeEvent(AnalyticsEvents.FORM_SUBMITTED, {
+      skjemanavn,
+      skjemaId,
+    });
   }
 
   const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;

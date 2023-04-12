@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Config from "config";
+import { vars } from "utils/variables";
 import { windowMatchMedia } from "./match-media";
 
-const mobileWidthBreakpoint = Config.vars.mobileBreakpointPx;
+const mobileWidthBreakpoint = vars.mobileBreakpointPx;
 const mqlWidthBreakpoint = windowMatchMedia(`(min-width: ${mobileWidthBreakpoint}px)`);
 
 export function useIsMobile() {

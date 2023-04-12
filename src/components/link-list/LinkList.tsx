@@ -3,6 +3,8 @@ import { BodyShort, Heading } from "@navikt/ds-react";
 import styles from "./LinkList.module.scss";
 import Link from "next/link";
 import { SupportLink } from "sanity-utils/types";
+import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
+
 interface Props {
   title?: string;
   links?: SupportLink[];
@@ -23,10 +25,23 @@ export function LinkList({ title, links }: Props) {
 
       <nav className={styles.linkList}>
         {/* TODO: Legge til nofollowurl for eksterne lenker her for bedre SEO */}
-        {links?.map(({ url, title, targetBlank }, index) => (
-          <Link href={url} key={index} className={styles.link} target={targetBlank ? "_blank" : "_self"}>
+        {links?.map(({ url, title: linkText, targetBlank }, index) => (
+          <Link
+            href={url}
+            key={index}
+            className={styles.link}
+            target={targetBlank ? "_blank" : "_self"}
+            onClick={() => {
+              logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
+                destinasjon: url,
+                lenketekst: linkText,
+                komponent: "Lenkeliste for støtteinformasjon",
+                seksjon: "Nyttig å vite",
+              });
+            }}
+          >
             <BodyShort className={styles.linkText} as={"span"}>
-              {title}
+              {linkText}
             </BodyShort>
           </Link>
         ))}

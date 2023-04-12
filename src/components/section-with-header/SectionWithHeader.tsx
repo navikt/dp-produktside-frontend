@@ -4,9 +4,10 @@ import { Heading, Panel } from "@navikt/ds-react";
 import { CopyToClipboard } from "@navikt/ds-react-internal";
 import classNames from "classnames";
 import { useSanityContext } from "components/sanity-context/sanity-context";
-import Config from "config";
+import { appUrls } from "utils/url";
 import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";
+import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 
 interface Props {
   anchorId?: string;
@@ -39,11 +40,17 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
           {anchorId && (
             <CopyToClipboard
               className={styles.copyLink}
-              copyText={Config.appUrls.produktsideAnchorUrl(anchorId)}
+              copyText={appUrls.produktsideProductionUrl(anchorId)}
               popoverText={getGeneralText("copy-to-clipboard.popover-text")}
               size="small"
-              icon={<LinkIcon title={getGeneralText("copy-to-clipboard.title")} />}
+              icon={<LinkIcon aria-hidden title={title} />}
               popoverPlacement="right"
+              // TODO: Legg til denne når komponenten CopyToClipboard er fikset.
+              // onClick={() => {
+              //   logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
+              //     seksjon: title,
+              //   });
+              // }}
             >
               {getGeneralText("copy-to-clipboard.title")}
             </CopyToClipboard>
