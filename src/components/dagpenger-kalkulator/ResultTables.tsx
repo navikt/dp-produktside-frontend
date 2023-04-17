@@ -1,7 +1,7 @@
-import { Alert, BodyLong, BodyShort, Heading, Table } from "@navikt/ds-react";
+import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import { toKR } from "./utils";
 import styles from "./ResultTables.module.scss";
+import { toKR } from "./utils";
 
 interface ResultTablesProps {
   grunnlag: number;
@@ -23,16 +23,16 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
       </Heading>
 
       <div className={styles.resultBox}>
-        <Heading size="large" level="4" className={styles.resultBox_title}>
+        <Heading size="large" as="p" className={styles.resultBox_title}>
           {toKR(totalPer2Week)}
         </Heading>
 
-        <Heading size="small" level="4" className={styles.resultBox_subtitle}>
+        <Heading size="small" as="p" className={styles.resultBox_subtitle}>
           hver 14. dag (før skatt)
         </Heading>
       </div>
 
-      <Heading size="medium" level="4" className={styles.resultText_title}>
+      <Heading size="medium" as="p" className={styles.resultText_title}>
         Beregningen din
       </Heading>
 
@@ -50,7 +50,7 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
           {toKR(barnetilleggPer2Week)} <span className={styles.weak}>for {numberOfChildren} barn</span>
         </BodyShort>
 
-        <hr />
+        <div className={styles.decorativeHorziontalLine} />
 
         <BodyShort as="dt">Totalt hver 14. dag før skatt</BodyShort>
         <BodyShort as="dd">{toKR(totalPer2Week)}</BodyShort>

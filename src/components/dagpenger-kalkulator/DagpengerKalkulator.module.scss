@@ -65,6 +65,7 @@ $common-input-max-width: common.px-to-rem(118px);
     }
 
     .button {
+      --ac-button-secondary-bg: var(--a-white);
       max-width: fit-content;
       margin: 1rem auto;
       margin-bottom: 0;

@@ -17,34 +17,36 @@ export function LinkList({ title, links }: Props) {
 
   return (
     <section className={styles.container} aria-label={title}>
-      {title && (
-        <Heading size="small" level="2" className={styles.title}>
-          {title}
-        </Heading>
-      )}
+      <nav aria-label={title}>
+        {title && (
+          <Heading size="small" level="2" className={styles.title}>
+            {title}
+          </Heading>
+        )}
 
-      <nav className={styles.linkList}>
         {/* TODO: Legge til nofollowurl for eksterne lenker her for bedre SEO */}
-        {links?.map(({ url, title: linkText, targetBlank }, index) => (
-          <Link
-            href={url}
-            key={index}
-            className={styles.link}
-            target={targetBlank ? "_blank" : "_self"}
-            onClick={() => {
-              logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-                destinasjon: url,
-                lenketekst: linkText,
-                komponent: "Lenkeliste for støtteinformasjon",
-                seksjon: "Nyttig å vite",
-              });
-            }}
-          >
-            <BodyShort className={styles.linkText} as={"span"}>
-              {linkText}
-            </BodyShort>
-          </Link>
-        ))}
+        <ul className={styles.linkList}>
+          {links?.map(({ url, title: linkText, targetBlank }, index) => (
+            <Link
+              href={url}
+              key={index}
+              className={styles.link}
+              target={targetBlank ? "_blank" : "_self"}
+              onClick={() => {
+                logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
+                  destinasjon: url,
+                  lenketekst: linkText,
+                  komponent: "Lenkeliste for støtteinformasjon",
+                  seksjon: "Nyttig å vite",
+                });
+              }}
+            >
+              <BodyShort className={styles.linkText} as={"span"}>
+                {linkText}
+              </BodyShort>
+            </Link>
+          ))}
+        </ul>
       </nav>
     </section>
   );

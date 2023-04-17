@@ -53,7 +53,7 @@ export const FilterExplanation = ({ selectedFilters, availableFilters }: FilterE
           })}
           role="img"
           focusable="false"
-          aria-labelledby={explanationId}
+          titleId={explanationId}
         />
         <Information
           className={classNames(styles.icon, {
@@ -62,7 +62,7 @@ export const FilterExplanation = ({ selectedFilters, availableFilters }: FilterE
           })}
           role="img"
           focusable="false"
-          aria-labelledby={explanationId}
+          titleId={explanationId}
         />
       </div>
       <div className={styles.text} id={explanationId}>

@@ -1,13 +1,11 @@
-import Cookies from "js-cookie";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { setDefaultOptions } from "date-fns";
 import nb from "date-fns/locale/nb";
-import en from "date-fns/locale/en-GB";
+import { useEffect } from "react";
 import "@navikt/ds-css";
 import "@navikt/ds-css-internal";
 import "components/prototype-banner/PrototypeBanner.css";
-import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import { FilterContextProvider } from "components/filter-menu/FilterContext";
 import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
@@ -26,12 +24,10 @@ interface PageProps {
 export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   const router = useRouter();
 
-  onLanguageSelect(({ locale }) => {
-    Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });
+  useEffect(() => {
     // Sets locale for all date-fns functions located in utils/dates
-    setDefaultOptions({ locale: locale === "en" ? en : nb });
-    router.push(router.asPath, router.asPath, { locale });
-  });
+    setDefaultOptions({ locale: nb });
+  }, []);
 
   return (
     <ErrorBoundary>
