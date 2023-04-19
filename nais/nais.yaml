@@ -28,12 +28,16 @@ spec:
     outbound:
       external:
         - host: www.nav.no
-        - host: dekoratoren.dev.nav.no
+        - host: g.nav.no
         - host: api.sanity.io
         - host: apicdn.sanity.io
         - host: cdn.sanity.io
         - host: rt6o382n.api.sanity.io
         - host: rt6o382n.apicdn.sanity.io
+        - host: sentry.gc.nav.no
+      rules:
+        - application: nav-dekoratoren
+          namespace: personbruker
   env:
     - name: NODE_EXTRA_CA_CERTS
       value: "/etc/pki/tls/certs/ca-bundle.crt"

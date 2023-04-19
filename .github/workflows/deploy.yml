@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-node@v3
         if: steps.node_modules.outputs.cache-hit != 'true'
         with:
-          node-version: "16.x"
+          node-version: "18.x"
           cache: "npm"
           registry-url: "https://npm.pkg.github.com"
 
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -59,13 +59,13 @@ jobs:
 
       # Bygg docker image
       - uses: docker/setup-buildx-action@v2
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v3
+      - uses: docker/build-push-action@v4
         with:
           context: .
           push: true
@@ -113,3 +113,16 @@ jobs:
           RESOURCE: nais/nais.yaml
           VARS: nais/dev-gcp/vars.yaml
           PRINT_PAYLOAD: true
+      
+      - name: Lag deployment i Sentry
+        uses: getsentry/action-release@v1
+        continue-on-error: true
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: https://sentry.gc.nav.no
+          SENTRY_ORG: nav
+          SENTRY_PROJECT: dp-produktside-frontend
+        with:
+          environment: development
+          version: ${{ github.sha }}
+          set_commits: skip

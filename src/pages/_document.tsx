@@ -1,36 +1,43 @@
 import {
-  Components as DekoratorComponents,
-  Env,
-  Locale,
+  DecoratorComponents,
+  DecoratorEnvProps,
+  DecoratorLocale,
+  DecoratorParams,
   fetchDecoratorReact,
-  Props as DekoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
+import * as Sentry from "@sentry/browser";
 import { PrototypeBanner } from "components/prototype-banner/PrototypeBanner";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
-const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<Env, "localhost">;
-const supportedLocales = ["nb", "en"];
+const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<DecoratorEnvProps["env"], "localhost">;
+
+const defaultLocale = "nb";
+const supportedLocales = [defaultLocale];
 const availableLanguages = supportedLocales.map((locale) => ({
   locale,
   url: `https://www.nav.no/dagpenger/${locale}`,
   handleInApp: true,
-})) as DekoratorProps["availableLanguages"];
+})) as DecoratorParams["availableLanguages"];
 
-const dekoratorParams: DekoratorProps = {
+const decoratorParams: DecoratorParams = {
   availableLanguages,
   breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
   context: "privatperson",
-  env: decoratorEnv,
   utilsBackground: "white",
 };
 
-export default class MyDocument extends Document<{ Dekorator: DekoratorComponents }> {
+export default class MyDocument extends Document<{ Decorator: DecoratorComponents }> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
-    const language = locale === undefined ? "nb" : (locale as Locale);
+    const language = locale === undefined ? defaultLocale : (locale as DecoratorLocale);
 
-    const Dekorator: DekoratorComponents = await fetchDecoratorReact({ ...dekoratorParams, language }).catch((err) => {
+    Sentry.setContext("culture", { locale: language });
+
+    const Decorator: DecoratorComponents = await fetchDecoratorReact({
+      env: decoratorEnv,
+      params: { ...decoratorParams, language },
+    }).catch((err) => {
       // eslint-disable-next-line no-console
       console.error(err);
       const empty = () => <></>;
@@ -44,27 +51,28 @@ export default class MyDocument extends Document<{ Dekorator: DekoratorComponent
 
     return {
       ...initialProps,
-      Dekorator,
+      Decorator,
       locale: language,
     };
   }
 
   render() {
-    const { Dekorator, locale } = this.props;
+    const { Decorator, locale } = this.props;
 
     return (
       <Html lang={locale}>
-        <Head />
+        <Head>
+          <Decorator.Styles />
+        </Head>
 
-        <Dekorator.Styles />
-        <Dekorator.Scripts />
         <body>
           {/* TODO: Legg til condition for banner når den prodsettes */}
           {/* TODO: Utforsk rendring av banner med createPortal */}
-          <PrototypeBanner />
-          <Dekorator.Header />
+          {process.env.ENABLE_PROTOTYPE_BANNER && <PrototypeBanner />}
+          <Decorator.Header />
           <Main />
-          <Dekorator.Footer />
+          <Decorator.Footer />
+          <Decorator.Scripts />
           <NextScript />
         </body>
       </Html>

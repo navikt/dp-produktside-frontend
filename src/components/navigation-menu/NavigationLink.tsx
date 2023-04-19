@@ -1,4 +1,4 @@
-import { Label } from "@navikt/ds-react";
+import { BodyShort } from "@navikt/ds-react";
 import classNames from "classnames";
 import Link from "next/link";
 import { memo, ReactNode } from "react";
@@ -60,7 +60,7 @@ function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Prop
       onClick={setLocationHashAndScrollToTarget}
     >
       <span className={navigationSidebarStyles.decor} aria-hidden={true} />
-      <Label>{children}</Label>
+      <BodyShort className={styles.linkText}>{children}</BodyShort>
     </Link>
   );
 }

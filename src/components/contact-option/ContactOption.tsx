@@ -1,6 +1,6 @@
 import { Heading } from "@navikt/ds-react";
 import Link from "next/link";
-import { MouseEventHandler, ReactNode, useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import * as NavIcons from "@navikt/ds-icons";
 import { TypedObject } from "@portabletext/types";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
@@ -27,13 +27,12 @@ export function ContactOption({ title, content, contactOption, href = "#", onCli
     <div className={styles.container}>
       <Link
         className={styles.link}
-        target="_blank"
         href={href}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <IconComponent className={styles.icon} title="haha" />
+        <IconComponent className={styles.icon} aria-hidden />
         <Heading level="3" size="small">
           {title}
         </Heading>

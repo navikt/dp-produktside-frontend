@@ -79,6 +79,7 @@ export function DagpengerKalkulator() {
               value={value}
               maxLength={12}
               allowNegative={false}
+              decimalScale={0}
               thousandSeparator=" "
               onValueChange={(values) => {
                 onChange(values.floatValue);
@@ -152,7 +153,7 @@ export function DagpengerKalkulator() {
             label="Hvor mange barn under 18 år forsørger du?"
             error={errors?.numberOfChildren?.message as string}
           >
-            <option value="">Velg antall</option>
+            <option value="">Velg antall barn</option>
             {childrenOptions}
           </Select>
         )}
@@ -164,7 +165,7 @@ export function DagpengerKalkulator() {
 
       <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
         {showResult && (
-          <>
+          <div aria-live="assertive">
             {hasNotEnoughGrunnlag ? (
               <Alert variant="info" className={styles.resultInfoText}>
                 <Heading spacing size="small" level="4">
@@ -183,7 +184,7 @@ export function DagpengerKalkulator() {
                 </Alert>
               </>
             )}
-          </>
+          </div>
         )}
       </div>
     </form>

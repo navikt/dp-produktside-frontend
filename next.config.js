@@ -1,14 +1,16 @@
+const { withSentryConfig } = require("@sentry/nextjs");
 const { buildCspHeader } = require("@navikt/nav-dekoratoren-moduler/ssr");
 const path = require("path");
 
 // TODO: Denne bør deles med _document.tsx
-const supportedLocales = ["nb", "en"];
+const supportedLocales = ["nb"];
 
 // Direktiver appen vår benytter
 const myAppDirectives = {
   "script-src-elem": ["'self'"],
   "img-src": ["'self'", "data:"],
   "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io", "amplitude.nav.no/collect"],
+  "report-uri": "https://sentry.gc.nav.no/api/162/security/?sentry_key=209db408152a436fa73a237b1bf29182",
 };
 
 /** @type {import('next').NextConfig} */
@@ -44,4 +46,9 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, {
+  silent: true,
+  errorHandler: (err, invokeErr, compilation) => {
+    compilation.warnings.push("Sentry CLI Plugin: " + err.message);
+  },
+});

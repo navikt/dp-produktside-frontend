@@ -26,7 +26,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
       <Panel className={classNames(styles.container)}>
         {Icon && (
           <div id={Icon ? anchorId : undefined} className={styles.iconContainer} tabIndex={-1}>
-            <Icon className={styles.icon} />
+            <Icon className={styles.icon} aria-hidden />
           </div>
         )}
 
@@ -43,14 +43,13 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
               copyText={appUrls.produktsideProductionUrl(anchorId)}
               popoverText={getGeneralText("copy-to-clipboard.popover-text")}
               size="small"
-              icon={<LinkIcon aria-hidden title={title} />}
+              icon={<LinkIcon title={title} aria-hidden />}
               popoverPlacement="right"
-              // TODO: Legg til denne når komponenten CopyToClipboard er fikset.
-              // onClick={() => {
-              //   logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
-              //     seksjon: title,
-              //   });
-              // }}
+              onClick={() => {
+                logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
+                  seksjon: title,
+                });
+              }}
             >
               {getGeneralText("copy-to-clipboard.title")}
             </CopyToClipboard>
