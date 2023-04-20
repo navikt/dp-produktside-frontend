@@ -1,5 +1,6 @@
 import { PortableTextTypeComponent } from "@portabletext/react";
 import { AccordionWithRichText } from "components/accordion-with-rich-text/AccordionWithRichText";
+import { Alert } from "components/alert/Alert";
 import { MicroCards } from "components/card/MicroCard";
 import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKalkulator";
 import { LinkButton } from "components/link-button/LinkButton";
@@ -7,6 +8,7 @@ import { ReadMoreWithRichText } from "components/readmore-with-rich-text/ReadMor
 
 export const commonComponents: Record<string, PortableTextTypeComponent<any> | undefined> | undefined = {
   produktsideAccordionWithRichText: AccordionWithRichText,
+  produktsideAlert: Alert,
   produktsideButton: LinkButton,
   produktsideCalculator: DagpengerKalkulator,
   produktsideMicroCards: ({ value }) => <MicroCards title={value.title} cardList={value.cardList} />,
