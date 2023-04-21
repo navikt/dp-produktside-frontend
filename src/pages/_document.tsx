@@ -24,6 +24,7 @@ const decoratorParams: DecoratorParams = {
   breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
   context: "privatperson",
   utilsBackground: "white",
+  urlLookupTable: false,
 };
 
 export default class MyDocument extends Document<{ Decorator: DecoratorComponents }> {
