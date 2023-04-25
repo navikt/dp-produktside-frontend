@@ -28,6 +28,7 @@ spec:
     outbound:
       external:
         - host: www.nav.no
+        - host: cdn.nav.no
         - host: g.nav.no
         - host: api.sanity.io
         - host: apicdn.sanity.io
