@@ -59,13 +59,14 @@ export async function getStaticProps() {
 }
 
 function HistorikkIndex({ revisions }: Props) {
-  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
   {
     /* Datoer blir satt til slutten av dagen 
     fordi man ønsker all historikk til slutten av den dagen */
   }
-  const fromDate = endOfDay(subDays(min(revisionDates), 1));
-  const toDate = endOfDay(addDays(max(revisionDates), 1));
+
+  const fromDate = endOfDay(new Date(2023, 3, 26));
+  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
+  const toDate = endOfDay(addDays(max([fromDate, ...revisionDates]), 1));
 
   const [selectedDate, setSelectedDate] = useQueryState("timestamp", {
     parse: (v: string) => new Date(v),
