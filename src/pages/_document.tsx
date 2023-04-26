@@ -6,7 +6,6 @@ import {
   fetchDecoratorReact,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import * as Sentry from "@sentry/browser";
-import { PrototypeBanner } from "components/prototype-banner/PrototypeBanner";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<DecoratorEnvProps["env"], "localhost">;
@@ -69,7 +68,7 @@ export default class MyDocument extends Document<{ Decorator: DecoratorComponent
         <body>
           {/* TODO: Legg til condition for banner når den prodsettes */}
           {/* TODO: Utforsk rendring av banner med createPortal */}
-          {process.env.ENABLE_PROTOTYPE_BANNER && <PrototypeBanner />}
+          {/* {process.env.ENABLE_PROTOTYPE_BANNER && <PrototypeBanner />} */}
           <Decorator.Header />
           <Main />
           <Decorator.Footer />
