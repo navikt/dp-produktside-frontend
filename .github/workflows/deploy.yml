@@ -112,7 +112,6 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: nais/nais.yaml
           VARS: nais/dev-gcp/vars.yaml
-          VAR: image=${{ needs.build.outputs.image }}
           PRINT_PAYLOAD: true
       
       - name: Lag deployment i Sentry
@@ -140,7 +139,6 @@ jobs:
           CLUSTER: prod-gcp
           RESOURCE: nais/nais.yaml
           VARS: nais/prod-gcp/vars.yaml
-          VAR: image=${{ needs.build.outputs.image }}
           PRINT_PAYLOAD: true
 
       - name: Lag deployment i Sentry
