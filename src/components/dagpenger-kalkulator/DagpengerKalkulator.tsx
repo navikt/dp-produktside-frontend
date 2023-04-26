@@ -1,8 +1,9 @@
-import { Alert, BodyLong, Button, Heading, Radio, RadioGroup, ReadMore, Select, TextField } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
+import { ReadMoreWithRichText } from "components/readmore-with-rich-text/ReadMoreWithRichText";
 import styles from "./DagpengerKalkulator.module.scss";
 import { ResultTables } from "./ResultTables";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
@@ -92,7 +93,10 @@ export function DagpengerKalkulator() {
               error={error?.message}
               label="Hva har du hatt i inntekt de siste 12 månedene, eller i gjennomsnitt de siste 36 månedene?"
               description={
-                <ReadMore header="Hvilke inntekter avgjør hvor mye du kan få?">
+                <ReadMoreWithRichText
+                  header="Hvilke inntekter avgjør hvor mye du kan få?"
+                  _key={`${skjemaId}-grunnlag`}
+                >
                   <BodyLong spacing>Vi bruker disse inntektene for å beregne hvor mye du kan få i dagpenger:</BodyLong>
                   <ul>
                     <li>Arbeidsinntekt</li>
@@ -106,7 +110,7 @@ export function DagpengerKalkulator() {
                   </ul>
                   <br />
                   <BodyLong>Inntekt som selvstendig næringsdrivende regnes ikke som arbeidsinntekt.</BodyLong>
-                </ReadMore>
+                </ReadMoreWithRichText>
               }
             />
           )}
@@ -121,7 +125,7 @@ export function DagpengerKalkulator() {
               ref={ref}
               className={styles.radioGroup}
               description={
-                <ReadMore header="Hvorfor spør vi om du forsørger barn?">
+                <ReadMoreWithRichText header="Hvorfor spør vi om du forsørger barn?" _key={`${skjemaId}-har-barn`}>
                   <BodyLong className={styles.radioGroup_description}>
                     Forsørger du barn under 18 år, får du et barnetillegg på 35 kroner per barn, 5 dager i uken. Dette
                     utgjør 175 kroner i uken per barn. Hvis du forsørger barnet har du rett til barnetillegg selv om
@@ -131,7 +135,7 @@ export function DagpengerKalkulator() {
                     Barnet må bo i Norge eller et annet EØS-land. Hvis barnet i løpet av 12 måneder oppholder seg
                     utenfor disse områdene i mer enn 90 dager, vil du ikke lenger få barnetillegg.
                   </BodyLong>
-                </ReadMore>
+                </ReadMoreWithRichText>
               }
               name={name}
               legend="Forsørger du barn under 18 år?"
