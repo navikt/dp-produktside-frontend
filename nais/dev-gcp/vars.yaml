@@ -2,4 +2,6 @@ dekoratorMiljo: dev
 sanityDataset: production
 ingresses: |
   ingresses:
-    - https://arbeid.ekstern.dev.nav.no/dagpenger
+    - https://arbeid.ekstern.dev.nav.no/dagpenger($|\/$)
+    - https://arbeid.ekstern.dev.nav.no/dagpenger/historikk($|\/$)
+
