@@ -41,7 +41,7 @@ export const produktsideQuery = groq`{
 }`;
 
 export const produktsideSectionIdsQuery = groq`{
-  'sectionIds': *[_type == "produktsideSection" && __i18n_lang == $lang]{
+  'sectionIds': *[_type == "produktsideSection" && __i18n_lang == $lang && !(_id in path("drafts.**"))]{
     _id
   }
 }`;
