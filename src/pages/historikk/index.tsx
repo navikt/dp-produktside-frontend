@@ -80,7 +80,7 @@ function HistorikkIndex({ revisions }: Props) {
   );
 
   const isValidSelectedDate =
-    isValidDate(selectedDate) && isWithinInterval(selectedDate, { start: fromDate, end: toDate });
+    isValidDate(selectedDate) && isWithinInterval(selectedDate, { start: subDays(fromDate, 1), end: toDate });
 
   const selectedTimestamp = isValidSelectedDate ? toISOString(selectedDate!) : undefined;
 
