@@ -2,8 +2,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Produktområde Arbeid - Produktsside Dagpenger
 
-Produktsside dagpenger rettet mot arbeidsledige og permitterte på www.nav.no/arbeid/. 
-Innholdet kan redigeres på www.nav.no/arbeid/cms.
+Produktsside dagpenger rettet mot arbeidsledige og permitterte på www.nav.no/arbeid.
+Produktsiden befinner seg på www.nav.no/dagpenger.
+Innholdet kan redigeres på https://dagpenger.ekstern.dev.nav.no/sanity/.
 
 ## Utvikle lokalt
 
@@ -22,7 +23,6 @@ Spørsmål tilknyttet koden kan rettes mot:
 ### Internt
 
 Slack: #po-arbeid-innhold, #po-arbeid, #team-dagpenger, #team-dagpenger-dev
-
 
 ## Learn More
 

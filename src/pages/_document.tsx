@@ -20,7 +20,7 @@ const availableLanguages = supportedLocales.map((locale) => ({
 
 const decoratorParams: DecoratorParams = {
   availableLanguages,
-  breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/arbeid/" }],
+  breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/dagpenger/" }],
   context: "privatperson",
   utilsBackground: "white",
   urlLookupTable: false,

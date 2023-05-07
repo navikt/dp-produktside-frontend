@@ -74,7 +74,7 @@ export default function Home() {
     <div className={styles.rootContainer}>
       <PageMeta title={seo?.title} description={seo?.description} seoImage={seo?.image} />
 
-      <main className={styles.main}>
+      <main className={styles.main} id="maincontent">
         <div className={styles.productPage}>
           <Header title={title} lastUpdated={lastUpdated} />
 
