@@ -45,7 +45,7 @@ export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) 
         <BodyShort as="dt">Dagpenger</BodyShort>
         <BodyShort as="dd">{toKR(dagpengerPer2Week)}</BodyShort>
 
-        <BodyShort as="dt">Barnetilegg</BodyShort>
+        <BodyShort as="dt">Barnetillegg</BodyShort>
         <BodyShort as="dd">
           {toKR(barnetilleggPer2Week)} <span className={styles.weak}>for {numberOfChildren} barn</span>
         </BodyShort>
