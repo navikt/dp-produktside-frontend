@@ -36,7 +36,7 @@ export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProvider
         GtoNOK: (g: number) =>
           isNaN(g)
             ? "Her skulle det vært et kronebeløp oversatt fra grunnbeløp, men vi greide ikke å lese tallet "
-            : Math.round(g * gValue).toLocaleString("no-NO") + " kr",
+            : Math.round(g * gValue).toLocaleString("no-NO"),
       }}
     >
       {children}
