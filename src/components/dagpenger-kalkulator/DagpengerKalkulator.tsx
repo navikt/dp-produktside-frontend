@@ -91,7 +91,7 @@ export function DagpengerKalkulator() {
               className={styles.textField}
               customInput={TextField}
               error={error?.message}
-              label="Hva har du hatt i inntekt de siste 12 eller 36 månedene?"
+              label="Hva har du hatt i inntekt de siste 12 månedene, eller i gjennomsnitt de siste 36 månedene?"
               description={
                 <ReadMoreWithRichText
                   header="Hvilke inntekter avgjør hvor mye du kan få?"
