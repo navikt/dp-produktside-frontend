@@ -38,6 +38,14 @@ export const produktsideQuery = groq`{
     'generalTexts': *[_type == 'produktsideGeneralText' && __i18n_lang == $baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
+    'calculator': {
+      ...*[_id == 'produktsideCalculatorSettings' && __i18n_lang == $baseLang][0]{
+        ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+      },
+      'texts' : *[_type == 'produktsideCalculatorText' && __i18n_lang == $baseLang]{
+        ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+      }
+    },
 }`;
 
 export const produktsideSectionIdsQuery = groq`{

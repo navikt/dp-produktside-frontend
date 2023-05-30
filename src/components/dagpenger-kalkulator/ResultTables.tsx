@@ -1,59 +1,66 @@
 import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
-import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
+import { ReactNode } from "react";
 import styles from "./ResultTables.module.scss";
-import { toKR } from "./utils";
 
-interface ResultTablesProps {
-  grunnlag: number;
-  numberOfChildren: number;
+interface ResultDescriptionListItem {
+  term: ReactNode;
+  description: ReactNode;
 }
 
-export function ResultTables({ grunnlag, numberOfChildren }: ResultTablesProps) {
-  const { gValue } = useGrunnbelopContext();
-  const mellom0og6g = Math.max(0, Math.min(grunnlag, 6 * gValue));
-  const resultatMellom0og6G = mellom0og6g * 0.624;
-  const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
-  const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
-  const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
+interface ResultTablesProps {
+  title: ReactNode;
+  resultBoxTitle: ReactNode;
+  resultBoxSubtitle: ReactNode;
+  resultExplanationTitle: ReactNode;
+  resultExplanationDescription: ReactNode;
+  resultDescriptionList: ResultDescriptionListItem[];
+}
+
+export function ResultTables({
+  title,
+  resultBoxTitle,
+  resultBoxSubtitle,
+  resultExplanationTitle,
+  resultExplanationDescription,
+  resultDescriptionList,
+}: ResultTablesProps) {
+  const resultDescriptionListHead = resultDescriptionList.slice(0, -1);
+  const resultDescriptionListTail = [...resultDescriptionList].pop();
 
   return (
     <div className={styles.container}>
       <Heading size="large" level="4" className={styles.title}>
-        Du kan få utbetalt
+        {title}
       </Heading>
 
       <div className={styles.resultBox}>
         <Heading size="large" as="p" className={styles.resultBox_title}>
-          {toKR(totalPer2Week)}
+          {resultBoxTitle}
         </Heading>
 
         <Heading size="small" as="p" className={styles.resultBox_subtitle}>
-          hver 14. dag (før skatt)
+          {resultBoxSubtitle}
         </Heading>
       </div>
 
       <Heading size="medium" as="p" className={styles.resultText_title}>
-        Beregningen din
+        {resultExplanationTitle}
       </Heading>
 
-      <BodyLong>
-        Vi regner ut 62,4 prosent av din inntekt opp til 6 G. For deg blir det <b>{toKR(resultatMellom0og6G)}</b> i
-        året.
-      </BodyLong>
+      <BodyLong>{resultExplanationDescription}</BodyLong>
 
-      <dl className={styles.resultDetailList}>
-        <BodyShort as="dt">Dagpenger</BodyShort>
-        <BodyShort as="dd">{toKR(dagpengerPer2Week)}</BodyShort>
-
-        <BodyShort as="dt">Barnetillegg</BodyShort>
-        <BodyShort as="dd">
-          {toKR(barnetilleggPer2Week)} <span className={styles.weak}>for {numberOfChildren} barn</span>
-        </BodyShort>
+      <dl className={styles.resultDescriptionList}>
+        {resultDescriptionListHead?.map(({ term, description }) => (
+          <>
+            <BodyShort as="dt">{term}</BodyShort>
+            <BodyShort as="dd">{description}</BodyShort>
+          </>
+        ))}
 
         <div className={styles.decorativeHorziontalLine} />
 
-        <BodyShort as="dt">Totalt hver 14. dag før skatt</BodyShort>
-        <BodyShort as="dd">{toKR(totalPer2Week)}</BodyShort>
+        <BodyShort as="dt">{resultDescriptionListTail?.term}</BodyShort>
+        <BodyShort as="dd">{resultDescriptionListTail?.description}</BodyShort>
       </dl>
     </div>
   );

@@ -27,5 +27,6 @@ export const commonBlockStyles:
       {children}
     </Heading>
   ),
+  m0: ({ children }) => <BodyLong>{children}</BodyLong>,
   m1: ({ children }) => <BodyLong className={styles.typography__normalM1}>{children}</BodyLong>,
 };
