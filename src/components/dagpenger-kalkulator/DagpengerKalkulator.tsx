@@ -175,9 +175,9 @@ export function DagpengerKalkulator() {
                 <Heading spacing size="small" level="4">
                   Du har hatt for lite i inntekt til å ha rett til dagpenger
                 </Heading>
-                Du må ha hatt en inntekt på minst 177 930 kroner (1,5 G) de siste 12 månedene, eller minst 355 860
-                kroner (3 G) de siste 36 månedene. Vi anbefaler at du uansett sender en søknad. Da vurderer NAV om du
-                likevel har rett.
+                Du må ha hatt en inntekt på minst 177 930 kroner (1,5G) de siste 12 månedene, eller minst 355 860 kroner
+                (3G) de siste 36 månedene. Vi anbefaler at du uansett sender en søknad. Da vurderer NAV om du likevel
+                har rett.
               </Alert>
             ) : (
               <>
