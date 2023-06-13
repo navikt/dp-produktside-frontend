@@ -18,31 +18,9 @@ interface Props {
 export function LeftMenuSection({ internalLinks, supportLinks, sticky }: Props) {
   const { getGeneralText } = useSanityContext();
 
-  const buttonLinkHref = appUrls.dagpengerSoknad;
-  const buttonLinkText = getGeneralText("navigation-menu.button-title");
-
   return (
     <section className={classnames(styles.leftMenu, { [styles.leftMenuSticky]: sticky })}>
       <NavigationMenu title={getGeneralText("navigation-menu.title")} anchorLinks={internalLinks} />
-
-      <div className={styles.link}>
-        {/** TODO: Fiks flerspråklig url for denne knappen */}
-        <Button
-          as="a"
-          href={buttonLinkHref}
-          onClick={() => {
-            logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-              destinasjon: buttonLinkHref,
-              lenketekst: buttonLinkText,
-              komponent: "Meny for intern-navigasjon",
-              seksjon: "Innhold",
-            });
-          }}
-          variant="primary"
-        >
-          {buttonLinkText}
-        </Button>
-      </div>
 
       <LinkList links={supportLinks} title={getGeneralText("support-links-menu.title")} />
     </section>

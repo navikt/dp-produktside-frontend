@@ -23,12 +23,3 @@ $bottomOffset: 2rem;
 .leftMenuSticky {
   position: sticky;
 }
-
-.link {
-  background-color: var(--a-bg-default);
-  padding: 1rem;
-
-  > * {
-    width: 100%;
-  }
-}
