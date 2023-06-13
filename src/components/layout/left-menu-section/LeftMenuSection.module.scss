@@ -5,7 +5,6 @@ $bottomOffset: 2rem;
 
 .leftMenu {
   top: $topOffset;
-  margin-bottom: 0;
 
   @media #{common.$mq-screen-tablet-and-desktop} {
     overflow: auto;
