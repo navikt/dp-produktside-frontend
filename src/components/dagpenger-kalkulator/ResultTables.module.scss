@@ -40,7 +40,7 @@ $common-border-radius: common.px-to-rem(5px);
     }
   }
 
-  .resultDetailList {
+  .resultDescriptionList {
     > dt {
       margin-bottom: 0.25rem;
     }
@@ -59,13 +59,8 @@ $common-border-radius: common.px-to-rem(5px);
     }
 
     > dd {
-      font-weight: var(--a-font-weight-bold);
       &:not(:last-child) {
         margin-bottom: 0.75rem;
-      }
-
-      .weak {
-        font-weight: normal;
       }
     }
   }

@@ -1,7 +1,9 @@
+import { TypedObject } from "@portabletext/types";
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext } from "react";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { useSanityPreview } from "sanity-utils/useSanityPreview";
+import { CalculatorSchema } from "./calculator-schema-types";
 
 // TODO: Fix any-types when Sanity is upgraded to V3.
 interface SanityProviderProps {
@@ -16,6 +18,8 @@ interface SanityContextValues {
   generalTexts: any;
   contactOptions: any;
   seo: any;
+  calculator: CalculatorSchema;
+  getCalculatorTextBlock: (id: string) => TypedObject | TypedObject[] | string;
   getGeneralText: (id: string) => string;
 }
 
@@ -57,5 +61,18 @@ export function useSanityContext() {
     return element.textValue;
   }
 
-  return { ...context, getGeneralText };
+  function getCalculatorTextBlock(id: string) {
+    const calculatorTextId = `calculator.${id}`;
+    const element = context?.calculator?.texts?.find(({ textId }) => textId === calculatorTextId);
+
+    if (!element?.textValue) {
+      // TODO: Log missing text error with Sentry
+      console.error(`Error, calculatorText with ${calculatorTextId} couldn't be found `);
+      return calculatorTextId;
+    }
+
+    return element.textValue;
+  }
+
+  return { ...context, getGeneralText, getCalculatorTextBlock };
 }

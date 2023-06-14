@@ -1,15 +1,31 @@
-import { Alert, BodyLong, Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import { ReadMoreWithRichText } from "components/readmore-with-rich-text/ReadMoreWithRichText";
 import styles from "./DagpengerKalkulator.module.scss";
 import { ResultTables } from "./ResultTables";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
+import { useSanityContext } from "components/sanity-context/sanity-context";
+import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
+import { PortableText } from "@portabletext/react";
+import { toKR } from "./utils";
+import { commonComponents } from "components/portable-text-content/components";
+import { commonMarks } from "components/portable-text-content/marks/marks";
+import { TypedObject } from "@portabletext/types";
+import {
+  CalculatorVariables,
+  HasChildrenQuestion,
+  IncomeQuestion,
+  NumberOfChildrenQuestion,
+} from "components/sanity-context/calculator-schema-types";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
+}
+
+interface PortableTextCalculatorProps {
+  value: TypedObject | TypedObject[] | string;
 }
 
 interface FormValues {
@@ -19,6 +35,7 @@ interface FormValues {
 }
 
 export function DagpengerKalkulator() {
+  const { calculator, getCalculatorTextBlock } = useSanityContext();
   const { gValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
   const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -59,12 +76,66 @@ export function DagpengerKalkulator() {
 
   const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;
 
+  const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
+  const hasChildrenQuestion = calculator.questions.find(
+    ({ _type }) => _type === "hasChildrenQuestion"
+  ) as HasChildrenQuestion;
+  const numberOfChildrenQuestion = calculator.questions.find(
+    ({ _type }) => _type === "numberOfChildrenQuestion"
+  ) as NumberOfChildrenQuestion;
+
+  const numberOfChildren = watchNumberOfChildren ?? 0;
+  const mellom0og6g = Math.max(0, Math.min(watchGrunnlag, 6 * gValue));
+  const resultatMellom0og6G = mellom0og6g * 0.624;
+  const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
+  const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
+  const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
+
+  function resolveCalculatorVariable(variable: CalculatorVariables): string {
+    const textToVariableObject = {
+      "antall-barn": numberOfChildren,
+      "barnetillegg-per-2-uker": barnetilleggPer2Week,
+      "dagpenger-per-2-uker": dagpengerPer2Week,
+      "dagpenger-mellom-0-og-6G": resultatMellom0og6G,
+      "total-per-2-uker": totalPer2Week,
+    };
+
+    if (variable === "antall-barn") {
+      return `${textToVariableObject[variable]}`;
+    }
+
+    return toKR(textToVariableObject[variable]);
+  }
+
+  const PortableTextCalculator = ({ value }: PortableTextCalculatorProps) => {
+    if (typeof value == "string") {
+      return <>{value}</>;
+    }
+
+    return (
+      <PortableText
+        value={value}
+        components={{
+          block: { normal: ({ children }) => <>{children}</> },
+          marks: commonMarks,
+          types: {
+            ...commonComponents,
+            produktsideCalculatorVariable: ({ value }) => {
+              const resolvedVariable = resolveCalculatorVariable(value.variable);
+              return value?.strongText ? <strong>{resolvedVariable}</strong> : <>{resolvedVariable}</>;
+            },
+          },
+        }}
+      />
+    );
+  };
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={styles.calculatorFieldset}>
         <legend className={styles.calculatorTitle}>
           <Heading size="medium" level="3">
-            Kalkulator
+            {calculator?.title}
           </Heading>
         </legend>
 
@@ -72,7 +143,7 @@ export function DagpengerKalkulator() {
           control={control}
           name="grunnlag"
           rules={{
-            required: "Du må skrive inn inntekt",
+            required: incomeQuestion?.errorMessage,
           }}
           render={({ field: { onChange, name, value }, fieldState: { error } }) => (
             <NumericFormat
@@ -91,27 +162,8 @@ export function DagpengerKalkulator() {
               className={styles.textField}
               customInput={TextField}
               error={error?.message}
-              label="Hva har du hatt i inntekt de siste 12 månedene, eller i gjennomsnitt de siste 36 månedene?"
-              description={
-                <ReadMoreWithRichText
-                  header="Hvilke inntekter avgjør hvor mye du kan få?"
-                  _key={`${skjemaId}-grunnlag`}
-                >
-                  <BodyLong spacing>Vi bruker disse inntektene for å beregne hvor mye du kan få i dagpenger:</BodyLong>
-                  <ul>
-                    <li>Arbeidsinntekt</li>
-                    <li>Sykepenger</li>
-                    <li>Omsorgspenger</li>
-                    <li>Pleiepenger</li>
-                    <li>Opplæringspenger</li>
-                    <li>Svangerskapspenger</li>
-                    <li>Foreldrepenger ved fødsel og adopsjon</li>
-                    <li>Dagpenger</li>
-                  </ul>
-                  <br />
-                  <BodyLong>Inntekt som selvstendig næringsdrivende regnes ikke som arbeidsinntekt.</BodyLong>
-                </ReadMoreWithRichText>
-              }
+              label={incomeQuestion?.label}
+              description={<PortableTextContent value={incomeQuestion?.description} />}
             />
           )}
         />
@@ -119,51 +171,42 @@ export function DagpengerKalkulator() {
         <Controller
           control={control}
           name="hasChildren"
-          rules={{ required: "Du må svare på om du forsørger barn under 18 år" }}
+          rules={{ required: hasChildrenQuestion?.errorMessage }}
           render={({ field: { value, onChange, onBlur, name, ref }, fieldState: { error } }) => (
             <RadioGroup
               ref={ref}
               className={styles.radioGroup}
-              description={
-                <ReadMoreWithRichText header="Hvorfor spør vi om du forsørger barn?" _key={`${skjemaId}-har-barn`}>
-                  <BodyLong className={styles.radioGroup_description}>
-                    Forsørger du barn under 18 år, får du et barnetillegg på 35 kroner per barn, 5 dager i uken. Dette
-                    utgjør 175 kroner i uken per barn. Hvis du forsørger barnet har du rett til barnetillegg selv om
-                    barnet ikke bor hos deg.
-                  </BodyLong>
-                  <BodyLong>
-                    Barnet må bo i Norge eller et annet EØS-land. Hvis barnet i løpet av 12 måneder oppholder seg
-                    utenfor disse områdene i mer enn 90 dager, vil du ikke lenger få barnetillegg.
-                  </BodyLong>
-                </ReadMoreWithRichText>
-              }
+              description={<PortableTextContent value={hasChildrenQuestion?.description} />}
               name={name}
-              legend="Forsørger du barn under 18 år?"
+              legend={hasChildrenQuestion?.label}
               onChange={onChange}
               onBlur={onBlur}
               value={value}
               error={error?.message}
             >
-              <Radio value="true">Ja</Radio>
-              <Radio value="false">Nei</Radio>
+              <Radio value="true">{hasChildrenQuestion?.radioButtonLabel1}</Radio>
+              <Radio value="false">{hasChildrenQuestion?.radioButtonLabel2}</Radio>
             </RadioGroup>
           )}
         />
 
         {hasChildren && (
           <Select
-            {...register("numberOfChildren", { required: "Du må velge antall barn", shouldUnregister: true })}
+            {...register("numberOfChildren", {
+              required: numberOfChildrenQuestion?.errorMessage,
+              shouldUnregister: true,
+            })}
             className={styles.select}
-            label="Hvor mange barn under 18 år forsørger du?"
+            label={numberOfChildrenQuestion?.label}
             error={errors?.numberOfChildren?.message as string}
           >
-            <option value="">Velg antall barn</option>
+            <option value="">{numberOfChildrenQuestion?.firstOption}</option>
             {childrenOptions}
           </Select>
         )}
 
         <Button type="submit" className={styles.button} variant="secondary">
-          Beregn hva jeg kan få
+          <PortableTextCalculator value={getCalculatorTextBlock("submit-button-title")} />
         </Button>
       </fieldset>
 
@@ -171,22 +214,30 @@ export function DagpengerKalkulator() {
         {showResult && (
           <div aria-live="assertive">
             {hasNotEnoughGrunnlag ? (
-              <Alert variant="info" className={styles.resultInfoText}>
-                <Heading spacing size="small" level="4">
-                  Du har hatt for lite i inntekt til å ha rett til dagpenger
-                </Heading>
-                Du må ha hatt en inntekt på minst 177 930 kroner (1,5G) de siste 12 månedene, eller minst 355 860 kroner
-                (3G) de siste 36 månedene. Vi anbefaler at du uansett sender en søknad. Da vurderer NAV om du likevel
-                har rett.
-              </Alert>
+              <div className={styles.resultInfoText}>
+                <PortableTextContent value={calculator?.bottomContentOnInsufficientIncome} />
+              </div>
             ) : (
               <>
-                <ResultTables grunnlag={watchGrunnlag} numberOfChildren={watchNumberOfChildren ?? 0} />
+                <ResultTables
+                  title={<PortableTextCalculator value={getCalculatorTextBlock("result-section-title")} />}
+                  resultBoxTitle={<PortableTextCalculator value={getCalculatorTextBlock("result-box-title")} />}
+                  resultBoxSubtitle={<PortableTextCalculator value={getCalculatorTextBlock("result-box-subtitle")} />}
+                  resultExplanationTitle={
+                    <PortableTextCalculator value={getCalculatorTextBlock("result-explanation-title")} />
+                  }
+                  resultExplanationDescription={
+                    <PortableTextCalculator value={getCalculatorTextBlock("result-explanation-description")} />
+                  }
+                  resultDescriptionList={calculator.calculationList.map(({ term, description }) => ({
+                    term,
+                    description: <PortableTextCalculator value={description} />,
+                  }))}
+                />
 
-                <Alert variant="info" className={styles.resultInfoText}>
-                  Dette er kun en veiledende beregning basert på at du er 100 prosent arbeidsledig. Når du søker
-                  vurderer NAV hvor mye du kan ha rett til i dagpenger.
-                </Alert>
+                <div className={styles.resultInfoText}>
+                  <PortableTextContent value={calculator?.bottomContentOnSufficientIncome} />
+                </div>
               </>
             )}
           </div>
