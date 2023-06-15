@@ -4,6 +4,7 @@ import { createContext, ReactNode, useContext } from "react";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { useSanityPreview } from "sanity-utils/useSanityPreview";
 import { CalculatorSchema } from "./calculator-schema-types";
+import { TopContentSchema } from "./types/top-content";
 
 // TODO: Fix any-types when Sanity is upgraded to V3.
 interface SanityProviderProps {
@@ -18,6 +19,7 @@ interface SanityContextValues {
   generalTexts: any;
   contactOptions: any;
   seo: any;
+  topContent: TopContentSchema;
   calculator: CalculatorSchema;
   getCalculatorTextBlock: (id: string) => TypedObject | TypedObject[] | string;
   getGeneralText: (id: string) => string;

@@ -17,6 +17,7 @@ import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery
 import styles from "styles/Home.module.scss";
 import { convertTimestampToDate, isValidDate } from "utils/dates";
 import { useIsMobile } from "utils/useIsMobile";
+import { TopContent } from "components/top-content/TopContent";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
@@ -42,6 +43,7 @@ export default function Home() {
     kortFortalt,
     contactOptions,
     seo,
+    topContent,
   } = sanityData;
 
   const kortFortaltLink = {
@@ -82,8 +84,14 @@ export default function Home() {
             <div className={styles.layoutContainer}>
               <div className={styles.topRow}>
                 <div className={styles.leftCol}>
-                  {isMobile && <KortFortaltSection />}
-                  {isMobile && <FilterSection />}
+                  {isMobile && (
+                    <>
+                      <TopContent value={topContent?.content} />
+                      <KortFortaltSection />
+                      <FilterSection />
+                    </>
+                  )}
+
                   <LeftMenuSection
                     internalLinks={[kortFortaltLink, ...links]}
                     supportLinks={supportLinks}
@@ -92,8 +100,13 @@ export default function Home() {
                 </div>
 
                 <div className={styles.mainCol}>
-                  {!isMobile && <KortFortaltSection />}
-                  {!isMobile && <FilterSection />}
+                  {!isMobile && (
+                    <>
+                      <TopContent value={topContent?.content} />
+                      <KortFortaltSection />
+                      <FilterSection />
+                    </>
+                  )}
 
                   {/* @ts-ignore */}
                   {content?.map(({ title, content, slug, iconName }, index) => (
