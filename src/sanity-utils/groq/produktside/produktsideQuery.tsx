@@ -46,6 +46,9 @@ export const produktsideQuery = groq`{
         ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
       }
     },
+    'topContent': *[_type == 'produktsideTopContent' && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
 }`;
 
 export const produktsideSectionIdsQuery = groq`{
