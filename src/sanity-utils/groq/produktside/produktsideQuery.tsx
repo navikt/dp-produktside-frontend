@@ -20,6 +20,9 @@ const getAllFieldsGroq = `{
 }`;
 
 export const produktsideQuery = groq`{
+    'header': *[_id == "produktsideHeader" && __i18n_lang == $baseLang][0] {
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
     'settings': *[_id == "produktsideSettings" && __i18n_lang == $baseLang][0] {
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${settingsGroq}, ${settingsGroq})
     },

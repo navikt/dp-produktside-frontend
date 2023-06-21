@@ -39,7 +39,8 @@ export default function Home() {
   const sanityData = useSanityContext();
 
   const {
-    settings: { title, content, supportLinks, _updatedAt },
+    header,
+    settings: { content, supportLinks, _updatedAt },
     kortFortalt,
     contactOptions,
     seo,
@@ -78,7 +79,12 @@ export default function Home() {
 
       <main className={styles.main} id="maincontent">
         <div className={styles.productPage}>
-          <Header title={title} lastUpdated={lastUpdated} />
+          <Header
+            title={header?.title}
+            leftSubtitle={header?.leftSubtitle}
+            rightSubtitle={header?.rightSubtitle}
+            lastUpdated={lastUpdated}
+          />
 
           <div className={styles.content}>
             <div className={styles.layoutContainer}>

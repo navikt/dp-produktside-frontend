@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useCallback } from "react";
-import { Button, ReadMore, UNSAFE_DatePicker } from "@navikt/ds-react";
+import { Button, ReadMore, DatePicker } from "@navikt/ds-react";
 import { Error } from "components/error/Error";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
@@ -108,7 +108,7 @@ function HistorikkIndex({ revisions }: Props) {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <UNSAFE_DatePicker.Standalone
+      <DatePicker.Standalone
         selected={selectedDate || undefined}
         onSelect={(date: Date | undefined) => {
           if (date) {
@@ -143,8 +143,8 @@ function HistorikkIndex({ revisions }: Props) {
           {settings && kortFortalt && (
             <main className={homeStyles.main}>
               <div className={homeStyles.productPage}>
-                {/* TODO: Fiks sist oppdatert dato for historikk i Header */}
-                <Header title={settings?.title} />
+                {/* TODO: Fiks historikk for Header-skjema */}
+                <Header title="Dagpenger" leftSubtitle="PENGESTØTTE" rightSubtitle="Oppdatert" />
 
                 <div className={homeStyles.content}>
                   <div className={homeStyles.layoutContainer}>

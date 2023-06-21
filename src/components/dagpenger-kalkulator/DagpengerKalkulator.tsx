@@ -18,7 +18,7 @@ import {
   HasChildrenQuestion,
   IncomeQuestion,
   NumberOfChildrenQuestion,
-} from "components/sanity-context/calculator-schema-types";
+} from "components/sanity-context/types/calculator-schema-types";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";

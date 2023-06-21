@@ -4,7 +4,6 @@ import { setDefaultOptions } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect } from "react";
 import "@navikt/ds-css";
-import "@navikt/ds-css-internal";
 import "components/prototype-banner/PrototypeBanner.css";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import { FilterContextProvider } from "components/filter-menu/FilterContext";

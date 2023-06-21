@@ -1,7 +1,6 @@
 import * as NavIcons from "@navikt/ds-icons";
 import { Link as LinkIcon } from "@navikt/ds-icons";
-import { Heading, Panel } from "@navikt/ds-react";
-import { CopyToClipboard } from "@navikt/ds-react-internal";
+import { CopyButton, Heading, Panel } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { appUrls } from "utils/url";
@@ -38,21 +37,20 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
           )}
 
           {anchorId && (
-            <CopyToClipboard
+            <CopyButton
               className={styles.copyLink}
+              text={getGeneralText("copy-to-clipboard.title")}
+              activeText={getGeneralText("copy-to-clipboard.popover-text")}
               copyText={appUrls.produktsideProductionUrl(anchorId)}
-              popoverText={getGeneralText("copy-to-clipboard.popover-text")}
               size="small"
-              icon={<LinkIcon title={title} aria-hidden />}
-              popoverPlacement="right"
+              icon={<LinkIcon aria-hidden />}
+              activeIcon={<LinkIcon aria-hidden />}
               onClick={() => {
                 logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
                   seksjon: title,
                 });
               }}
-            >
-              {getGeneralText("copy-to-clipboard.title")}
-            </CopyToClipboard>
+            />
           )}
         </div>
 
