@@ -17,11 +17,16 @@ export async function revisionsFetcher(docId: string | string[]): Promise<Revisi
   try {
     const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/transactions/${docId}?excludeContent=true`;
 
-    const response = await fetch(url, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      url,
+      token
+        ? {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        : {}
+    );
 
     // https://stackoverflow.com/questions/60634337/when-using-fetch-how-to-convert-response-body-from-application-x-ndjson-to-appli
     if (response.status != 200) {
