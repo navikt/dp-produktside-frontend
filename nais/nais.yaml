@@ -49,5 +49,5 @@ spec:
     - name: NEXT_PUBLIC_SANITY_DATASET
       value: {{sanityDataset}}
   envFrom:
-    - secret: dp-faktasider-frontend-sanity-cms-read-token
+    - secret: dp-produktside-frontend-sanity-cms-read-token
   {{ingresses}}
