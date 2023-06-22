@@ -151,6 +151,7 @@ function HistorikkIndex({ revisions }: Props) {
                     <div className={homeStyles.topRow}>
                       <div className={homeStyles.leftCol}>
                         <LeftMenuSection
+                          title={settings?.title}
                           internalLinks={[
                             { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
                             ...(settingsSections?.map(({ title, slug }) => ({
@@ -158,6 +159,7 @@ function HistorikkIndex({ revisions }: Props) {
                               linkText: title,
                             })) ?? []),
                           ]}
+                          supportLinksTitle={settings?.supportLinksTitle}
                           supportLinks={settings?.supportLinks}
                           sticky={true}
                         />

@@ -38,14 +38,7 @@ export default function Home() {
   const isMobile = useIsMobile();
   const sanityData = useSanityContext();
 
-  const {
-    header,
-    settings: { content, supportLinks, _updatedAt },
-    kortFortalt,
-    contactOptions,
-    seo,
-    topContent,
-  } = sanityData;
+  const { header, settings, kortFortalt, contactOptions, seo, topContent } = sanityData;
 
   const kortFortaltLink = {
     anchorId: kortFortalt?.slug?.current,
@@ -53,16 +46,16 @@ export default function Home() {
   };
 
   // @ts-ignore
-  const links = content?.map(({ title, slug }) => ({
+  const links = settings?.content?.map(({ title, slug }) => ({
     anchorId: slug?.current,
     linkText: title,
   }));
 
   const lastUpdatedDates = [
-    _updatedAt,
+    settings?._updatedAt,
     kortFortalt?._updatedAt,
     //@ts-ignore
-    ...(content?.map((section) => {
+    ...(settings?.content?.map((section) => {
       if (section?._updatedAt) {
         return section?._updatedAt;
       }
@@ -99,8 +92,10 @@ export default function Home() {
                   )}
 
                   <LeftMenuSection
+                    title={settings?.title}
+                    supportLinksTitle={settings?.supportLinksTitle}
                     internalLinks={[kortFortaltLink, ...links]}
-                    supportLinks={supportLinks}
+                    supportLinks={settings?.supportLinks}
                     sticky={!isMobile}
                   />
                 </div>
@@ -115,7 +110,7 @@ export default function Home() {
                   )}
 
                   {/* @ts-ignore */}
-                  {content?.map(({ title, content, slug, iconName }, index) => (
+                  {settings?.content?.map(({ title, content, slug, iconName }, index) => (
                     <SectionWithHeader key={index} title={title} anchorId={slug?.current} iconName={iconName}>
                       {/* bør styles til bodylong*/}
                       <PortableTextContent value={content} />
