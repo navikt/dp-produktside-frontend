@@ -4,7 +4,6 @@ import styles from "./Header.module.scss";
 //@ts-ignore
 import svgIcon from "../../../public/static-dagpenger.svg";
 import { formatLocaleDateWithMonthText } from "utils/dates";
-import { useSanityContext } from "components/sanity-context/sanity-context";
 // TODO: Finn en bedre måte å hente SVG-ikon på?
 // NextJS klarer ikke bruke public-pathen når man bruker src="/static-dagpenger.svg".
 // Sannsynligvis fordi vi har en src-mappe, men det gjenstår å undersøke dette.
@@ -12,12 +11,12 @@ import { useSanityContext } from "components/sanity-context/sanity-context";
 
 interface Props {
   title?: string;
+  leftSubtitle?: string;
+  rightSubtitle?: string;
   lastUpdated?: Date;
 }
 
-export function Header({ title, lastUpdated }: Props) {
-  const { getGeneralText } = useSanityContext();
-
+export function Header({ title, leftSubtitle, rightSubtitle, lastUpdated }: Props) {
   return (
     <header className={styles.header}>
       <div className={styles.illustration} aria-hidden="true" role="presentation">
@@ -30,7 +29,7 @@ export function Header({ title, lastUpdated }: Props) {
         </Heading>
         <div className={styles.taglineWrapper}>
           <BodyShort size="small" className={styles.taglineLabel}>
-            {getGeneralText("header.left-subtitle")}
+            {leftSubtitle}
           </BodyShort>
           {lastUpdated && (
             <>
@@ -39,7 +38,7 @@ export function Header({ title, lastUpdated }: Props) {
               </span>
               <Detail>
                 <span className={styles.modifiedLabel}>
-                  {`${getGeneralText("header.right-subtitle")} 
+                  {`${rightSubtitle} 
                   ${formatLocaleDateWithMonthText(lastUpdated)}`}
                 </span>
               </Detail>

@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext } from "react";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { useSanityPreview } from "sanity-utils/useSanityPreview";
-import { CalculatorSchema } from "./calculator-schema-types";
-import { TopContentSchema } from "./types/top-content";
+import { CalculatorSchema } from "./types/calculator-schema-types";
+import { HeaderSchema } from "./types/header-schema";
+import { TopContentSchema } from "./types/top-content-schema";
 
 // TODO: Fix any-types when Sanity is upgraded to V3.
 interface SanityProviderProps {
@@ -13,6 +14,7 @@ interface SanityProviderProps {
 }
 
 interface SanityContextValues {
+  header: HeaderSchema;
   settings: any;
   kortFortalt: any;
   filterSection: any;
