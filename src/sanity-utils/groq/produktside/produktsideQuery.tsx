@@ -11,6 +11,7 @@ const settingsGroq = `{
        _updatedAt,
     }
   },
+  supportLinksTitle,
   supportLinks,
   _updatedAt,
 }`;

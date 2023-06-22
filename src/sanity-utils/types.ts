@@ -29,6 +29,7 @@ export interface SupportLink {
 
 export interface HistoryProduktsideSettings extends CommonDocumentFields {
   _type: "produktsideSettings";
+  supportLinksTitle?: string;
   supportLinks?: SupportLink[];
 }
 export interface HistoryProduktsideKortFortalt extends CommonDocumentFields {
