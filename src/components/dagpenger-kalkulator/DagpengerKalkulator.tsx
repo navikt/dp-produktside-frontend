@@ -154,7 +154,7 @@ export function DagpengerKalkulator() {
               decimalScale={0}
               thousandSeparator=" "
               onValueChange={(values) => {
-                onChange(values.floatValue);
+                onChange(values.floatValue as number);
               }}
               type="text"
               inputMode="numeric"
