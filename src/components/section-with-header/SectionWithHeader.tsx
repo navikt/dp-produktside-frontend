@@ -7,6 +7,7 @@ import { appUrls } from "utils/url";
 import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
+import { useRouter } from "next/router";
 
 interface Props {
   anchorId?: string;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
+  const { locale } = useRouter();
   const { getGeneralText } = useSanityContext();
   // @ts-ignore
   const Icon = NavIcons?.[iconName];
@@ -41,7 +43,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
               className={styles.copyLink}
               text={getGeneralText("copy-to-clipboard.title")}
               activeText={getGeneralText("copy-to-clipboard.popover-text")}
-              copyText={appUrls.produktsideProductionUrl(anchorId)}
+              copyText={appUrls.produktsideProductionURL({ anchorId, locale: locale })}
               size="small"
               icon={<LinkIcon aria-hidden />}
               activeIcon={<LinkIcon aria-hidden />}

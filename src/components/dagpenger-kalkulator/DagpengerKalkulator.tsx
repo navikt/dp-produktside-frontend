@@ -19,6 +19,7 @@ import {
   IncomeQuestion,
   NumberOfChildrenQuestion,
 } from "components/sanity-context/types/calculator-schema-types";
+import { useRouter } from "next/router";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -35,6 +36,7 @@ interface FormValues {
 }
 
 export function DagpengerKalkulator() {
+  const { locale } = useRouter();
   const { calculator, getCalculatorTextBlock } = useSanityContext();
   const { gValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -104,7 +106,7 @@ export function DagpengerKalkulator() {
       return `${textToVariableObject[variable]}`;
     }
 
-    return toKR(textToVariableObject[variable]);
+    return toKR(textToVariableObject[variable], locale);
   }
 
   const PortableTextCalculator = ({ value }: PortableTextCalculatorProps) => {

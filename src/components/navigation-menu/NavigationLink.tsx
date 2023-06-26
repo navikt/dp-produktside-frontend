@@ -9,6 +9,7 @@ import styles from "./NavigationLink.module.scss";
 import { navigationAnchorOffsetPx } from "./NavigationMenu";
 import navigationSidebarStyles from "./NavigationSidebar.module.scss";
 import { NavScrollDirection } from "./types";
+import { useRouter } from "next/router";
 
 interface Props {
   targetId: string;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Props) {
+  const { locale } = useRouter();
   const linkHref = `#${targetId}`;
 
   //@ts-ignore
@@ -26,12 +28,12 @@ function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Prop
     e.preventDefault();
 
     //@ts-ignore
-    window.history.pushState(window.history.state, undefined, `#${targetId}`);
+    window.history.pushState(window.history.state, undefined, linkHref);
 
     smoothScrollToTarget(targetId, navigationAnchorOffsetPx);
 
     logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-      destinasjon: appUrls.produktsidePublicUrl(linkHref),
+      destinasjon: appUrls.produktsideProductionURL({ anchorId: targetId, locale }),
       lenketekst: children,
       komponent: "Meny for intern-navigasjon",
       seksjon: "Innhold",

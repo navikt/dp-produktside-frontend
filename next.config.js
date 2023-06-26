@@ -3,7 +3,7 @@ const { buildCspHeader } = require("@navikt/nav-dekoratoren-moduler/ssr");
 const path = require("path");
 
 // TODO: Denne bør deles med _document.tsx
-const supportedLocales = ["nb"];
+const supportedLocales = ["nb", "en"];
 
 // Direktiver appen vår benytter
 const myAppDirectives = {

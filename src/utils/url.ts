@@ -1,5 +1,11 @@
+interface ProductionURLOptions {
+  anchorId: string;
+  locale?: string;
+}
+
 export const appUrls = {
-  nav404: "https://www.nav.no/404",
-  produktsideProductionUrl: (anchorId: string) => `https://www.nav.no/dagpenger#${anchorId}`,
-  produktsidePublicUrl: (href: string) => `${process.env.APP_ORIGIN_URL}${href}`,
+  produktsideProductionURL: ({ anchorId, locale = "nb" }: ProductionURLOptions) => {
+    const localePart = locale !== "nb" ? `/${locale}` : "";
+    return `https://www.nav.no/dagpenger${localePart}#${anchorId}`;
+  },
 };
