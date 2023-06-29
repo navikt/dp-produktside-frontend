@@ -1,6 +1,7 @@
 import { Accordion } from "@navikt/ds-react";
-import { PortableText, PortableTextTypeComponentProps } from "@portabletext/react";
+import { PortableTextTypeComponentProps } from "@portabletext/react";
 import { useState } from "react";
+import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./AccordionWithRichText.module.scss";
 
@@ -22,7 +23,7 @@ export function AccordionWithRichText({ value }: PortableTextTypeComponentProps<
         {value.title}
       </Accordion.Header>
       <Accordion.Content className={styles.accordionContent}>
-        <PortableText value={value.content} />
+        <PortableTextContent value={value.content} />
       </Accordion.Content>
     </Accordion.Item>
   );
