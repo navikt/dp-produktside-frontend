@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import { useQueryState } from "next-usequerystate";
 import { useCallback } from "react";
 import { Button, ReadMore, DatePicker } from "@navikt/ds-react";
 import { Error } from "components/error/Error";
@@ -23,23 +24,28 @@ import {
 } from "utils/dates";
 import { useHistoryData } from "utils/historikk/useHistoryData";
 import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
-import { useQueryState } from "utils/use-query-state/useQueryState";
+import { GetStaticPropsContext } from "next";
 
 interface Props {
   sanityData: any;
   revisions: Revision[];
 }
 
-const produktsideSettingsId = "produktsideSettings";
-const produktsideKortFortaltId = "produktsideKortFortalt";
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  const lang = locale ?? "nb";
+  const baseLang = "nb";
 
-export async function getStaticProps() {
-  //TODO: Fiks språk når historikk blir rearbeidet
-  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: "nb" });
+  console.log(lang, "locale");
+
+  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang, lang });
   const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery, {
-    baseLang: "nb",
-    lang: "nb",
+    baseLang,
+    lang,
   });
+
+  const localeId = lang ? `__i18n_${lang}` : "";
+  const produktsideSettingsId = `produktsideSettings${localeId}`;
+  const produktsideKortFortaltId = `produktsideKortFortalt${localeId}`;
 
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
   const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
@@ -72,6 +78,7 @@ function HistorikkIndex({ revisions }: Props) {
     parse: (v: string) => new Date(v),
     serialize: (v: Date) => toISOString(v),
   });
+
   const setSelectedDateShallow = useCallback(
     (date: Date) => {
       setSelectedDate(endOfDay(date), { shallow: true });
@@ -98,9 +105,9 @@ function HistorikkIndex({ revisions }: Props) {
     }
   });
 
-  if (revisions.length <= 0) {
-    return <Error />;
-  }
+  // if (revisions.length <= 0) {
+  //   return <Error />;
+  // }
 
   return (
     <div className={styles.container}>
@@ -127,17 +134,16 @@ function HistorikkIndex({ revisions }: Props) {
           <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
 
           <ReadMore header="Endringer denne dagen" className={styles.readMore}>
-            {revisions &&
-              revisions
-                ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
-                ?.map(({ timestamp }) => (
-                  <Button
-                    size="small"
-                    key={timestamp}
-                    className={styles.button}
-                    onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
-                  >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
-                ))}
+            {revisions
+              ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
+              ?.map(({ timestamp }) => (
+                <Button
+                  size="small"
+                  key={timestamp}
+                  className={styles.button}
+                  onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
+                >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
+              ))}
           </ReadMore>
 
           {settings && kortFortalt && (

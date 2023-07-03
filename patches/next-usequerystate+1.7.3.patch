@@ -1,0 +1,52 @@
+diff --git a/node_modules/next-usequerystate/dist/cjs/useQueryState.js b/node_modules/next-usequerystate/dist/cjs/useQueryState.js
+index 955cb86..28d9869 100644
+--- a/node_modules/next-usequerystate/dist/cjs/useQueryState.js
++++ b/node_modules/next-usequerystate/dist/cjs/useQueryState.js
+@@ -108,7 +108,7 @@ function useQueryState(key, { history = 'replace', parse = x => x, serialize = S
+             hash,
+             search
+         }, {
+-            pathname: window.location.pathname,
++            pathname: router.pathname,
+             hash,
+             search
+         }, transitionOptions);
+diff --git a/node_modules/next-usequerystate/dist/cjs/useQueryStates.js b/node_modules/next-usequerystate/dist/cjs/useQueryStates.js
+index 864d134..297829c 100644
+--- a/node_modules/next-usequerystate/dist/cjs/useQueryStates.js
++++ b/node_modules/next-usequerystate/dist/cjs/useQueryStates.js
+@@ -73,7 +73,7 @@ function useQueryStates(keys, { history = 'replace' } = {}) {
+             hash,
+             search
+         }, {
+-            pathname: window.location.pathname,
++            pathname: router.pathname,
+             hash,
+             search
+         }, transitionOptions);
+diff --git a/node_modules/next-usequerystate/dist/esm/useQueryState.js b/node_modules/next-usequerystate/dist/esm/useQueryState.js
+index 41ab13a..db1aff3 100644
+--- a/node_modules/next-usequerystate/dist/esm/useQueryState.js
++++ b/node_modules/next-usequerystate/dist/esm/useQueryState.js
+@@ -102,7 +102,7 @@ export function useQueryState(key, { history = 'replace', parse = x => x, serial
+             hash,
+             search
+         }, {
+-            pathname: window.location.pathname,
++            pathname: router.pathname,
+             hash,
+             search
+         }, transitionOptions);
+diff --git a/node_modules/next-usequerystate/dist/esm/useQueryStates.js b/node_modules/next-usequerystate/dist/esm/useQueryStates.js
+index 10e358d..a7b1ce7 100644
+--- a/node_modules/next-usequerystate/dist/esm/useQueryStates.js
++++ b/node_modules/next-usequerystate/dist/esm/useQueryStates.js
+@@ -67,7 +67,7 @@ export function useQueryStates(keys, { history = 'replace' } = {}) {
+             hash,
+             search
+         }, {
+-            pathname: window.location.pathname,
++            pathname: router.pathname,
+             hash,
+             search
+         }, transitionOptions);

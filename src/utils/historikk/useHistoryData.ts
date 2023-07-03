@@ -7,9 +7,6 @@ import {
   HistoryProduktsideSettings,
 } from "sanity-utils/types";
 
-const produktsideSettingsId = "produktsideSettings";
-const produktsideKortFortaltId = "produktsideKortFortalt";
-
 interface HistoryData {
   settings?: HistoryProduktsideSettings;
   kortFortalt?: HistoryProduktsideKortFortalt;
@@ -17,8 +14,12 @@ interface HistoryData {
 }
 
 export function useHistoryData(timestamp?: string) {
-  const { basePath } = useRouter();
+  const { basePath, locale } = useRouter();
   const [historyData, setHistoryData] = useState<HistoryData>({});
+  const lang = locale ?? "nb";
+  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
+  const produktsideSettingsId = `produktsideSettings${localeId}`;
+  const produktsideKortFortaltId = `produktsideKortFortalt${localeId}`;
 
   useEffect(() => {
     if (!timestamp) {

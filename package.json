@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "prepare": "node ./prepare.js",
+    "postinstall": "npx patch-package",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -27,6 +28,7 @@
     "lodash": "^4.17.21",
     "next": "13.4.7",
     "next-sanity": "^1.0.0",
+    "next-usequerystate": "^1.7.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.0",

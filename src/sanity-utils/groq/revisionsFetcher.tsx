@@ -17,6 +17,7 @@ export async function revisionsFetcher(docId: string | string[]): Promise<Revisi
   try {
     const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/transactions/${docId}?excludeContent=true`;
 
+    console.log(url);
     const response = await fetch(
       url,
       token

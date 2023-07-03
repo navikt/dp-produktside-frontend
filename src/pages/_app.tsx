@@ -32,6 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   });
 
   useEffect(() => {
+    console.log(router.locale);
     setDefaultOptions({ locale: router.locale === "en" ? enGB : nb });
   }, [router.locale]);
 
