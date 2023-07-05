@@ -11,7 +11,7 @@ import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/do
 const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<DecoratorEnvProps["env"], "localhost">;
 
 const defaultLocale = "nb";
-const supportedLocales = [defaultLocale];
+const supportedLocales = [defaultLocale, "en"];
 const availableLanguages = supportedLocales.map((locale) => ({
   locale,
   url: `https://www.nav.no/dagpenger/${locale}`,

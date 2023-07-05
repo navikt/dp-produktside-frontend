@@ -3,6 +3,8 @@ sanityDataset: production
 ingresses: |
   ingresses:
     - https://arbeid.ekstern.dev.nav.no/dagpenger($|\/$)
+    - https://arbeid.ekstern.dev.nav.no/dagpenger/nb($|\/$)
+    - https://arbeid.ekstern.dev.nav.no/dagpenger/en($|\/$)
     - https://arbeid.ekstern.dev.nav.no/dagpenger/historikk($|\/$)
     - https://arbeid.ekstern.dev.nav.no/dagpenger/api/history($|\/.*)
 
