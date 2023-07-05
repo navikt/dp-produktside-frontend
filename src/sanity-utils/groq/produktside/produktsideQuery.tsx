@@ -21,19 +21,19 @@ const getAllFieldsGroq = `{
 }`;
 
 export const produktsideQuery = groq`{
-    'header': *[_id == "produktsideHeader" && __i18n_lang == $baseLang][0] {
+    'header': *[_type == "produktsideHeader" && __i18n_lang == $baseLang][0] {
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'settings': *[_id == "produktsideSettings" && __i18n_lang == $baseLang][0] {
+    'settings': *[_type == "produktsideSettings" && __i18n_lang == $baseLang][0] {
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${settingsGroq}, ${settingsGroq})
     },
-    'kortFortalt': *[_id == "produktsideKortFortalt" && __i18n_lang == $baseLang][0]{
+    'kortFortalt': *[_type == "produktsideKortFortalt" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'filterSection': *[_id == "produktsideFilterSection" && __i18n_lang == $baseLang][0]{
+    'filterSection': *[_type == "produktsideFilterSection" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'seo': *[_id == "produktsideSEO" && __i18n_lang == $baseLang][0]{
+    'seo': *[_type == "produktsideSEO" && __i18n_lang == $baseLang][0]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
     'contactOptions': *[_type == 'produktsideContactOptions' && __i18n_lang == $baseLang][0]{
@@ -43,7 +43,7 @@ export const produktsideQuery = groq`{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
     'calculator': {
-      ...*[_id == 'produktsideCalculatorSettings' && __i18n_lang == $baseLang][0]{
+      ...*[_type == 'produktsideCalculatorSettings' && __i18n_lang == $baseLang][0]{
         ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
       },
       'texts' : *[_type == 'produktsideCalculatorText' && __i18n_lang == $baseLang]{
