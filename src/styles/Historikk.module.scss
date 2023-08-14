@@ -4,8 +4,40 @@
   align-items: center;
   justify-content: center;
 
-  .button {
-    margin-bottom: 0.5rem;
+  .fieldset {
+    background-color: var(--a-blue-50);
+    border: 3px solid var(--a-blue-200);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    margin-bottom: 3.25rem;
+    display: flex;
+    flex-direction: column;
+    width: 35.125rem;
+
+    .title {
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      margin-bottom: 1.5rem;
+    }
+
+    .select {
+      > :global(.navds-select__container) {
+        width: 11.813rem;
+      }
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .button {
+      max-width: fit-content;
+    }
+
+    .selectedTimestampText {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
   }
 
   .readMore {

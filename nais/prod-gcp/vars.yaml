@@ -6,4 +6,5 @@ ingresses: |
     - https://www.nav.no/dagpenger/nb($|\/$)
     - https://www.nav.no/dagpenger/en($|\/$)
     - https://www.nav.no/dagpenger/historikk($|\/$)
+    - https://www.nav.no/dagpenger/en/historikk($|\/$)
     - https://www.nav.no/dagpenger/api/history($|\/.*)
