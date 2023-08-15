@@ -130,8 +130,8 @@ export default function HistorikkIndex({ revisions }: Props) {
           </Heading>
 
           <BodyLong className={styles.description}>
-            Her finner du historiske versjoner av siden om dagpenger. Velg dato og klokkeslett for å se innholdet du
-            ønsker.
+            Her finner du historiske versjoner av den <strong>{locale === "en" ? "engelske" : "norske"}</strong> siden
+            om dagpenger. Velg dato og klokkeslett for å se innholdet du ønsker.
           </BodyLong>
 
           <DatePicker {...datepickerProps} className={styles.datepicker}>
