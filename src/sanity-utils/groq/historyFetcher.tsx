@@ -14,11 +14,16 @@ export async function historyFetcher<T>(
   try {
     const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/documents/${docId}?time=${time}`;
 
-    const response = await fetch(url, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      url,
+      token
+        ? {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        : {}
+    );
     const jsonResponse = await response.json();
 
     return jsonResponse;
