@@ -1,4 +1,3 @@
-import { Button } from "@navikt/ds-react";
 import classnames from "classnames";
 import { LinkList } from "components/link-list/LinkList";
 import { NavigationMenu } from "components/navigation-menu/NavigationMenu";

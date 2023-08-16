@@ -1,49 +1,44 @@
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import { useCallback } from "react";
-import { Button, ReadMore, DatePicker } from "@navikt/ds-react";
-import { Error } from "components/error/Error";
+import { BodyLong, Button, DatePicker, Heading, Loader, Select, useDatepicker } from "@navikt/ds-react";
+import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
-import { addDays, endOfDay, isSameDay, isWithinInterval, max, min, subDays } from "date-fns";
+import { isSameDay, startOfDay } from "date-fns";
+import { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { FormEvent, useEffect, useState } from "react";
 import { sanityClient } from "sanity-utils/client";
 import { produktsideQuery, produktsideSectionIdsQuery } from "sanity-utils/groq/produktside/produktsideQuery";
 import { Revision, revisionsFetcher } from "sanity-utils/groq/revisionsFetcher";
 import { HistoryProduktsideSection, HistorySectionIds } from "sanity-utils/types";
 import styles from "styles/Historikk.module.scss";
 import homeStyles from "styles/Home.module.scss";
-import {
-  convertTimestampToDate,
-  formatLocaleDateAndTime,
-  formatTimestampAsLocaleTime,
-  isValidDate,
-  toISOString,
-} from "utils/dates";
-import { useHistoryData } from "utils/historikk/useHistoryData";
-import { useHistoryGrunnbelop } from "utils/historikk/useHistoryGrunnbelop";
-import { useQueryState } from "utils/use-query-state/useQueryState";
+import { convertTimestampToDate, formatLocaleDateAndTime, formatTimestampAsLocaleTime, toISOString } from "utils/dates";
+import { HistoryData, fetchHistoryData } from "utils/historikk/fetchHistoryData";
+import { fetchHistoryGrunnbelop } from "utils/historikk/fetchHistoryGrunnbelop";
+import { produktsideKortFortaltId, produktsideSettingsId } from "utils/historikk/historyDocumentIds";
 
 interface Props {
   sanityData: any;
   revisions: Revision[];
 }
 
-const produktsideSettingsId = "produktsideSettings";
-const produktsideKortFortaltId = "produktsideKortFortalt";
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  const lang = locale ?? "nb";
+  const baseLang = "nb";
+  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
 
-export async function getStaticProps() {
-  //TODO: Fiks språk når historikk blir rearbeidet
-  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: "nb" });
+  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang, lang });
   const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery, {
-    baseLang: "nb",
-    lang: "nb",
+    baseLang,
+    lang,
   });
 
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
-  const revisionsProduktsideSettings = await revisionsFetcher(produktsideSettingsId);
-  const revisionsProduktsideKortFortalt = await revisionsFetcher(produktsideKortFortaltId);
+  const revisionsProduktsideSettings = await revisionsFetcher(`${produktsideSettingsId}${localeId}`);
+  const revisionsProduktsideKortFortalt = await revisionsFetcher(`${produktsideKortFortaltId}${localeId}`);
   const revisionsProduktsideSection = await revisionsFetcher(sectionIdsArray);
 
   const revisions = [
@@ -58,49 +53,69 @@ export async function getStaticProps() {
   };
 }
 
-function HistorikkIndex({ revisions }: Props) {
-  {
-    /* Datoer blir satt til slutten av dagen 
-    fordi man ønsker all historikk til slutten av den dagen */
-  }
+export default function HistorikkIndex({ revisions }: Props) {
+  const { basePath, locale, replace } = useRouter();
+  const { setGValue } = useGrunnbelopContext();
+  const [loading, setLoading] = useState(false);
+  const [dateValidationError, setDateValidationError] = useState("");
+  const [selectedTimestamp, setSelectedTimestamp] = useState("");
+  const [historyData, setHistoryData] = useState<HistoryData | undefined>(undefined);
+  const fromDate = locale === "en" ? new Date(2023, 6, 5) : new Date(2023, 3, 26);
+  const toDate = new Date();
 
-  const fromDate = endOfDay(new Date(2023, 3, 26));
-  const revisionDates = revisions.map(({ timestamp }) => convertTimestampToDate(timestamp));
-  const toDate = endOfDay(addDays(max([fromDate, ...revisionDates]), 1));
-
-  const [selectedDate, setSelectedDate] = useQueryState("timestamp", {
-    parse: (v: string) => new Date(v),
-    serialize: (v: Date) => toISOString(v),
-  });
-  const setSelectedDateShallow = useCallback(
-    (date: Date) => {
-      setSelectedDate(endOfDay(date), { shallow: true });
+  const { datepickerProps, inputProps, selectedDay } = useDatepicker({
+    fromDate,
+    toDate,
+    onDateChange: () => {
+      setSelectedTimestamp("");
+      setHistoryData(undefined);
     },
-    [setSelectedDate]
-  );
+    onValidate: (val) => {
+      setDateValidationError(!val.isValidDate ? "Valgt dato er ugyldig" : "");
+    },
+  });
 
-  const isValidSelectedDate =
-    isValidDate(selectedDate) && isWithinInterval(selectedDate, { start: subDays(fromDate, 1), end: toDate });
+  const isValidSelectedDay = selectedDay && !dateValidationError;
+  const defaultSelectedTimestamp = isValidSelectedDay ? toISOString(startOfDay(selectedDay as Date)) : "";
 
-  const selectedTimestamp = isValidSelectedDate ? toISOString(selectedDate!) : undefined;
-
-  useHistoryGrunnbelop(selectedTimestamp);
-  const historyData = useHistoryData(selectedTimestamp);
-  const { settings, kortFortalt, contentSections } = historyData;
+  const revisionsOnSelectedDay = selectedDay
+    ? revisions?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDay))
+    : [];
+  const hasRevisionsOnSelectedDay = revisionsOnSelectedDay.length > 0;
 
   // TODO: Fiks typescript
   // @ts-ignore
-  const settingsSections: HistoryProduktsideSection[] = settings?.content?.map((settingsSection) => {
-    const section = contentSections?.find(({ _id }) => _id == settingsSection?.produktsideSection?._ref);
+  const settingsSections: HistoryProduktsideSection[] = historyData
+    ? // @ts-ignore
+      historyData?.settings?.content?.map((settingsSection) => {
+        // @ts-ignore
+        const section = historyData?.contentSections?.find(
+          ({ _id }) => _id == settingsSection?.produktsideSection?._ref
+        );
 
-    if (section) {
-      return section;
-    }
-  });
+        if (section) {
+          return section;
+        }
+      })
+    : [];
 
-  if (revisions.length <= 0) {
-    return <Error />;
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    setLoading(true);
+    event.preventDefault();
+    replace("/historikk", undefined, { shallow: true });
+    const newHistoryData = await fetchHistoryData({ basePath, locale, timestamp: selectedTimestamp });
+    const historyGrunnbelop = await fetchHistoryGrunnbelop(selectedTimestamp);
+
+    setHistoryData(newHistoryData);
+    setGValue(historyGrunnbelop.grunnbeloep);
+    setLoading(false);
   }
+
+  useEffect(() => {
+    if (!hasRevisionsOnSelectedDay) {
+      setSelectedTimestamp(defaultSelectedTimestamp);
+    }
+  }, [selectedDay]);
 
   return (
     <div className={styles.container}>
@@ -108,95 +123,125 @@ function HistorikkIndex({ revisions }: Props) {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <DatePicker.Standalone
-        selected={selectedDate || undefined}
-        onSelect={(date: Date | undefined) => {
-          if (date) {
-            setSelectedDateShallow(endOfDay(date));
-          }
-        }}
-        dropdownCaption
-        fromDate={fromDate}
-        toDate={toDate}
-      />
+      <form onSubmit={onSubmit}>
+        <fieldset className={styles.fieldset}>
+          <Heading level="1" size="xlarge" className={styles.title}>
+            Historikk
+          </Heading>
 
-      {selectedDate && !isValidSelectedDate && <p>Ugyldig dato</p>}
+          <BodyLong className={styles.description}>
+            Her finner du historiske versjoner av den <strong>{locale === "en" ? "engelske" : "norske"}</strong> siden
+            om dagpenger. Velg dato og klokkeslett for å se innholdet du ønsker.
+          </BodyLong>
 
-      {selectedDate && isValidSelectedDate && (
-        <>
-          <p>{`Valgt dato og tidspunkt: ${formatLocaleDateAndTime(selectedDate!)}`}</p>
+          <DatePicker {...datepickerProps} className={styles.datepicker}>
+            <DatePicker.Input {...inputProps} label="Velg dato" error={dateValidationError ?? undefined} />
+          </DatePicker>
 
-          <ReadMore header="Endringer denne dagen" className={styles.readMore}>
-            {revisions &&
-              revisions
-                ?.filter(({ timestamp }) => isSameDay(convertTimestampToDate(timestamp), selectedDate!))
-                ?.map(({ timestamp }) => (
-                  <Button
-                    size="small"
-                    key={timestamp}
-                    className={styles.button}
-                    onClick={() => setSelectedDate(convertTimestampToDate(timestamp), { shallow: true })}
-                  >{`${formatTimestampAsLocaleTime(timestamp)}`}</Button>
+          {isValidSelectedDay && (
+            <>
+              <Select
+                className={styles.select}
+                label="Velg klokkeslett"
+                description={
+                  hasRevisionsOnSelectedDay
+                    ? "Se alle publiseringstidspunktene for denne dagen."
+                    : "Det er ikke publisert noen versjoner på dagen du har valgt. Derfor kan du ikke velge andre tidspunkter."
+                }
+                onChange={(event) => {
+                  setHistoryData(undefined);
+                  setSelectedTimestamp(event.target.value);
+                }}
+                value={selectedTimestamp}
+              >
+                {!hasRevisionsOnSelectedDay && (
+                  <option key={defaultSelectedTimestamp} value={defaultSelectedTimestamp}>
+                    {formatTimestampAsLocaleTime(defaultSelectedTimestamp)}
+                  </option>
+                )}
+                {hasRevisionsOnSelectedDay && <option value="">Velg tidspunkt</option>}
+                {revisionsOnSelectedDay?.map(({ timestamp }) => (
+                  <option key={timestamp} value={timestamp}>{`${formatTimestampAsLocaleTime(timestamp)}`}</option>
                 ))}
-          </ReadMore>
+              </Select>
 
-          {settings && kortFortalt && (
-            <main className={homeStyles.main}>
-              <div className={homeStyles.productPage}>
-                {/* TODO: Fiks historikk for Header-skjema */}
-                <Header title="Dagpenger" leftSubtitle="PENGESTØTTE" rightSubtitle="Oppdatert" />
+              {selectedTimestamp && (
+                <Button loading={loading} type="submit" className={styles.button}>
+                  Vis innhold
+                </Button>
+              )}
 
-                <div className={homeStyles.content}>
-                  <div className={homeStyles.layoutContainer}>
-                    <div className={homeStyles.topRow}>
-                      <div className={homeStyles.leftCol}>
-                        <LeftMenuSection
-                          title={settings?.title}
-                          internalLinks={[
-                            { anchorId: kortFortalt?.slug?.current, linkText: kortFortalt?.title },
-                            ...(settingsSections?.map(({ title, slug }) => ({
-                              anchorId: slug?.current,
-                              linkText: title,
-                            })) ?? []),
-                          ]}
-                          supportLinksTitle={settings?.supportLinksTitle}
-                          supportLinks={settings?.supportLinks}
-                          sticky={true}
-                        />
-                      </div>
+              {historyData && selectedTimestamp && (
+                <Heading
+                  className={styles.selectedTimestampText}
+                  size="small"
+                  as="p"
+                >{`Viser innhold for: ${formatLocaleDateAndTime(convertTimestampToDate(selectedTimestamp))}`}</Heading>
+              )}
+            </>
+          )}
+        </fieldset>
+      </form>
 
-                      <div className={homeStyles.mainCol}>
-                        <SectionWithHeader anchorId={kortFortalt?.slug?.current} title={kortFortalt?.title}>
-                          <p>{`Oppdatert ${formatLocaleDateAndTime(
-                            convertTimestampToDate(kortFortalt?._updatedAt)
-                          )}`}</p>
-                          <PortableTextContent value={kortFortalt?.content} />
-                        </SectionWithHeader>
+      {loading && <Loader size="3xlarge" title="Laster inn..." />}
 
-                        {settingsSections?.map(
-                          ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
-                            <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
-                              <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
-                              {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
-                              <PortableTextContent value={content} />
-                            </SectionWithHeader>
-                          )
-                        )}
-                      </div>
+      {!loading && selectedTimestamp && historyData?.kortFortalt && historyData?.settings && (
+        <>
+          <main className={homeStyles.main}>
+            <div className={homeStyles.productPage}>
+              {/* TODO: Fiks historikk for Header-skjema */}
+              <Header title="Dagpenger" leftSubtitle="PENGESTØTTE" rightSubtitle="Oppdatert" />
+
+              <div className={homeStyles.content}>
+                <div className={homeStyles.layoutContainer}>
+                  <div className={homeStyles.topRow}>
+                    <div className={homeStyles.leftCol}>
+                      <LeftMenuSection
+                        title={historyData?.settings?.title}
+                        internalLinks={[
+                          {
+                            anchorId: historyData?.kortFortalt?.slug?.current ?? "",
+                            linkText: historyData?.kortFortalt?.title ?? "",
+                          },
+                          ...(settingsSections?.map(({ title, slug }) => ({
+                            anchorId: slug?.current,
+                            linkText: title,
+                          })) ?? []),
+                        ]}
+                        supportLinksTitle={historyData.settings?.supportLinksTitle}
+                        supportLinks={historyData.settings?.supportLinks}
+                        sticky={true}
+                      />
+                    </div>
+
+                    <div className={homeStyles.mainCol}>
+                      <SectionWithHeader
+                        anchorId={historyData?.kortFortalt?.slug?.current}
+                        title={historyData?.kortFortalt?.title}
+                      >
+                        <p>{`Oppdatert ${formatLocaleDateAndTime(
+                          convertTimestampToDate(historyData?.kortFortalt?._updatedAt)
+                        )}`}</p>
+                        <PortableTextContent value={historyData?.kortFortalt?.content!} />
+                      </SectionWithHeader>
+
+                      {settingsSections?.map(
+                        ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
+                          <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
+                            <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
+                            {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
+                            <PortableTextContent value={content} />
+                          </SectionWithHeader>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            </main>
-          )}
+            </div>
+          </main>
         </>
       )}
     </div>
   );
 }
-
-// TODO: Aktiver ssr og finn en måte å håndtere SSR i Historikk.
-// Datepicker og useQueryState er lite ssr-vennlige.
-export default dynamic(() => Promise.resolve(HistorikkIndex), {
-  ssr: false,
-});
