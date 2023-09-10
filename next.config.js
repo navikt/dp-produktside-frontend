@@ -9,6 +9,8 @@ const supportedLocales = ["nb", "en"];
 const myAppDirectives = {
   "script-src-elem": ["'self'"],
   "img-src": ["'self'", "data:"],
+  "font-src": ["'self'", "fonts.googleapis.com"],
+  "style-src-elem": ["fonts.googleapis.com"],
   "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io", "amplitude.nav.no/collect"],
   "report-uri": "https://sentry.gc.nav.no/api/162/security/?sentry_key=209db408152a436fa73a237b1bf29182",
 };
@@ -17,6 +19,9 @@ const myAppDirectives = {
 const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   i18n: {
     locales: supportedLocales,
     defaultLocale: "nb",

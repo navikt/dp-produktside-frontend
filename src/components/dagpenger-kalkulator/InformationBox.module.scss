@@ -1,0 +1,33 @@
+@use "styles/common" as common;
+
+$common-border-radius-top: common.px-to-rem(2px);
+$common-border-radius-bottom: common.px-to-rem(8px);
+
+.container {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 1.5rem;
+  margin-top: common.px-to-rem(2px);
+  border-radius: $common-border-radius-top $common-border-radius-top $common-border-radius-bottom
+    $common-border-radius-bottom;
+
+  &__green {
+    background-color: var(--a-green-50);
+  }
+
+  &__orange {
+    background-color: var(--a-orange-50);
+  }
+
+  .icon {
+    margin-right: 0.375rem;
+    width: 24px;
+    height: 24px;
+  }
+
+  .textContent {
+    flex: 1;
+    color: #000;
+    font-feature-settings: "clig" off, "liga" off;
+  }
+}

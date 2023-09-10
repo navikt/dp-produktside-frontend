@@ -1,15 +1,15 @@
 @use "styles/common" as common;
 
-$common-border-radius: common.px-to-rem(5px);
-$common-input-max-width: common.px-to-rem(118px);
-
+$common-border-width: common.px-to-rem(4px);
+$common-border-radius: common.px-to-rem(8px);
+$common-input-max-width: common.px-to-rem(129px);
 .container {
   display: flex;
   flex-direction: column;
-  background-color: var(--a-purple-50);
   border-radius: $common-border-radius;
+  border: $common-border-width solid var(--a-blue-100);
   position: relative;
-  padding: common.px-to-rem(80px) 1rem common.px-to-rem(20px);
+  padding: 1rem;
 
   .calculatorFieldset {
     display: flex;
@@ -19,21 +19,34 @@ $common-input-max-width: common.px-to-rem(118px);
     margin: 0;
     min-width: 0;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
     .calculatorTitle {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: common.px-to-rem(10px) common.px-to-rem(20px);
-      border-radius: $common-border-radius;
-      background-color: var(--a-purple-200);
+      float: left;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       text-align: center;
       width: 100%;
+      margin-bottom: 0.5rem;
+
+      .calculatorIcon {
+        margin-right: 1rem;
+      }
+    }
+
+    .calculatorDecorativeLine {
+      width: 95%;
+    }
+
+    .incomeInputContainer {
+      display: flex;
+      flex-direction: row;
     }
 
     .textField {
-      margin-bottom: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 0.625rem;
 
       > :global(.navds-text-field__input) {
         width: auto;
@@ -42,21 +55,15 @@ $common-input-max-width: common.px-to-rem(118px);
     }
 
     .radioGroup {
-      > :global(.navds-radio-buttons) {
-        display: flex;
-        flex-direction: row;
-
-        > :first-child {
-          margin-right: 1rem;
-        }
-      }
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
       .radioGroup_description {
         margin-bottom: var(--a-spacing-4);
       }
     }
 
     .select {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
 
       > :global(.navds-select__container) {
         width: auto;
@@ -65,10 +72,8 @@ $common-input-max-width: common.px-to-rem(118px);
     }
 
     .button {
-      --ac-button-secondary-bg: var(--a-white);
+      margin-top: 1.5rem;
       max-width: fit-content;
-      margin: 1rem auto;
-      margin-bottom: 0;
     }
   }
 
@@ -76,7 +81,4 @@ $common-input-max-width: common.px-to-rem(118px);
     scroll-margin-top: 0.75rem;
   }
 
-  .resultInfoText {
-    margin-top: 1rem;
-  }
 }
