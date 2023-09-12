@@ -19,9 +19,6 @@ const myAppDirectives = {
 const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   i18n: {
     locales: supportedLocales,
     defaultLocale: "nb",
