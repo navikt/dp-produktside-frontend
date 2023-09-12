@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
 import styles from "./DagpengerKalkulator.module.scss";
-import { ResultTables } from "./ResultTables";
+import { PositiveResult } from "./PositiveResult";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
@@ -20,6 +20,10 @@ import {
   NumberOfChildrenQuestion,
 } from "components/sanity-context/types/calculator-schema-types";
 import { useRouter } from "next/router";
+import svgIcon from "../../../public/kalkulator.svg";
+import Image from "next/image";
+import { InformationBox } from "./InformationBox";
+import { NegativeResult } from "./NegativeResult";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -102,8 +106,12 @@ export function DagpengerKalkulator() {
       "total-per-2-uker": totalPer2Week,
     };
 
+    console.log(locale);
+
     if (variable === "antall-barn") {
       return `${textToVariableObject[variable]}`;
+    } else if (variable === "dagpenger-mellom-0-og-6G" && locale === "nb") {
+      return `${Math.round(textToVariableObject[variable]).toLocaleString("nb-NO")} kroner`;
     }
 
     return toKR(textToVariableObject[variable], locale);
@@ -136,10 +144,17 @@ export function DagpengerKalkulator() {
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={styles.calculatorFieldset}>
         <legend className={styles.calculatorTitle}>
+          <Image className={styles.calculatorIcon} src={svgIcon} aria-hidden alt="" />
           <Heading size="medium" level="3">
             {calculator?.title}
           </Heading>
         </legend>
+
+        <div role="img" className={styles.calculatorDecorativeLine} aria-hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 4" fill="none">
+            <path d="M2 2H280" stroke="#CCE1FF" strokeWidth="4" strokeLinecap="round" />
+          </svg>
+        </div>
 
         <Controller
           control={control}
@@ -165,10 +180,11 @@ export function DagpengerKalkulator() {
               customInput={TextField}
               error={error?.message}
               label={incomeQuestion?.label}
-              description={<PortableTextContent value={incomeQuestion?.description} />}
+              suffix={locale === "en" ? " NOK" : " kr"}
             />
           )}
         />
+        <PortableTextContent value={incomeQuestion?.description} />
 
         <Controller
           control={control}
@@ -178,7 +194,6 @@ export function DagpengerKalkulator() {
             <RadioGroup
               ref={ref}
               className={styles.radioGroup}
-              description={<PortableTextContent value={hasChildrenQuestion?.description} />}
               name={name}
               legend={hasChildrenQuestion?.label}
               onChange={onChange}
@@ -191,6 +206,7 @@ export function DagpengerKalkulator() {
             </RadioGroup>
           )}
         />
+        <PortableTextContent value={hasChildrenQuestion?.description} />
 
         {hasChildren && (
           <Select
@@ -206,8 +222,7 @@ export function DagpengerKalkulator() {
             {childrenOptions}
           </Select>
         )}
-
-        <Button type="submit" className={styles.button} variant="secondary">
+        <Button type="submit" className={styles.button} variant="primary">
           <PortableTextCalculator value={getCalculatorTextBlock("submit-button-title")} />
         </Button>
       </fieldset>
@@ -216,12 +231,28 @@ export function DagpengerKalkulator() {
         {showResult && (
           <div aria-live="assertive">
             {hasNotEnoughGrunnlag ? (
-              <div className={styles.resultInfoText}>
-                <PortableTextContent value={calculator?.bottomContentOnInsufficientIncome} />
-              </div>
+              <>
+                <NegativeResult
+                  title={<PortableTextCalculator value={getCalculatorTextBlock("negative-result-section-title")} />}
+                  resultExplanationDescription1={
+                    <PortableTextCalculator
+                      value={getCalculatorTextBlock("negative-result-explanation-description-1")}
+                    />
+                  }
+                  resultExplanationDescription2={
+                    <PortableTextCalculator
+                      value={getCalculatorTextBlock("negative-result-explanation-description-2")}
+                    />
+                  }
+                />
+
+                <InformationBox variant="orange">
+                  <PortableTextCalculator value={getCalculatorTextBlock("negative-result-info")} />
+                </InformationBox>
+              </>
             ) : (
               <>
-                <ResultTables
+                <PositiveResult
                   title={<PortableTextCalculator value={getCalculatorTextBlock("result-section-title")} />}
                   resultBoxTitle={<PortableTextCalculator value={getCalculatorTextBlock("result-box-title")} />}
                   resultBoxSubtitle={<PortableTextCalculator value={getCalculatorTextBlock("result-box-subtitle")} />}
@@ -237,9 +268,9 @@ export function DagpengerKalkulator() {
                   }))}
                 />
 
-                <div className={styles.resultInfoText}>
-                  <PortableTextContent value={calculator?.bottomContentOnSufficientIncome} />
-                </div>
+                <InformationBox>
+                  <PortableTextCalculator value={getCalculatorTextBlock("positive-result-info")} />
+                </InformationBox>
               </>
             )}
           </div>

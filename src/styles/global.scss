@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Source Sans Pro Black";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/dagpenger/fonts/SourceSans3-Black.ttf.woff2") format("woff2");
+}
+
 #__next {
   background-color: var(--a-bg-subtle);
 }
