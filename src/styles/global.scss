@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url("/dagpenger/fonts/SourceSans3-Black.ttf.woff2") format("woff2");
+  src: url("#{$assetPrefix}/dagpenger/fonts/SourceSans3-Black.ttf.woff2") format("woff2");
 }
 
 #__next {

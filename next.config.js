@@ -29,6 +29,7 @@ const nextConfig = {
   reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "src")],
+    additionalData: `$assetPrefix : '${process.env.ASSET_PREFIX ?? ""}';`,
   },
   swcMinify: true,
   async headers() {
