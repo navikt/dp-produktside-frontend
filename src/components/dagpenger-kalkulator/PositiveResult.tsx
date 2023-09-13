@@ -1,6 +1,10 @@
 import { BodyLong, BodyShort, Heading } from "@navikt/ds-react";
+import classnames from "classnames";
+import localFont from "next/font/local";
 import { ReactNode } from "react";
 import styles from "./PositiveResult.module.scss";
+
+const SourceSans3Black = localFont({ src: "./SourceSans3-Black.ttf.woff2" });
 
 interface ResultDescriptionListItem {
   term: ReactNode;
@@ -34,7 +38,7 @@ export function PositiveResult({
           {title}
         </Heading>
 
-        <strong className={styles.resultBox_title}>{resultBoxTitle}</strong>
+        <strong className={classnames(styles.resultBox_title, SourceSans3Black.className)}>{resultBoxTitle}</strong>
 
         <Heading size="small" as="p" className={styles.resultBox_subtitle}>
           {resultBoxSubtitle}
