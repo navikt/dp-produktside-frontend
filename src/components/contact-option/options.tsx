@@ -1,15 +1,15 @@
 export const options = {
   call: {
-    icon: "Telephone",
-    hoverIcon: "TelephoneFilled",
+    icon: "PhoneIcon",
+    hoverIcon: "PhoneFillIcon",
   },
   chat: {
-    icon: "Dialog",
-    hoverIcon: "DialogFilled",
+    icon: "ChatIcon",
+    hoverIcon: "ChatFillIcon",
   },
   write: {
-    icon: "Send",
-    hoverIcon: "SendFilled",
+    icon: "PaperplaneIcon",
+    hoverIcon: "PaperplaneFillIcon",
   },
 };
 

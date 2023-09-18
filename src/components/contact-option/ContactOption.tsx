@@ -1,7 +1,7 @@
+import * as AkselIcons from "@navikt/aksel-icons";
 import { Heading } from "@navikt/ds-react";
 import Link from "next/link";
 import { MouseEventHandler, useState } from "react";
-import * as NavIcons from "@navikt/ds-icons";
 import { TypedObject } from "@portabletext/types";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { IContactOption, options } from "./options";
@@ -21,7 +21,7 @@ export function ContactOption({ title, content, contactOption, href = "#", onCli
   const { icon, hoverIcon } = options[contactOption];
 
   //@ts-ignore
-  const IconComponent = NavIcons?.[isHovered ? hoverIcon : icon];
+  const IconComponent = AkselIcons?.[isHovered ? hoverIcon : icon];
 
   return (
     <div className={styles.container}>

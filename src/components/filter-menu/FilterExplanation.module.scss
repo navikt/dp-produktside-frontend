@@ -6,29 +6,35 @@
   transition: all 0.8s linear;
   border-radius: 3px;
   width: calc(100% + 0.5rem);
-  font-size: 0.875rem;
-  border: 1px solid transparent;
+  font-size: 1rem;
+  border: 1px solid white;
 }
 
 .filterExplanationHighlight {
   background-color: var(--a-green-100);
-  border: 1px solid var(--a-border-success);
+  border: 1px solid var(--a-green-500);
   transition: all 0.4s linear;
 }
 
 .iconWrapper {
   display: block;
-  height: 14px;
-  margin-right: 0.5em;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-right: 0.25rem;
   position: relative;
-  width: 14px;
+
+  .highlighted {
+    color: var(--a-surface-success);
+  }
 }
 
 .icon {
   display: block;
-  left: 0;
+  height: 1.5rem;
+  width: 1.5rem;
   position: absolute;
   top: 0;
+  left: 0;
   transition: all 0.4s;
 }
 

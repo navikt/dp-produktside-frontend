@@ -1,6 +1,6 @@
+import { InformationSquareIcon, InformationSquareFillIcon } from "@navikt/aksel-icons";
 import classNames from "classnames";
 import { useState, useEffect, useRef, useId } from "react";
-import { Information, InformationFilled } from "@navikt/ds-icons";
 import { useSanityContext } from "components/sanity-context/sanity-context";
 import styles from "./FilterExplanation.module.scss";
 
@@ -43,26 +43,20 @@ export const FilterExplanation = ({ selectedFilters, availableFilters }: FilterE
     <div
       className={classNames(styles.filterExplanation, { [styles.filterExplanationHighlight]: showHighlight })}
       aria-live="assertive"
+      aria-atomic={true}
     >
       <div className={styles.iconWrapper}>
-        <InformationFilled
-          color="#006A23"
-          className={classNames(styles.icon, {
-            [styles.iconVisible]: showHighlight,
-            [styles.iconHidden]: !showHighlight,
-          })}
-          role="img"
-          focusable="false"
-          titleId={explanationId}
+        <InformationSquareFillIcon
+          className={classNames(
+            styles.icon,
+            styles.highlighted,
+            showHighlight ? styles.iconVisible : styles.iconHidden
+          )}
+          aria-labelledby={explanationId}
         />
-        <Information
-          className={classNames(styles.icon, {
-            [styles.iconVisible]: !showHighlight,
-            [styles.iconHidden]: showHighlight,
-          })}
-          role="img"
-          focusable="false"
-          titleId={explanationId}
+        <InformationSquareIcon
+          className={classNames(styles.icon, showHighlight ? styles.iconHidden : styles.iconVisible)}
+          aria-labelledby={explanationId}
         />
       </div>
       <div className={styles.text} id={explanationId}>

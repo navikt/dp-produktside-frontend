@@ -27,24 +27,25 @@ export function LinkList({ title, links }: Props) {
         {/* TODO: Legge til nofollowurl for eksterne lenker her for bedre SEO */}
         <ul className={styles.linkList}>
           {links?.map(({ url, title: linkText, targetBlank }, index) => (
-            <Link
-              href={url}
-              key={index}
-              className={styles.link}
-              target={targetBlank ? "_blank" : "_self"}
-              onClick={() => {
-                logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-                  destinasjon: url,
-                  lenketekst: linkText,
-                  komponent: "Lenkeliste for støtteinformasjon",
-                  seksjon: "Nyttig å vite",
-                });
-              }}
-            >
-              <BodyShort className={styles.linkText} as={"span"}>
-                {linkText}
-              </BodyShort>
-            </Link>
+            <li key={index}>
+              <Link
+                href={url}
+                className={styles.link}
+                target={targetBlank ? "_blank" : "_self"}
+                onClick={() => {
+                  logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
+                    destinasjon: url,
+                    lenketekst: linkText,
+                    komponent: "Lenkeliste for støtteinformasjon",
+                    seksjon: "Nyttig å vite",
+                  });
+                }}
+              >
+                <BodyShort className={styles.linkText} as={"span"}>
+                  {linkText}
+                </BodyShort>
+              </Link>
+            </li>
           ))}
         </ul>
       </nav>
