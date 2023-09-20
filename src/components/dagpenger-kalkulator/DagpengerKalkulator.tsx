@@ -106,8 +106,6 @@ export function DagpengerKalkulator() {
       "total-per-2-uker": totalPer2Week,
     };
 
-    console.log(locale);
-
     if (variable === "antall-barn") {
       return `${textToVariableObject[variable]}`;
     } else if (variable === "dagpenger-mellom-0-og-6G" && locale === "nb") {
@@ -190,7 +188,7 @@ export function DagpengerKalkulator() {
           control={control}
           name="hasChildren"
           rules={{ required: hasChildrenQuestion?.errorMessage }}
-          render={({ field: { value, onChange, onBlur, name, ref }, fieldState: { error } }) => (
+          render={({ field: { onChange, onBlur, name, ref }, fieldState: { error } }) => (
             <RadioGroup
               ref={ref}
               className={styles.radioGroup}
@@ -198,7 +196,6 @@ export function DagpengerKalkulator() {
               legend={hasChildrenQuestion?.label}
               onChange={onChange}
               onBlur={onBlur}
-              value={value}
               error={error?.message}
             >
               <Radio value="true">{hasChildrenQuestion?.radioButtonLabel1}</Radio>
