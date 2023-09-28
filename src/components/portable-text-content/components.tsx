@@ -6,8 +6,10 @@ import { DagpengerKalkulator } from "components/dagpenger-kalkulator/DagpengerKa
 import { LinkButton } from "components/link-button/LinkButton";
 import { ReadMoreWithRichText } from "components/readmore-with-rich-text/ReadMoreWithRichText";
 import { PortableTextContent } from "./PortableTextContent";
+import { AccordionList } from "components/accordion-list/AccordionList";
 
 export const commonComponents: Record<string, PortableTextTypeComponent<any> | undefined> | undefined = {
+  produktsideAccordionList: AccordionList,
   produktsideAccordionWithRichText: AccordionWithRichText,
   produktsideAlert: Alert,
   produktsideButton: LinkButton,
