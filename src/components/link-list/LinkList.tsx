@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyShort, Heading } from "@navikt/ds-react";
 import styles from "./LinkList.module.scss";
 import Link from "next/link";
@@ -27,7 +26,7 @@ export function LinkList({ title, links }: Props) {
         {/* TODO: Legge til nofollowurl for eksterne lenker her for bedre SEO */}
         <ul className={styles.linkList}>
           {links?.map(({ url, title: linkText, targetBlank }, index) => (
-            <li key={index}>
+            <li key={index} className={styles.linkListElement}>
               <Link
                 href={url}
                 className={styles.link}
@@ -41,7 +40,7 @@ export function LinkList({ title, links }: Props) {
                   });
                 }}
               >
-                <BodyShort className={styles.linkText} as={"span"}>
+                <BodyShort className={styles.linkText} as="span">
                   {linkText}
                 </BodyShort>
               </Link>

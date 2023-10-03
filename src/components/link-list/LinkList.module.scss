@@ -17,12 +17,14 @@
   @include common.unstyled-list();
 }
 
-.link {
+.linkListElement {
   $horizontalPadding: 0.5rem;
   $verticalPadding: 0.6875rem;
   padding: $verticalPadding $horizontalPadding;
   margin: 0 -#{$horizontalPadding};
+}
 
+.link {
   // link-border-bottom-mixin inside .linkText creates animated underline
   // which is why we need to disable the default text-decoration
   text-decoration: none;
