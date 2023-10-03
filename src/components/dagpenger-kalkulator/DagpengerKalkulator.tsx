@@ -1,29 +1,29 @@
 import { Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
+import { TypedObject } from "@portabletext/types";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
-import styles from "./DagpengerKalkulator.module.scss";
-import { PositiveResult } from "./PositiveResult";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
-import { useSanityContext } from "components/sanity-context/sanity-context";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { PortableText } from "@portabletext/react";
-import { toKR } from "./utils";
 import { commonComponents } from "components/portable-text-content/components";
 import { commonMarks } from "components/portable-text-content/marks/marks";
-import { TypedObject } from "@portabletext/types";
+import { useGrunnbelopContext } from "contexts/grunnbelop-context/GrunnbelopContext";
+import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import {
   CalculatorVariables,
   HasChildrenQuestion,
   IncomeQuestion,
   NumberOfChildrenQuestion,
-} from "components/sanity-context/types/calculator-schema-types";
-import { useRouter } from "next/router";
+} from "contexts/sanity-context/types/calculator-schema-types";
+import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import svgIcon from "../../../public/kalkulator.svg";
-import Image from "next/image";
+import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
+import { PositiveResult } from "./PositiveResult";
+import { toKR } from "./utils";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";

@@ -1,5 +1,5 @@
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
-import { useSanityContext } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import { FilterExplanation } from "./FilterExplanation";
 

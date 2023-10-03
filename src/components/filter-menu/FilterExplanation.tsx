@@ -1,7 +1,7 @@
 import { InformationSquareIcon, InformationSquareFillIcon } from "@navikt/aksel-icons";
 import classNames from "classnames";
 import { useState, useEffect, useRef, useId } from "react";
-import { useSanityContext } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import styles from "./FilterExplanation.module.scss";
 
 interface FilterExplanationProps {

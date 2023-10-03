@@ -1,5 +1,5 @@
 import { BodyLong, Button, DatePicker, Heading, Loader, Select, useDatepicker } from "@navikt/ds-react";
-import { useGrunnbelopContext } from "components/grunnbelop-context/grunnbelop-context";
+import { useGrunnbelopContext } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";

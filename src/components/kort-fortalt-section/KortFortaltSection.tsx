@@ -1,5 +1,5 @@
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { useSanityContext } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
 
 export function KortFortaltSection() {
