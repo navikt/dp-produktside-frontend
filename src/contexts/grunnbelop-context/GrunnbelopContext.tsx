@@ -17,7 +17,7 @@ interface GrunnbelopProviderProps {
 
 interface GrunnbelopContextValues {
   gValue: number;
-  GtoNOK: (g: number) => string;
+  GtoNOK: (g: any) => string;
   setGValue: Dispatch<SetStateAction<number>>;
 }
 
@@ -33,7 +33,7 @@ export function GrunnbelopProvider({ grunnbeloep, children }: GrunnbelopProvider
       value={{
         gValue: gValue,
         setGValue: setGValue,
-        GtoNOK: (g: number) =>
+        GtoNOK: (g: any) =>
           isNaN(g)
             ? "Her skulle det vært et kronebeløp oversatt fra grunnbeløp, men vi greide ikke å lese tallet "
             : Math.round(g * gValue).toLocaleString("no-NO"),

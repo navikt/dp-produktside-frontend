@@ -1,7 +1,7 @@
 import { createPreviewSubscriptionHook } from "next-sanity";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
-import { usePreviewContext } from "components/preview-context/previewContext";
+import { usePreviewContext } from "contexts/preview-context/PreviewContext";
 import { sanityConfig } from "./client";
 
 export function useSanityPreview<Data>(initialData: Data, query: string, params?: Record<string, any>): Data {

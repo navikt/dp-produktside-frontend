@@ -5,11 +5,11 @@ import { nb, enGB } from "date-fns/locale";
 import "@navikt/ds-css";
 import "components/prototype-banner/PrototypeBanner.css";
 import ErrorBoundary from "components/error-boundary/ErrorBoundary";
-import { FilterContextProvider } from "components/filter-menu/FilterContext";
-import { GrunnbelopProvider } from "components/grunnbelop-context/grunnbelop-context";
-import { SanityProvider } from "components/sanity-context/sanity-context";
-import { PreviewBanner } from "components/preview-context/PreviewBanner";
-import { PreviewContextProvider } from "components/preview-context/previewContext";
+import { FilterContextProvider } from "contexts/filter-context/FilterContext";
+import { GrunnbelopProvider } from "contexts/grunnbelop-context/GrunnbelopContext";
+import { SanityProvider } from "contexts/sanity-context/SanityContext";
+import { PreviewBanner } from "contexts/preview-context/PreviewBanner";
+import { PreviewContextProvider } from "contexts/preview-context/PreviewContext";
 import "styles/global.scss";
 import "styles/common.scss";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
@@ -26,12 +26,12 @@ export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   const router = useRouter();
 
   onLanguageSelect(({ locale }) => {
-    // Sets locale for all date-fns functions located in utils/dates
     Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });
     router.push(router.asPath, router.asPath, { locale });
   });
 
   useEffect(() => {
+    // Sets locale for all date-fns functions located in utils/dates
     setDefaultOptions({ locale: router.locale === "en" ? enGB : nb });
   }, [router.locale]);
 

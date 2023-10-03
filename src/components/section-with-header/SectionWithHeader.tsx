@@ -2,7 +2,7 @@ import * as NavIcons from "@navikt/ds-icons";
 import { Link as LinkIcon } from "@navikt/ds-icons";
 import { CopyButton, Heading, Panel } from "@navikt/ds-react";
 import classNames from "classnames";
-import { useSanityContext } from "components/sanity-context/sanity-context";
+import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import { appUrls } from "utils/url";
 import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";

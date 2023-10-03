@@ -1,5 +1,5 @@
 import { Checkbox } from "@navikt/ds-react";
-import { usePreviewContext } from "./previewContext";
+import { usePreviewContext } from "./PreviewContext";
 import styles from "./PreviewBanner.module.scss";
 
 export function PreviewBanner() {
