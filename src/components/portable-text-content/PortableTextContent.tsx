@@ -13,8 +13,6 @@ export function PortableTextContent({ value }: PortableTextProps) {
         block: commonBlockStyles,
         marks: commonMarks,
         types: {
-          produktsideFilteredContent: FilterContent,
-          produktsideFilterMenu: FilterMenuWithScroll,
           ...commonComponents,
         },
       }}
