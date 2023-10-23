@@ -6,6 +6,7 @@ import { commonMarks } from "components/portable-text-content/marks/marks";
 import { commonBlockStyles } from "components/portable-text-content/styles";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./AccordionWithRichText.module.scss";
+import { PortableTextContentCompactTypogragphy } from "components/portable-text-content/PortableTextContentCompactTypogragphy";
 
 export function AccordionWithRichText({ value }: PortableTextTypeComponentProps<any>) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,19 +28,7 @@ export function AccordionWithRichText({ value }: PortableTextTypeComponentProps<
         {value.title}
       </Accordion.Header>
       <Accordion.Content className={styles.accordionContent}>
-        <PortableText
-          value={value.content}
-          components={{
-            block: {
-              normal: ({ children }) => <BodyLong className={styles.typography__normal}>{children}</BodyLong>,
-              ...restCommonBlockStyles,
-            },
-            marks: commonMarks,
-            types: {
-              ...commonComponents,
-            },
-          }}
-        />
+        <PortableTextContentCompactTypogragphy value={value.content} />
       </Accordion.Content>
     </Accordion.Item>
   );

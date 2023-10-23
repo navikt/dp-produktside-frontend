@@ -8,7 +8,7 @@ import { FilterContent } from "components/filter-content/FilterContent";
 import { FilterMenuWithScroll } from "components/filter-menu/FilterMenuWithScroll";
 import { LinkButton } from "components/link-button/LinkButton";
 import { ReadMoreWithRichText } from "components/readmore-with-rich-text/ReadMoreWithRichText";
-import { PortableTextContent } from "./PortableTextContent";
+import { PortableTextContentCompactTypogragphy } from "./PortableTextContentCompactTypogragphy";
 
 export const commonComponents: Record<string, PortableTextTypeComponent<any> | undefined> = {
   produktsideAccordionList: AccordionList,
@@ -21,7 +21,7 @@ export const commonComponents: Record<string, PortableTextTypeComponent<any> | u
   produktsideMicroCards: ({ value }) => <MicroCards title={value.title} cardList={value.cardList} />,
   produktsideReadMoreWithRichText: ({ value }) => (
     <ReadMoreWithRichText header={value.title} size={value.size} _key={value._key}>
-      <PortableTextContent value={value.content} />
+      <PortableTextContentCompactTypogragphy value={value.content} />
     </ReadMoreWithRichText>
   ),
 };

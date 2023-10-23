@@ -7,6 +7,10 @@
 }
 
 .typography {
+  &__normalCompact {
+    margin-bottom: var(--a-spacing-5);
+  }
+
   &__normalM1 {
     margin-bottom: var(--a-spacing-2);
   }
