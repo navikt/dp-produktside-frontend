@@ -2,10 +2,9 @@ import { BodyLong, Heading } from "@navikt/ds-react";
 import { PortableTextBlockComponent } from "@portabletext/react";
 import styles from "./PortableTextContent.module.scss";
 
-export const commonBlockStyles:
-  | PortableTextBlockComponent
-  | Record<string, PortableTextBlockComponent | undefined>
-  | undefined = {
+export type BlockStyles = "normal" | "h3" | "h4" | "h5" | "h6" | "m0" | "m1";
+
+export const commonBlockStyles: Record<BlockStyles, PortableTextBlockComponent> = {
   normal: ({ children }) => <BodyLong spacing>{children}</BodyLong>,
   h3: ({ children }) => (
     <Heading level="3" size="medium" spacing>
