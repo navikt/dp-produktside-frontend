@@ -164,7 +164,7 @@ export function DagpengerKalkulator() {
             <NumericFormat
               name={name}
               value={value}
-              maxLength={12}
+              maxLength={14}
               allowNegative={false}
               decimalScale={0}
               thousandSeparator=" "

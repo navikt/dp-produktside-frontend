@@ -1,12 +1,10 @@
-import { Accordion, BodyLong } from "@navikt/ds-react";
-import { PortableText, PortableTextTypeComponentProps } from "@portabletext/react";
+import { Accordion } from "@navikt/ds-react";
+import { PortableTextTypeComponentProps } from "@portabletext/react";
 import { useState } from "react";
-import { commonComponents } from "components/portable-text-content/components";
-import { commonMarks } from "components/portable-text-content/marks/marks";
+import { PortableTextContentCompactTypogragphy } from "components/portable-text-content/PortableTextContentCompactTypogragphy";
 import { commonBlockStyles } from "components/portable-text-content/styles";
 import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./AccordionWithRichText.module.scss";
-import { PortableTextContentCompactTypogragphy } from "components/portable-text-content/PortableTextContentCompactTypogragphy";
 
 export function AccordionWithRichText({ value }: PortableTextTypeComponentProps<any>) {
   const [isOpen, setIsOpen] = useState(false);
