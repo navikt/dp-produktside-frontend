@@ -1,3 +1,4 @@
+import * as AkselIcons from "@navikt/aksel-icons";
 import * as NavIcons from "@navikt/ds-icons";
 import { Link as LinkIcon } from "@navikt/ds-icons";
 import { CopyButton, Heading, Panel } from "@navikt/ds-react";
@@ -20,7 +21,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
   const { locale } = useRouter();
   const { getGeneralText } = useSanityContext();
   // @ts-ignore
-  const Icon = NavIcons?.[iconName];
+  const Icon = AkselIcons?.[iconName] ?? NavIcons?.[iconName];
 
   return (
     <section id={Icon ? undefined : anchorId} className={Icon && styles.withIcon}>

@@ -60,7 +60,7 @@ export default function HistorikkIndex({ revisions }: Props) {
   const [dateValidationError, setDateValidationError] = useState("");
   const [selectedTimestamp, setSelectedTimestamp] = useState("");
   const [historyData, setHistoryData] = useState<HistoryData | undefined>(undefined);
-  const fromDate = locale === "en" ? new Date(2023, 6, 5) : new Date(2023, 3, 26);
+  const fromDate = locale === "en" ? new Date(2023, 6, 5) : new Date(2023, 0, 26);
   const toDate = new Date();
 
   const { datepickerProps, inputProps, selectedDay } = useDatepicker({
