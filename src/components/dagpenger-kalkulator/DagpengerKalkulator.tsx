@@ -80,7 +80,7 @@ export function DagpengerKalkulator() {
     });
   }
 
-  const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;
+  const hasNotEnoughGrunnlag = watchGrunnlag < 1 * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
