@@ -7,7 +7,7 @@ import styles from "./LinkButton.module.scss";
 
 export function LinkButton({ value }: PortableTextTypeComponentProps<any>) {
   // @ts-ignore
-  const Icon = AkselIcons[value?.iconName] ?? NavIcons?.[value?.iconName];
+  const Icon = AkselIcons?.[value?.iconName] ?? NavIcons?.[value?.iconName];
 
   const iconProps = Icon
     ? {
