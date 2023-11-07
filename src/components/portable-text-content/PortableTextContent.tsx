@@ -2,6 +2,7 @@ import { PortableText, PortableTextProps } from "@portabletext/react";
 import { commonComponents } from "./components";
 import { commonMarks } from "./marks/marks";
 import { commonBlockStyles } from "./styles";
+import { UnknownComponentType } from "./UnknownComponentType";
 
 export function PortableTextContent({ value }: PortableTextProps) {
   return (
@@ -13,6 +14,7 @@ export function PortableTextContent({ value }: PortableTextProps) {
         types: {
           ...commonComponents,
         },
+        unknownType: UnknownComponentType,
       }}
     />
   );

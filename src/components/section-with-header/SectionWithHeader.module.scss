@@ -34,8 +34,13 @@ $iconContainerRadius: common.px-to-rem(64px / 2);
     overflow: hidden;
 
     .icon {
-      height: 32px;
-      width: 32px;
+      height: 50%;
+      width: 50%;
+    }
+
+    .akselIcon {
+      height: 65%;
+      width: 65%;
     }
 
     @mixin adjust-for-padding($sectionPadding) {

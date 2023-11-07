@@ -1,9 +1,10 @@
-import { PortableText, PortableTextProps } from "@portabletext/react";
-import { commonBlockStyles } from "./styles";
-import { commonMarks } from "./marks/marks";
-import { commonComponents } from "./components";
 import { BodyLong } from "@navikt/ds-react";
+import { PortableText, PortableTextProps } from "@portabletext/react";
 import styles from "./PortableTextContent.module.scss";
+import { UnknownComponentType } from "./UnknownComponentType";
+import { commonComponents } from "./components";
+import { commonMarks } from "./marks/marks";
+import { commonBlockStyles } from "./styles";
 
 export function PortableTextContentCompactTypogragphy({ value }: PortableTextProps) {
   const { normal, ...restCommonBlockStyles } = commonBlockStyles;
@@ -20,6 +21,7 @@ export function PortableTextContentCompactTypogragphy({ value }: PortableTextPro
         types: {
           ...commonComponents,
         },
+        unknownType: UnknownComponentType,
       }}
     />
   );

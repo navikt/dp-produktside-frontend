@@ -1,3 +1,4 @@
+import * as AkselIcons from "@navikt/aksel-icons";
 import * as NavIcons from "@navikt/ds-icons";
 import { Link as LinkIcon } from "@navikt/ds-icons";
 import { CopyButton, Heading, Panel } from "@navikt/ds-react";
@@ -19,15 +20,22 @@ interface Props {
 export function SectionWithHeader({ anchorId, children, iconName, title }: Props) {
   const { locale } = useRouter();
   const { getGeneralText } = useSanityContext();
+
   // @ts-ignore
-  const Icon = NavIcons?.[iconName];
+  const akselIcon = AkselIcons?.[iconName];
+
+  // @ts-ignore
+  const navIcon = NavIcons?.[iconName];
+
+  // @ts-ignore
+  const Icon = akselIcon ?? navIcon;
 
   return (
     <section id={Icon ? undefined : anchorId} className={Icon && styles.withIcon}>
       <Panel className={classNames(styles.container)}>
         {Icon && (
           <div id={Icon ? anchorId : undefined} className={styles.iconContainer} tabIndex={-1}>
-            <Icon className={styles.icon} aria-hidden />
+            <Icon className={akselIcon ? styles.akselIcon : styles.icon} aria-hidden />
           </div>
         )}
 
