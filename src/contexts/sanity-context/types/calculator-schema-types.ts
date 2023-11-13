@@ -17,6 +17,14 @@ export interface IncomeQuestion {
   label: string;
 }
 
+export interface Income36MonthsQuestion {
+  _key: string;
+  _type: string;
+  description: PortabelTextBlockType;
+  errorMessage: string;
+  label: string;
+}
+
 export interface HasChildrenQuestion {
   _key: string;
   _type: string;

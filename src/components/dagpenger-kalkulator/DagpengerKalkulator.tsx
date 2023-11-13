@@ -1,4 +1,4 @@
-import { Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { Button, ErrorMessage, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import {
   CalculatorVariables,
   HasChildrenQuestion,
+  Income36MonthsQuestion,
   IncomeQuestion,
   NumberOfChildrenQuestion,
 } from "contexts/sanity-context/types/calculator-schema-types";
@@ -34,7 +35,8 @@ interface PortableTextCalculatorProps {
 }
 
 interface FormValues {
-  grunnlag: number;
+  income: number;
+  income36Months: number;
   hasChildren: string;
   numberOfChildren: number;
 }
@@ -48,11 +50,13 @@ export function DagpengerKalkulator() {
   const {
     register,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitted },
     handleSubmit,
+    trigger,
     watch,
   } = useForm<FormValues>();
-  const watchGrunnlag = watch("grunnlag");
+  const watchIncome = watch("income") ?? 0;
+  const watchIncome36Months = watch("income36Months") ?? 0;
   const watchHasChildren = watch("hasChildren");
   const watchNumberOfChildren = watch("numberOfChildren");
   const hasChildren = convertStringToBoolean(watchHasChildren);
@@ -69,9 +73,17 @@ export function DagpengerKalkulator() {
     if (showResult) {
       setShowResult(false);
     }
-  }, [watchGrunnlag, watchHasChildren, watchNumberOfChildren]);
+  }, [watchIncome, watchIncome36Months, watchHasChildren, watchNumberOfChildren]);
 
-  function onSubmit() {
+  useEffect(() => {
+    if (isSubmitted) {
+      trigger("income");
+      trigger("income36Months");
+    }
+  }, [watchIncome, watchIncome36Months, isSubmitted]);
+
+  function onSubmit(data: FormValues) {
+    console.log(data);
     setShowResult(true);
     resultTablesContainerRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     logAmplitudeEvent(AnalyticsEvents.FORM_SUBMITTED, {
@@ -80,9 +92,10 @@ export function DagpengerKalkulator() {
     });
   }
 
-  const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;
-
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
+  const income36MonthsQuestion = calculator.questions.find(
+    ({ _type }) => _type === "income36MonthsQuestion"
+  ) as Income36MonthsQuestion;
   const hasChildrenQuestion = calculator.questions.find(
     ({ _type }) => _type === "hasChildrenQuestion"
   ) as HasChildrenQuestion;
@@ -90,8 +103,11 @@ export function DagpengerKalkulator() {
     ({ _type }) => _type === "numberOfChildrenQuestion"
   ) as NumberOfChildrenQuestion;
 
+  const hasEnoughIncome = watchIncome >= 1.5 * gValue || watchIncome36Months >= 3 * gValue;
+
+  const bestIncome = Math.max(watchIncome, watchIncome36Months / 3);
   const numberOfChildren = watchNumberOfChildren ?? 0;
-  const mellom0og6g = Math.max(0, Math.min(watchGrunnlag, 6 * gValue));
+  const mellom0og6g = Math.max(0, Math.min(bestIncome, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
   const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
   const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
@@ -156,9 +172,13 @@ export function DagpengerKalkulator() {
 
         <Controller
           control={control}
-          name="grunnlag"
+          name="income"
           rules={{
-            required: incomeQuestion?.errorMessage,
+            validate: {
+              atLeastOneInputIsFilled: (value, formValues) => {
+                return formValues.income || formValues.income36Months ? true : false;
+              },
+            },
           }}
           render={({ field: { onChange, name, value }, fieldState: { error } }) => (
             <NumericFormat
@@ -182,6 +202,42 @@ export function DagpengerKalkulator() {
             />
           )}
         />
+
+        <Controller
+          control={control}
+          name="income36Months"
+          rules={{
+            validate: {
+              atLeastOneInputIsFilled: (value, formValues) => {
+                return formValues.income || formValues.income36Months ? true : false;
+              },
+            },
+          }}
+          render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+            <NumericFormat
+              name={name}
+              value={value}
+              maxLength={14}
+              allowNegative={false}
+              decimalScale={0}
+              thousandSeparator=" "
+              onValueChange={(values) => {
+                onChange(values.floatValue as number);
+              }}
+              type="text"
+              inputMode="numeric"
+              size="medium"
+              className={styles.textField}
+              customInput={TextField}
+              error={error?.message}
+              label={income36MonthsQuestion?.label}
+              suffix={locale === "en" ? " NOK" : " kr"}
+            />
+          )}
+        />
+
+        {errors?.income && <ErrorMessage>Du må skrive i minst et av feltene over</ErrorMessage>}
+
         <PortableTextContent value={incomeQuestion?.description} />
 
         <Controller
@@ -203,6 +259,7 @@ export function DagpengerKalkulator() {
             </RadioGroup>
           )}
         />
+
         <PortableTextContent value={hasChildrenQuestion?.description} />
 
         {hasChildren && (
@@ -227,7 +284,7 @@ export function DagpengerKalkulator() {
       <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
         {showResult && (
           <div aria-live="assertive">
-            {hasNotEnoughGrunnlag ? (
+            {!hasEnoughIncome ? (
               <>
                 <NegativeResult
                   title={<PortableTextCalculator value={getCalculatorTextBlock("negative-result-section-title")} />}
