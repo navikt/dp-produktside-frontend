@@ -34,7 +34,7 @@ interface PortableTextCalculatorProps {
 }
 
 interface FormValues {
-  grunnlag: number;
+  income: number;
   hasChildren: string;
   numberOfChildren: number;
 }
@@ -52,7 +52,7 @@ export function DagpengerKalkulator() {
     handleSubmit,
     watch,
   } = useForm<FormValues>();
-  const watchGrunnlag = watch("grunnlag");
+  const watchIncome = watch("income");
   const watchHasChildren = watch("hasChildren");
   const watchNumberOfChildren = watch("numberOfChildren");
   const hasChildren = convertStringToBoolean(watchHasChildren);
@@ -69,7 +69,7 @@ export function DagpengerKalkulator() {
     if (showResult) {
       setShowResult(false);
     }
-  }, [watchGrunnlag, watchHasChildren, watchNumberOfChildren]);
+  }, [watchIncome, watchHasChildren, watchNumberOfChildren]);
 
   function onSubmit() {
     setShowResult(true);
@@ -80,7 +80,7 @@ export function DagpengerKalkulator() {
     });
   }
 
-  const hasNotEnoughGrunnlag = watchGrunnlag < 1.5 * gValue;
+  const hasNotEnoughIncome = watchIncome < 1.5 * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
@@ -91,7 +91,7 @@ export function DagpengerKalkulator() {
   ) as NumberOfChildrenQuestion;
 
   const numberOfChildren = watchNumberOfChildren ?? 0;
-  const mellom0og6g = Math.max(0, Math.min(watchGrunnlag, 6 * gValue));
+  const mellom0og6g = Math.max(0, Math.min(watchIncome, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
   const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
   const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
@@ -156,7 +156,7 @@ export function DagpengerKalkulator() {
 
         <Controller
           control={control}
-          name="grunnlag"
+          name="income"
           rules={{
             required: incomeQuestion?.errorMessage,
           }}
@@ -227,7 +227,7 @@ export function DagpengerKalkulator() {
       <div ref={resultTablesContainerRef} className={styles.resultTablesContainer}>
         {showResult && (
           <div aria-live="assertive">
-            {hasNotEnoughGrunnlag ? (
+            {hasNotEnoughIncome ? (
               <>
                 <NegativeResult
                   title={<PortableTextCalculator value={getCalculatorTextBlock("negative-result-section-title")} />}
