@@ -1,4 +1,4 @@
-import { Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { BodyShort, Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import {
   CalculatorVariables,
   HasChildrenQuestion,
+  IncomePeriodQuestion,
   IncomeQuestion,
   NumberOfChildrenQuestion,
 } from "contexts/sanity-context/types/calculator-schema-types";
@@ -37,6 +38,7 @@ interface FormValues {
   income: number;
   hasChildren: string;
   numberOfChildren: number;
+  incomePeriod: string;
 }
 
 export function DagpengerKalkulator() {
@@ -44,6 +46,7 @@ export function DagpengerKalkulator() {
   const { calculator, getCalculatorTextBlock } = useSanityContext();
   const { gValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
+  const incomePeriod = useState<string>("12");
   const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
   const {
     register,
@@ -55,6 +58,7 @@ export function DagpengerKalkulator() {
   const watchIncome = watch("income");
   const watchHasChildren = watch("hasChildren");
   const watchNumberOfChildren = watch("numberOfChildren");
+  const watchIncomePeriod = watch("incomePeriod");
   const hasChildren = convertStringToBoolean(watchHasChildren);
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
@@ -69,7 +73,7 @@ export function DagpengerKalkulator() {
     if (showResult) {
       setShowResult(false);
     }
-  }, [watchIncome, watchHasChildren, watchNumberOfChildren]);
+  }, [watchIncome, watchHasChildren, watchNumberOfChildren, watchIncomePeriod]);
 
   function onSubmit() {
     setShowResult(true);
@@ -83,12 +87,18 @@ export function DagpengerKalkulator() {
   const hasNotEnoughIncome = watchIncome < 1.5 * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
+  const thirtysixMonthIncomePeriodQuestion = calculator.questions.find(
+    ({ _type }) => _type === "thirtysixMonthIncomePeriodQuestion"
+  ) as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
     ({ _type }) => _type === "hasChildrenQuestion"
   ) as HasChildrenQuestion;
   const numberOfChildrenQuestion = calculator.questions.find(
     ({ _type }) => _type === "numberOfChildrenQuestion"
   ) as NumberOfChildrenQuestion;
+  const selectIncomePeriodQuestion = calculator.questions.find(
+    ({ _type }) => _type === "incomePeriodQuestion"
+  ) as IncomePeriodQuestion;
 
   const numberOfChildren = watchNumberOfChildren ?? 0;
   const mellom0og6g = Math.max(0, Math.min(watchIncome, 6 * gValue));
@@ -147,43 +157,104 @@ export function DagpengerKalkulator() {
             {calculator?.title}
           </Heading>
         </legend>
-
         <div role="img" className={styles.calculatorDecorativeLine} aria-hidden>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 4" fill="none">
             <path d="M2 2H280" stroke="#CCE1FF" strokeWidth="4" strokeLinecap="round" />
           </svg>
         </div>
-
+        <BodyShort spacing>
+          Fyll inn inntekten din for å se om du har rett til dagpenger. Beregningen er kun veiledende.
+        </BodyShort>
         <Controller
+          defaultValue={"12"}
           control={control}
-          name="income"
-          rules={{
-            required: incomeQuestion?.errorMessage,
-          }}
-          render={({ field: { onChange, name, value }, fieldState: { error } }) => (
-            <NumericFormat
+          name="incomePeriod"
+          render={({ field: { onChange, onBlur, name, value, ref }, fieldState: { error } }) => (
+            <RadioGroup
+              ref={ref}
               name={name}
-              value={value}
-              maxLength={14}
-              allowNegative={false}
-              decimalScale={0}
-              thousandSeparator=" "
-              onValueChange={(values) => {
-                onChange(values.floatValue as number);
-              }}
-              type="text"
-              inputMode="numeric"
-              size="medium"
-              className={styles.textField}
-              customInput={TextField}
+              className={styles.radioGroup}
+              legend={selectIncomePeriodQuestion?.label}
+              onChange={onChange}
+              onBlur={onBlur}
               error={error?.message}
-              label={incomeQuestion?.label}
-              suffix={locale === "en" ? " NOK" : " kr"}
-            />
+              value={value}
+            >
+              <Radio defaultChecked={true} value="12">
+                {selectIncomePeriodQuestion?.radioButtonLabel1}
+              </Radio>
+              <Radio value="36">{selectIncomePeriodQuestion?.radioButtonLabel2}</Radio>
+            </RadioGroup>
           )}
         />
-        <PortableTextContent value={incomeQuestion?.description} />
 
+        <PortableTextContent value={selectIncomePeriodQuestion?.description1} />
+
+        {watchIncomePeriod === "12" && (
+          <Controller
+            control={control}
+            name="income"
+            rules={{
+              required: incomeQuestion?.errorMessage,
+            }}
+            render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+              <NumericFormat
+                name={name}
+                value={value}
+                maxLength={14}
+                allowNegative={false}
+                decimalScale={0}
+                thousandSeparator=" "
+                onValueChange={(values) => {
+                  onChange(values.floatValue as number);
+                }}
+                type="text"
+                inputMode="numeric"
+                size="medium"
+                className={styles.textField}
+                customInput={TextField}
+                error={error?.message}
+                label={incomeQuestion?.label}
+                suffix={locale === "en" ? " NOK" : " kr"}
+              />
+            )}
+          />
+        )}
+        {watchIncomePeriod === "36" &&
+          ["1", "2", "3"].map((year) => (
+            <Controller
+              key={year}
+              control={control}
+              name="income"
+              rules={{
+                required: incomeQuestion?.errorMessage,
+              }}
+              render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+                <NumericFormat
+                  name={name}
+                  value={value}
+                  maxLength={14}
+                  allowNegative={false}
+                  decimalScale={0}
+                  thousandSeparator=" "
+                  onValueChange={(values) => {
+                    onChange(values.floatValue as number);
+                  }}
+                  type="text"
+                  inputMode="numeric"
+                  size="medium"
+                  className={styles.textField}
+                  customInput={TextField}
+                  error={error?.message}
+                  label={incomeQuestion?.label}
+                  suffix={locale === "en" ? " NOK" : " kr"}
+                />
+              )}
+            />
+          ))}
+        <PortableTextContent value={selectIncomePeriodQuestion?.description2} />
+
+        {/* <PortableTextContent value={incomeQuestion?.description} /> */}
         <Controller
           control={control}
           name="hasChildren"
@@ -204,7 +275,6 @@ export function DagpengerKalkulator() {
           )}
         />
         <PortableTextContent value={hasChildrenQuestion?.description} />
-
         {hasChildren && (
           <Select
             {...register("numberOfChildren", {
