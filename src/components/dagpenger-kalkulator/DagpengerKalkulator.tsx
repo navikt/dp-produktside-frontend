@@ -25,6 +25,7 @@ import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
 import { toKR } from "./utils";
+import { getYear, subYears } from "date-fns";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -41,12 +42,16 @@ interface FormValues {
   incomePeriod: string;
 }
 
+interface Periode {
+  start: Date;
+  end: Date;
+}
+
 export function DagpengerKalkulator() {
   const { locale } = useRouter();
   const { calculator, getCalculatorTextBlock } = useSanityContext();
   const { gValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
-  const incomePeriod = useState<string>("12");
   const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
   const {
     register,
@@ -62,6 +67,15 @@ export function DagpengerKalkulator() {
   const hasChildren = convertStringToBoolean(watchHasChildren);
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
+
+  const currentYear = getYear(new Date());
+  const desemberThisYear = new Date(currentYear, 11, 1);
+
+  const lastThirySixPeriodList: Periode[] = [
+    { start: subYears(desemberThisYear, 1), end: desemberThisYear },
+    { start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
+    { start: subYears(desemberThisYear, 3), end: subYears(desemberThisYear, 2) },
+  ];
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
     <option value={i + 1} key={i + 1}>
@@ -87,9 +101,6 @@ export function DagpengerKalkulator() {
   const hasNotEnoughIncome = watchIncome < 1.5 * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
-  const thirtysixMonthIncomePeriodQuestion = calculator.questions.find(
-    ({ _type }) => _type === "thirtysixMonthIncomePeriodQuestion"
-  ) as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
     ({ _type }) => _type === "hasChildrenQuestion"
   ) as HasChildrenQuestion;
@@ -148,6 +159,16 @@ export function DagpengerKalkulator() {
     );
   };
 
+  function formattDate(date: Date) {
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+
+    return new Date(date).toLocaleDateString(locale, options);
+  }
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={styles.calculatorFieldset}>
@@ -191,39 +212,8 @@ export function DagpengerKalkulator() {
         <PortableTextContent value={selectIncomePeriodQuestion?.description1} />
 
         {watchIncomePeriod === "12" && (
-          <Controller
-            control={control}
-            name="income"
-            rules={{
-              required: incomeQuestion?.errorMessage,
-            }}
-            render={({ field: { onChange, name, value }, fieldState: { error } }) => (
-              <NumericFormat
-                name={name}
-                value={value}
-                maxLength={14}
-                allowNegative={false}
-                decimalScale={0}
-                thousandSeparator=" "
-                onValueChange={(values) => {
-                  onChange(values.floatValue as number);
-                }}
-                type="text"
-                inputMode="numeric"
-                size="medium"
-                className={styles.textField}
-                customInput={TextField}
-                error={error?.message}
-                label={incomeQuestion?.label}
-                suffix={locale === "en" ? " NOK" : " kr"}
-              />
-            )}
-          />
-        )}
-        {watchIncomePeriod === "36" &&
-          ["1", "2", "3"].map((year) => (
+          <div className={styles.lastThirySixMonthPeriodContainer}>
             <Controller
-              key={year}
               control={control}
               name="income"
               rules={{
@@ -251,7 +241,49 @@ export function DagpengerKalkulator() {
                 />
               )}
             />
-          ))}
+          </div>
+        )}
+        {watchIncomePeriod === "36" && (
+          <div className={styles.lastThirySixMonthPeriodContainer}>
+            <BodyShort weight="semibold" spacing>
+              {incomeQuestion?.label.toString().replace("12", "36")}
+            </BodyShort>
+
+            {lastThirySixPeriodList.map((period, index) => (
+              <Controller
+                key={index}
+                control={control}
+                name="income"
+                rules={{
+                  required: incomeQuestion?.errorMessage,
+                }}
+                render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+                  <NumericFormat
+                    name={name}
+                    value={value}
+                    maxLength={14}
+                    allowNegative={false}
+                    decimalScale={0}
+                    thousandSeparator=" "
+                    onValueChange={(values) => {
+                      onChange(values.floatValue as number);
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    size="medium"
+                    className={styles.textField}
+                    customInput={TextField}
+                    error={error?.message}
+                    label=""
+                    description={`${formattDate(period.start)} - ${formattDate(period.end)}`}
+                    suffix={locale === "en" ? " NOK" : " kr"}
+                  />
+                )}
+              />
+            ))}
+          </div>
+        )}
+
         <PortableTextContent value={selectIncomePeriodQuestion?.description2} />
 
         {/* <PortableTextContent value={incomeQuestion?.description} /> */}

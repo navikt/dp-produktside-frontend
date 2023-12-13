@@ -45,13 +45,16 @@ $common-input-max-width: common.px-to-rem(140px);
     }
 
     .textField {
-      margin-top: 1rem;
       margin-bottom: 0.625rem;
 
       > :global(.navds-text-field__input) {
         width: auto;
         max-width: $common-input-max-width;
       }
+    }
+
+    .lastThirySixMonthPeriodContainer {
+      margin-top: 1rem;
     }
 
     .radioGroup {
@@ -79,5 +82,4 @@ $common-input-max-width: common.px-to-rem(140px);
   .resultTablesContainer {
     scroll-margin-top: 0.75rem;
   }
-
 }
