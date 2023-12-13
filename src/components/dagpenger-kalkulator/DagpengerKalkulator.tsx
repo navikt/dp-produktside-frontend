@@ -36,13 +36,17 @@ interface PortableTextCalculatorProps {
 }
 
 interface FormValues {
-  income: number;
+  incomeLast12Months: number;
+  incomeLast36MonthsThisYear: number;
+  incomeLast36MonthsLastYear: number;
+  incomeLast36MonthsTwoYearsAgo: number;
   hasChildren: string;
   numberOfChildren: number;
   incomePeriod: string;
 }
 
-interface Periode {
+interface Period {
+  name: "incomeLast36MonthsThisYear" | "incomeLast36MonthsLastYear" | "incomeLast36MonthsTwoYearsAgo";
   start: Date;
   end: Date;
 }
@@ -60,7 +64,10 @@ export function DagpengerKalkulator() {
     handleSubmit,
     watch,
   } = useForm<FormValues>();
-  const watchIncome = watch("income");
+  const watchIncomeLast12Months = watch("incomeLast12Months");
+  const watchIncomeLast36MonthsThisYear = watch("incomeLast36MonthsThisYear");
+  const watchIncomeLast36MonthsLastYear = watch("incomeLast36MonthsLastYear");
+  const watchIncomeLast36MonthsTwoYearsAgo = watch("incomeLast36MonthsTwoYearsAgo");
   const watchHasChildren = watch("hasChildren");
   const watchNumberOfChildren = watch("numberOfChildren");
   const watchIncomePeriod = watch("incomePeriod");
@@ -71,10 +78,10 @@ export function DagpengerKalkulator() {
   const currentYear = getYear(new Date());
   const desemberThisYear = new Date(currentYear, 11, 1);
 
-  const lastThirySixPeriodList: Periode[] = [
-    { start: subYears(desemberThisYear, 1), end: desemberThisYear },
-    { start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
-    { start: subYears(desemberThisYear, 3), end: subYears(desemberThisYear, 2) },
+  const incomeLast36MonthsPeriodList: Period[] = [
+    { name: "incomeLast36MonthsThisYear", start: subYears(desemberThisYear, 1), end: desemberThisYear },
+    { name: "incomeLast36MonthsLastYear", start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
+    { name: "incomeLast36MonthsTwoYearsAgo", start: subYears(desemberThisYear, 3), end: subYears(desemberThisYear, 2) },
   ];
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
@@ -87,7 +94,15 @@ export function DagpengerKalkulator() {
     if (showResult) {
       setShowResult(false);
     }
-  }, [watchIncome, watchHasChildren, watchNumberOfChildren, watchIncomePeriod]);
+  }, [
+    watchIncomeLast12Months,
+    watchIncomeLast36MonthsThisYear,
+    watchIncomeLast36MonthsLastYear,
+    watchIncomeLast36MonthsTwoYearsAgo,
+    watchHasChildren,
+    watchNumberOfChildren,
+    watchIncomePeriod,
+  ]);
 
   function onSubmit() {
     setShowResult(true);
@@ -98,7 +113,11 @@ export function DagpengerKalkulator() {
     });
   }
 
-  const hasNotEnoughIncome = watchIncome < 1.5 * gValue;
+  const incomeLast36Months =
+    watchIncomeLast36MonthsThisYear + watchIncomeLast36MonthsLastYear + watchIncomeLast36MonthsTwoYearsAgo;
+  const totalIncome = watchIncomePeriod === "12" ? watchIncomeLast12Months : incomeLast36Months;
+  const minumumIncomeByPeriodeLength = watchIncomePeriod === "12" ? 1.5 : 3;
+  const hasNotEnoughIncome = totalIncome < minumumIncomeByPeriodeLength * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
@@ -112,7 +131,7 @@ export function DagpengerKalkulator() {
   ) as IncomePeriodQuestion;
 
   const numberOfChildren = watchNumberOfChildren ?? 0;
-  const mellom0og6g = Math.max(0, Math.min(watchIncome, 6 * gValue));
+  const mellom0og6g = Math.max(0, Math.min(totalIncome, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
   const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
   const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
@@ -215,7 +234,7 @@ export function DagpengerKalkulator() {
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <Controller
               control={control}
-              name="income"
+              name="incomeLast12Months"
               rules={{
                 required: incomeQuestion?.errorMessage,
               }}
@@ -249,11 +268,11 @@ export function DagpengerKalkulator() {
               {incomeQuestion?.label.toString().replace("12", "36")}
             </BodyShort>
 
-            {lastThirySixPeriodList.map((period, index) => (
+            {incomeLast36MonthsPeriodList.map((period, index) => (
               <Controller
                 key={index}
                 control={control}
-                name="income"
+                name={period.name}
                 rules={{
                   required: incomeQuestion?.errorMessage,
                 }}
