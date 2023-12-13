@@ -131,11 +131,17 @@ export function DagpengerKalkulator() {
     ({ _type }) => _type === "incomePeriodQuestion"
   ) as IncomePeriodQuestion;
 
+  // Barnetillegg per 2023 er 35 kr.
+  // Det skal økes 1 kr per dag per barn fra 1.januar.
+  // f.eks 2023 - 1998 = 35
+  //       2024 - 1998 = 36
+  //       2025 - 1998 = 37
+  const barnetillegg = getYear(new Date()) - 1988;
   const numberOfChildren = watchNumberOfChildren ?? 0;
   const mellom0og6g = Math.max(0, Math.min(totalIncome, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
   const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
-  const barnetilleggPer2Week = 35 * 2 * 5 * numberOfChildren;
+  const barnetilleggPer2Week = barnetillegg * 2 * 5 * numberOfChildren;
   const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
 
   function resolveCalculatorVariable(variable: CalculatorVariables): string {
