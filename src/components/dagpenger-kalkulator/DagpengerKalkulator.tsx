@@ -75,9 +75,10 @@ export function DagpengerKalkulator() {
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
 
-  const currentYear = getYear(new Date());
-  const desemberThisYear = new Date(currentYear, 11, 1);
+  const thisYear = getYear(new Date());
+  const desemberThisYear = new Date(thisYear, 11, 1);
 
+  // Todo: Denne skal være litt mer komplisert, sjekk reglene
   const incomeLast36MonthsPeriodList: Period[] = [
     { name: "incomeLast36MonthsThisYear", start: subYears(desemberThisYear, 1), end: desemberThisYear },
     { name: "incomeLast36MonthsLastYear", start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
@@ -116,8 +117,8 @@ export function DagpengerKalkulator() {
   const incomeLast36Months =
     watchIncomeLast36MonthsThisYear + watchIncomeLast36MonthsLastYear + watchIncomeLast36MonthsTwoYearsAgo;
   const totalIncome = watchIncomePeriod === "12" ? watchIncomeLast12Months : incomeLast36Months;
-  const minumumIncomeByPeriodeLength = watchIncomePeriod === "12" ? 1.5 : 3;
-  const hasNotEnoughIncome = totalIncome < minumumIncomeByPeriodeLength * gValue;
+  const minumumIncomeBasedOnPeriodeLength = watchIncomePeriod === "12" ? 1.5 : 3;
+  const hasNotEnoughIncome = totalIncome < minumumIncomeBasedOnPeriodeLength * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
@@ -293,8 +294,8 @@ export function DagpengerKalkulator() {
                     className={styles.textField}
                     customInput={TextField}
                     error={error?.message}
-                    label=""
-                    description={`${formattDate(period.start)} - ${formattDate(period.end)}`}
+                    label="" // Todo: Sjekke om vi kan gjøre sånn
+                    description={`${formattDate(period.start)} - ${formattDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
                     suffix={locale === "en" ? " NOK" : " kr"}
                   />
                 )}
