@@ -44,7 +44,9 @@ export interface IncomePeriodQuestion {
   errorMessage: string;
   label: string;
   radioButtonLabel1: string;
+  option1title: string;
   radioButtonLabel2: string;
+  option2title: string;
 }
 
 interface CalculationListItem {

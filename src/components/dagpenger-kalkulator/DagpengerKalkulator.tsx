@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { BodyShort, Button, Heading, Label, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
 import Image from "next/image";
@@ -84,6 +84,8 @@ export function DagpengerKalkulator() {
     { name: "incomeLast36MonthsLastYear", start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
     { name: "incomeLast36MonthsTwoYearsAgo", start: subYears(desemberThisYear, 3), end: subYears(desemberThisYear, 2) },
   ];
+
+  const incomeLast12MonthsPeriod = { start: subYears(desemberThisYear, 1), end: desemberThisYear };
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
     <option value={i + 1} key={i + 1}>
@@ -185,7 +187,7 @@ export function DagpengerKalkulator() {
     );
   };
 
-  function formattDate(date: Date) {
+  function formatDate(date: Date) {
     const options: Intl.DateTimeFormatOptions = {
       month: "long",
       day: "numeric",
@@ -239,6 +241,10 @@ export function DagpengerKalkulator() {
 
         {watchIncomePeriod === "12" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
+            <BodyShort weight="semibold" spacing>
+              {selectIncomePeriodQuestion.option1title}
+            </BodyShort>
+
             <Controller
               control={control}
               name="incomeLast12Months"
@@ -262,7 +268,10 @@ export function DagpengerKalkulator() {
                   className={styles.textField}
                   customInput={TextField}
                   error={error?.message}
-                  label={incomeQuestion?.label}
+                  label=""
+                  description={`${formatDate(incomeLast12MonthsPeriod.start)} - ${formatDate(
+                    incomeLast12MonthsPeriod.end
+                  )}`}
                   suffix={locale === "en" ? " NOK" : " kr"}
                 />
               )}
@@ -272,7 +281,7 @@ export function DagpengerKalkulator() {
         {watchIncomePeriod === "36" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
-              {incomeQuestion?.label.toString().replace("12", "36")}
+              {selectIncomePeriodQuestion.option2title}
             </BodyShort>
 
             {incomeLast36MonthsPeriodList.map((period, index) => (
@@ -301,7 +310,7 @@ export function DagpengerKalkulator() {
                     customInput={TextField}
                     error={error?.message}
                     label="" // Todo: Sjekke om vi kan gjøre sånn
-                    description={`${formattDate(period.start)} - ${formattDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
+                    description={`${formatDate(period.start)} - ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
                     suffix={locale === "en" ? " NOK" : " kr"}
                   />
                 )}
