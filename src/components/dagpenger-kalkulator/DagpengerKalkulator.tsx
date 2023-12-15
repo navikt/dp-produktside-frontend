@@ -24,8 +24,8 @@ import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
-import { toKR } from "./utils";
-import { getYear, subYears } from "date-fns";
+import { getMonthsToSubtract, toKR } from "./utils";
+import { getYear, subMonths, subYears } from "date-fns";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -75,17 +75,25 @@ export function DagpengerKalkulator() {
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
 
-  const thisYear = getYear(new Date());
-  const desemberThisYear = new Date(thisYear, 11, 1);
+  const today = new Date();
+  const monthsToSubtract = getMonthsToSubtract(new Date());
+  const lastMonthWithPay = subMonths(today, monthsToSubtract);
 
-  // Todo: Denne skal være litt mer komplisert, sjekk reglene
   const incomeLast36MonthsPeriodList: Period[] = [
-    { name: "incomeLast36MonthsThisYear", start: subYears(desemberThisYear, 1), end: desemberThisYear },
-    { name: "incomeLast36MonthsLastYear", start: subYears(desemberThisYear, 2), end: subYears(desemberThisYear, 1) },
-    { name: "incomeLast36MonthsTwoYearsAgo", start: subYears(desemberThisYear, 3), end: subYears(desemberThisYear, 2) },
+    { name: "incomeLast36MonthsThisYear", start: subMonths(lastMonthWithPay, 11), end: lastMonthWithPay },
+    {
+      name: "incomeLast36MonthsLastYear",
+      start: subMonths(lastMonthWithPay, 11 + 12),
+      end: subMonths(lastMonthWithPay, 12),
+    },
+    {
+      name: "incomeLast36MonthsTwoYearsAgo",
+      start: subMonths(lastMonthWithPay, 12 * 2 + 11),
+      end: subMonths(lastMonthWithPay, 2 * 12),
+    },
   ];
 
-  const incomeLast12MonthsPeriod = { start: subYears(desemberThisYear, 1), end: desemberThisYear };
+  const incomeLast12MonthsPeriod = { start: subMonths(lastMonthWithPay, 11), end: lastMonthWithPay };
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
     <option value={i + 1} key={i + 1}>
@@ -190,7 +198,6 @@ export function DagpengerKalkulator() {
   function formatDate(date: Date) {
     const options: Intl.DateTimeFormatOptions = {
       month: "long",
-      day: "numeric",
       year: "numeric",
     };
 

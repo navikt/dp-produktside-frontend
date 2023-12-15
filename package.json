@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check-updates": "ncu -i --format group"
+    "check-updates": "ncu -i --format group",
+    "test": "vitest"
   },
   "dependencies": {
     "@navikt/ds-css": "^5.10.1",
@@ -38,6 +39,7 @@
     "@types/lodash": "^4.14.201",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "8.53.0",
     "eslint-config-next": "^13.5.4",
     "eslint-config-prettier": "^9.0.0",
@@ -45,7 +47,8 @@
     "lint-staged": "^14.0.1",
     "npm-check-updates": "^16.14.6",
     "prettier": "^2.8.8",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "vitest": "^1.0.4"
   },
   "prettier": {
     "printWidth": 120
