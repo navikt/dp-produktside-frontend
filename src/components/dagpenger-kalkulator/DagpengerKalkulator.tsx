@@ -124,8 +124,14 @@ export function DagpengerKalkulator() {
     });
   }
 
+  function wageCap6G(amount: number): number {
+    return Math.min(amount, 6 * gValue);
+  }
+
   const incomeLast36Months =
-    watchIncomeLast36MonthsThisYear + watchIncomeLast36MonthsLastYear + watchIncomeLast36MonthsTwoYearsAgo;
+    wageCap6G(watchIncomeLast36MonthsThisYear) +
+    wageCap6G(watchIncomeLast36MonthsLastYear) +
+    wageCap6G(watchIncomeLast36MonthsTwoYearsAgo);
   const totalIncome = watchIncomePeriod === "12" ? watchIncomeLast12Months : incomeLast36Months;
   const minumumIncomeBasedOnPeriodeLength = watchIncomePeriod === "12" ? 1.5 : 3;
   const hasNotEnoughIncome = totalIncome < minumumIncomeBasedOnPeriodeLength * gValue;
