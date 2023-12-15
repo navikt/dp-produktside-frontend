@@ -1,6 +1,6 @@
 import { getMonthsToSubtract } from "../../../components/dagpenger-kalkulator/utils";
 
-describe("5. er på hverdag", () => {
+describe("5. er på hverdag (desember 2023)", () => {
   test("Før 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2023-12-01"));
     expect(monthsToSubtract).toBe(2);
@@ -17,7 +17,7 @@ describe("5. er på hverdag", () => {
   });
 });
 
-describe("5. er på lørdag", () => {
+describe("5. er på lørdag (august 2023)", () => {
   test("Dagen før 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2023-08-04"));
     expect(monthsToSubtract).toBe(2);
@@ -28,7 +28,7 @@ describe("5. er på lørdag", () => {
     expect(monthsToSubtract).toBe(2);
   });
 
-  test("Mandag etter 5. hei på deg", () => {
+  test("Mandag etter 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2023-08-06"));
     expect(monthsToSubtract).toBe(2);
   });
@@ -44,7 +44,7 @@ describe("5. er på lørdag", () => {
   });
 });
 
-describe("5. er på søndag", () => {
+describe("5. er på søndag (november 2023)", () => {
   test("Dagen før 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2023-11-04"));
     expect(monthsToSubtract).toBe(2);
@@ -66,7 +66,7 @@ describe("5. er på søndag", () => {
   });
 });
 
-describe("Nytt år", () => {
+describe("Nytt år (januar 2024)", () => {
   test("Dagen før 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2024-01-04"));
     expect(monthsToSubtract).toBe(2);
