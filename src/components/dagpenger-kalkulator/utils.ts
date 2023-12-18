@@ -1,4 +1,4 @@
-import { subMonths } from "date-fns";
+import { getYear } from "date-fns";
 
 export function toKR(kr: number, locale?: string) {
   if (locale === "en") {
@@ -27,4 +27,11 @@ export function getMonthsToSubtract(dateObject: Date): number {
   }
 
   return 1;
+}
+
+export function getBarneTillegg(date: Date) {
+  // Barnetillegg per 2023 er 35 kr.
+  // Det skal økes 1 kr per dag per barn fra 1.januar.
+  // f.eks 2023 - 1998 = 35
+  return getYear(date) - 1988;
 }

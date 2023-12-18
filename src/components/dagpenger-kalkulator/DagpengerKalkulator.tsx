@@ -24,8 +24,9 @@ import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
-import { getMonthsToSubtract, toKR } from "./utils";
-import { getYear, subMonths, subYears } from "date-fns";
+import { getBarneTillegg, getMonthsToSubtract, toKR } from "./utils";
+import { getYear, subMonths } from "date-fns";
+import classNames from "classnames";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -138,21 +139,16 @@ export function DagpengerKalkulator() {
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
-    ({ _type }) => _type === "hasChildrenQuestion"
+    ({ _type }) => _type === "hasChildrenQuestion",
   ) as HasChildrenQuestion;
   const numberOfChildrenQuestion = calculator.questions.find(
-    ({ _type }) => _type === "numberOfChildrenQuestion"
+    ({ _type }) => _type === "numberOfChildrenQuestion",
   ) as NumberOfChildrenQuestion;
   const selectIncomePeriodQuestion = calculator.questions.find(
-    ({ _type }) => _type === "incomePeriodQuestion"
+    ({ _type }) => _type === "incomePeriodQuestion",
   ) as IncomePeriodQuestion;
 
-  // Barnetillegg per 2023 er 35 kr.
-  // Det skal økes 1 kr per dag per barn fra 1.januar.
-  // f.eks 2023 - 1998 = 35
-  //       2024 - 1998 = 36
-  //       2025 - 1998 = 37
-  const barnetillegg = getYear(new Date()) - 1988;
+  const barnetillegg = getBarneTillegg(new Date());
   const numberOfChildren = watchNumberOfChildren ?? 0;
   const mellom0og6g = Math.max(0, Math.min(totalIncome, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
@@ -278,12 +274,11 @@ export function DagpengerKalkulator() {
                   type="text"
                   inputMode="numeric"
                   size="medium"
-                  className={styles.textField}
+                  className={classNames(styles.textField, "navds-form-field--custom")}
                   customInput={TextField}
                   error={error?.message}
-                  label=""
-                  description={`${formatDate(incomeLast12MonthsPeriod.start)} - ${formatDate(
-                    incomeLast12MonthsPeriod.end
+                  label={`Fra ${formatDate(incomeLast12MonthsPeriod.start)} til ${formatDate(
+                    incomeLast12MonthsPeriod.end,
                   )}`}
                   suffix={locale === "en" ? " NOK" : " kr"}
                 />
@@ -305,28 +300,33 @@ export function DagpengerKalkulator() {
                 rules={{
                   required: incomeQuestion?.errorMessage,
                 }}
-                render={({ field: { onChange, name, value }, fieldState: { error } }) => (
-                  <NumericFormat
-                    name={name}
-                    value={value}
-                    maxLength={14}
-                    allowNegative={false}
-                    decimalScale={0}
-                    thousandSeparator=" "
-                    onValueChange={(values) => {
-                      onChange(values.floatValue as number);
-                    }}
-                    type="text"
-                    inputMode="numeric"
-                    size="medium"
-                    className={styles.textField}
-                    customInput={TextField}
-                    error={error?.message}
-                    label="" // Todo: Sjekke om vi kan gjøre sånn
-                    description={`${formatDate(period.start)} - ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
-                    suffix={locale === "en" ? " NOK" : " kr"}
-                  />
-                )}
+                render={({ field: { onChange, name, value }, fieldState: { error } }) => {
+                  const fromLabel = selectIncomePeriodQuestion?.IncomePeriodFromLabel;
+                  const toLabel = selectIncomePeriodQuestion?.IncomePeriodToLabel;
+                  const inputLabel = `${fromLabel} ${formatDate(period.start)} ${toLabel} ${formatDate(period.end)}`;
+
+                  return (
+                    <NumericFormat
+                      name={name}
+                      value={value}
+                      maxLength={14}
+                      allowNegative={false}
+                      decimalScale={0}
+                      thousandSeparator=" "
+                      onValueChange={(values) => {
+                        onChange(values.floatValue as number);
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      size="medium"
+                      className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
+                      customInput={TextField}
+                      error={error?.message}
+                      label={inputLabel}
+                      suffix={locale === "en" ? " NOK" : " kr"}
+                    />
+                  );
+                }}
               />
             ))}
           </div>
@@ -334,7 +334,6 @@ export function DagpengerKalkulator() {
 
         <PortableTextContent value={selectIncomePeriodQuestion?.description2} />
 
-        {/* <PortableTextContent value={incomeQuestion?.description} /> */}
         <Controller
           control={control}
           name="hasChildren"

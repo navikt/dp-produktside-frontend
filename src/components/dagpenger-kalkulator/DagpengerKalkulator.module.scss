@@ -51,6 +51,19 @@ $common-input-max-width: common.px-to-rem(140px);
         width: auto;
         max-width: $common-input-max-width;
       }
+
+      label {
+        max-width: 170px;
+        color: var(--a-text-subtle);
+        font-size: var(--a-font-size-large);
+        font-weight: var(--a-font-weight-regular);
+        letter-spacing: 0;
+        line-height: var(--a-font-line-height-large);
+      }
+    }
+
+    .textFeild36 {
+      margin-bottom: 1.75rem;
     }
 
     .lastThirySixMonthPeriodContainer {

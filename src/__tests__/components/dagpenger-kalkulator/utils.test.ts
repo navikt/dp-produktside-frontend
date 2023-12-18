@@ -1,4 +1,4 @@
-import { getMonthsToSubtract } from "../../../components/dagpenger-kalkulator/utils";
+import { getBarneTillegg, getMonthsToSubtract } from "../../../components/dagpenger-kalkulator/utils";
 
 describe("5. er på hverdag (desember 2023)", () => {
   test("Før 5.", () => {
@@ -80,5 +80,22 @@ describe("Nytt år (januar 2024)", () => {
   test("Lørdag etter 5.", () => {
     const monthsToSubtract = getMonthsToSubtract(new Date("2024-01-06"));
     expect(monthsToSubtract).toBe(1);
+  });
+});
+
+describe("Hent barnetillegg", () => {
+  test("Barnetillegg for 2023 er 35kr", () => {
+    const barnetillegg = getBarneTillegg(new Date("2023-01-01"));
+    expect(barnetillegg).toBe(35);
+  });
+
+  test("Barnetillegg for 2024 er 35kr", () => {
+    const barnetillegg = getBarneTillegg(new Date("2024-01-01"));
+    expect(barnetillegg).toBe(36);
+  });
+
+  test("Barnetillegg for 2025 er 35kr", () => {
+    const barnetillegg = getBarneTillegg(new Date("2025-01-01"));
+    expect(barnetillegg).toBe(37);
   });
 });
