@@ -45,6 +45,20 @@ $common-input-max-width: common.px-to-rem(140px);
       flex-direction: row;
     }
 
+    .inputContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    .singleInputContainer {
+      --label-margin-bottom: 0.1rem;
+    }
+
+    .multipleInputContainer {
+      --label-margin-bottom: 0.75rem;
+
+    }
+
     .textField {
       margin-bottom: 0.625rem;
 

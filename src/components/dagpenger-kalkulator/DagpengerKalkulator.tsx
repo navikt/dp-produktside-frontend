@@ -254,8 +254,8 @@ export function DagpengerKalkulator() {
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion.option1title}
             </BodyShort>
-            <div style={{ display: "flex", alignItems: "center", "--label-margin-bottom": "0rem" }}>
-              <Label>
+            <div className={classNames(styles.inputContainer, styles.singleInputContainer)}>
+              <Label size="small">
                 <div>
                   {
                     // @ts-ignore
@@ -306,11 +306,8 @@ export function DagpengerKalkulator() {
               {selectIncomePeriodQuestion.option2title}
             </BodyShort>
             {incomeLast36MonthsPeriodList.map((period, index) => (
-              <div
-                style={{ display: "flex", alignItems: "center", "--label-margin-bottom": "0.75rem" }}
-                key={period.name}
-              >
-                <Label>
+              <div className={classNames(styles.inputContainer, styles.multipleInputContainer)} key={period.name}>
+                <Label size="small">
                   <div>
                     {
                       // @ts-ignore
