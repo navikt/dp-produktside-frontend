@@ -254,53 +254,24 @@ export function DagpengerKalkulator() {
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion.option1title}
             </BodyShort>
-
-            <Controller
-              control={control}
-              name="incomeLast12Months"
-              rules={{
-                required: incomeQuestion?.errorMessage,
-              }}
-              render={({ field: { onChange, name, value }, fieldState: { error } }) => (
-                <NumericFormat
-                  name={name}
-                  value={value}
-                  maxLength={14}
-                  allowNegative={false}
-                  decimalScale={0}
-                  thousandSeparator=" "
-                  onValueChange={(values) => {
-                    onChange(values.floatValue as number);
-                  }}
-                  type="text"
-                  inputMode="numeric"
-                  size="medium"
-                  className={classNames(styles.textField, "navds-form-field--custom")}
-                  customInput={TextField}
-                  error={error?.message}
-                  label=""
-                  // @ts-ignore
-                  description={`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(
-                    incomeLast12MonthsPeriod.start,
+            <div style={{ display: "flex", alignItems: "center", "--label-margin-bottom": "0rem" }}>
+              <Label>
+                <div>
+                  {
                     // @ts-ignore
-                  )} ${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(incomeLast12MonthsPeriod.end)}`}
-                  suffix={locale === "en" ? " NOK" : " kr"}
-                />
-              )}
-            />
-          </div>
-        )}
-        {watchIncomePeriod === "36" && (
-          <div className={styles.lastThirySixMonthPeriodContainer}>
-            <BodyShort weight="semibold" spacing>
-              {selectIncomePeriodQuestion.option2title}
-            </BodyShort>
-
-            {incomeLast36MonthsPeriodList.map((period, index) => (
+                    `${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(incomeLast12MonthsPeriod.start)}`
+                  }
+                </div>
+                <div>
+                  {
+                    // @ts-ignore
+                    `${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(incomeLast12MonthsPeriod.end)}`
+                  }
+                </div>
+              </Label>
               <Controller
-                key={index}
                 control={control}
-                name={period.name}
+                name="incomeLast12Months"
                 rules={{
                   required: incomeQuestion?.errorMessage,
                 }}
@@ -318,19 +289,71 @@ export function DagpengerKalkulator() {
                     type="text"
                     inputMode="numeric"
                     size="medium"
-                    className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
+                    className={classNames(styles.textField, "navds-form-field--custom")}
                     customInput={TextField}
                     error={error?.message}
-                    label="" // Todo: Sjekke om vi kan gjøre sånn
-                    // @ts-ignore
-                    description={`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(
-                      period.start,
-                      // @ts-ignore
-                    )} ${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
+                    label="" // TODO: Sjekk om vi kan gjøre det sånn
                     suffix={locale === "en" ? " NOK" : " kr"}
                   />
                 )}
               />
+            </div>
+          </div>
+        )}
+        {watchIncomePeriod === "36" && (
+          <div className={styles.lastThirySixMonthPeriodContainer}>
+            <BodyShort weight="semibold" spacing>
+              {selectIncomePeriodQuestion.option2title}
+            </BodyShort>
+            {incomeLast36MonthsPeriodList.map((period, index) => (
+              <div
+                style={{ display: "flex", alignItems: "center", "--label-margin-bottom": "0.75rem" }}
+                key={period.name}
+              >
+                <Label>
+                  <div>
+                    {
+                      // @ts-ignore
+                      `${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(period.start)}`
+                    }
+                  </div>
+                  <div>
+                    {
+                      // @ts-ignore
+                      `${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(period.end)}`
+                    }
+                  </div>
+                </Label>
+                <Controller
+                  key={index}
+                  control={control}
+                  name={period.name}
+                  rules={{
+                    required: incomeQuestion?.errorMessage,
+                  }}
+                  render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+                    <NumericFormat
+                      name={name}
+                      value={value}
+                      maxLength={14}
+                      allowNegative={false}
+                      decimalScale={0}
+                      thousandSeparator=" "
+                      onValueChange={(values) => {
+                        onChange(values.floatValue as number);
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      size="medium"
+                      className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
+                      customInput={TextField}
+                      error={error?.message}
+                      label="" // TODO: Sjekk om vi kan gjøre det sånn
+                      suffix={locale === "en" ? " NOK" : " kr"}
+                    />
+                  )}
+                />
+              </div>
             ))}
           </div>
         )}
