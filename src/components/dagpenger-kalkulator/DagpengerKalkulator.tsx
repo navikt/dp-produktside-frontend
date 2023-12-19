@@ -322,9 +322,11 @@ export function DagpengerKalkulator() {
                     customInput={TextField}
                     error={error?.message}
                     label="" // Todo: Sjekke om vi kan gjøre sånn
-                    description={`${getCalculatorTextBlock("from")} ${formatDate(
+                    // @ts-ignore
+                    description={`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(
                       period.start,
-                    )} ${getCalculatorTextBlock("to")} ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
+                      // @ts-ignore
+                    )} ${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
                     suffix={locale === "en" ? " NOK" : " kr"}
                   />
                 )}
