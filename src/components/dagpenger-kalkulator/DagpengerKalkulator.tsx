@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
+import { toPlainText } from "@portabletext/react";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { commonComponents } from "components/portable-text-content/components";
 import { commonMarks } from "components/portable-text-content/marks/marks";
@@ -24,9 +25,14 @@ import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
+<<<<<<< HEAD
 import { getBarneTillegg, getMonthsToSubtract, toKR } from "./utils";
 import { getYear, subMonths } from "date-fns";
 import classNames from "classnames";
+=======
+import { getMonthsToSubtract, toKR } from "./utils";
+import { getYear, subMonths } from "date-fns";
+>>>>>>> a0e7140 (Legg til tekstfelt for intro, til og fra)
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";
@@ -221,7 +227,7 @@ export function DagpengerKalkulator() {
           </svg>
         </div>
         <BodyShort spacing>
-          Fyll inn inntekten din for å se om du har rett til dagpenger. Beregningen er kun veiledende.
+          <PortableTextCalculator value={getCalculatorTextBlock("intro")} />
         </BodyShort>
         <Controller
           defaultValue={"12"}
@@ -277,9 +283,10 @@ export function DagpengerKalkulator() {
                   className={classNames(styles.textField, "navds-form-field--custom")}
                   customInput={TextField}
                   error={error?.message}
-                  label={`Fra ${formatDate(incomeLast12MonthsPeriod.start)} til ${formatDate(
-                    incomeLast12MonthsPeriod.end,
-                  )}`}
+                  label=""
+                  description={`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(
+                    incomeLast12MonthsPeriod.start,
+                  )} ${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(incomeLast12MonthsPeriod.end)}`}
                   suffix={locale === "en" ? " NOK" : " kr"}
                 />
               )}
@@ -300,33 +307,30 @@ export function DagpengerKalkulator() {
                 rules={{
                   required: incomeQuestion?.errorMessage,
                 }}
-                render={({ field: { onChange, name, value }, fieldState: { error } }) => {
-                  const fromLabel = selectIncomePeriodQuestion?.IncomePeriodFromLabel;
-                  const toLabel = selectIncomePeriodQuestion?.IncomePeriodToLabel;
-                  const inputLabel = `${fromLabel} ${formatDate(period.start)} ${toLabel} ${formatDate(period.end)}`;
-
-                  return (
-                    <NumericFormat
-                      name={name}
-                      value={value}
-                      maxLength={14}
-                      allowNegative={false}
-                      decimalScale={0}
-                      thousandSeparator=" "
-                      onValueChange={(values) => {
-                        onChange(values.floatValue as number);
-                      }}
-                      type="text"
-                      inputMode="numeric"
-                      size="medium"
-                      className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
-                      customInput={TextField}
-                      error={error?.message}
-                      label={inputLabel}
-                      suffix={locale === "en" ? " NOK" : " kr"}
-                    />
-                  );
-                }}
+                render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+                  <NumericFormat
+                    name={name}
+                    value={value}
+                    maxLength={14}
+                    allowNegative={false}
+                    decimalScale={0}
+                    thousandSeparator=" "
+                    onValueChange={(values) => {
+                      onChange(values.floatValue as number);
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    size="medium"
+                    className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
+                    customInput={TextField}
+                    error={error?.message}
+                    label="" // Todo: Sjekke om vi kan gjøre sånn
+                    description={`${getCalculatorTextBlock("from")} ${formatDate(
+                      period.start,
+                    )} ${getCalculatorTextBlock("to")} ${formatDate(period.end)}`} // Todo: Det skulle være Fra xxx til xxx
+                    suffix={locale === "en" ? " NOK" : " kr"}
+                  />
+                )}
               />
             ))}
           </div>
