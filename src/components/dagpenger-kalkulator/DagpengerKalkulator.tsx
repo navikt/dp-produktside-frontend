@@ -25,14 +25,9 @@ import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
-<<<<<<< HEAD
 import { getBarneTillegg, getMonthsToSubtract, toKR } from "./utils";
-import { getYear, subMonths } from "date-fns";
 import classNames from "classnames";
-=======
-import { getMonthsToSubtract, toKR } from "./utils";
-import { getYear, subMonths } from "date-fns";
->>>>>>> a0e7140 (Legg til tekstfelt for intro, til og fra)
+import { subMonths } from "date-fns";
 
 function convertStringToBoolean(value?: string): boolean {
   return value === "true";

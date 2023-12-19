@@ -6,12 +6,3 @@ html,
 body {
   scroll-behavior: smooth;
 }
-
-// Overstyrer input label fra Aksel
-.navds-form-field--custom {
-  grid-template-columns: 17ch 1fr;
-}
-
-.navds-form-field--custom .navds-form-field__error {
-  grid-column: 1/-1;
-}
