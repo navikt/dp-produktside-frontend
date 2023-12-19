@@ -279,8 +279,10 @@ export function DagpengerKalkulator() {
                   customInput={TextField}
                   error={error?.message}
                   label=""
+                  // @ts-ignore
                   description={`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(
                     incomeLast12MonthsPeriod.start,
+                    // @ts-ignore
                   )} ${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(incomeLast12MonthsPeriod.end)}`}
                   suffix={locale === "en" ? " NOK" : " kr"}
                 />
