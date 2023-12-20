@@ -1,5 +1,5 @@
 dekoratorMiljo: dev
-sanityDataset: development
+sanityDataset: production
 ingresses: |
   ingresses:
     - https://arbeid.ekstern.dev.nav.no/dagpenger($|\/$)
