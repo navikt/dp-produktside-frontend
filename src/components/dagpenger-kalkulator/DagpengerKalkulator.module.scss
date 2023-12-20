@@ -3,6 +3,7 @@
 $common-border-width: common.px-to-rem(4px);
 $common-border-radius: common.px-to-rem(8px);
 $common-input-max-width: common.px-to-rem(140px);
+
 .container {
   display: flex;
   flex-direction: column;
@@ -44,14 +45,43 @@ $common-input-max-width: common.px-to-rem(140px);
       flex-direction: row;
     }
 
+    .inputContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    .singleInputContainer {
+      --label-margin-bottom: 0.1rem;
+    }
+
+    .multipleInputContainer {
+      --label-margin-bottom: 0.75rem;
+    }
+
     .textField {
-      margin-top: 1rem;
       margin-bottom: 0.625rem;
 
       > :global(.navds-text-field__input) {
         width: auto;
         max-width: $common-input-max-width;
       }
+
+      label {
+        max-width: 170px;
+        color: var(--a-text-subtle);
+        font-size: var(--a-font-size-large);
+        font-weight: var(--a-font-weight-regular);
+        letter-spacing: 0;
+        line-height: var(--a-font-line-height-large);
+      }
+    }
+
+    .textFeild36 {
+      margin-bottom: 1.75rem;
+    }
+
+    .lastThirySixMonthPeriodContainer {
+      margin-top: 1rem;
     }
 
     .radioGroup {
@@ -79,5 +109,4 @@ $common-input-max-width: common.px-to-rem(140px);
   .resultTablesContainer {
     scroll-margin-top: 0.75rem;
   }
-
 }

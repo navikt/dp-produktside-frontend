@@ -15,6 +15,7 @@ export interface IncomeQuestion {
   description: PortabelTextBlockType;
   errorMessage: string;
   label: string;
+  id: string;
 }
 
 export interface HasChildrenQuestion {
@@ -35,6 +36,19 @@ export interface NumberOfChildrenQuestion {
   label: string;
 }
 
+export interface IncomePeriodQuestion {
+  _key: string;
+  _type: string;
+  description1: PortabelTextBlockType;
+  description2: PortabelTextBlockType;
+  errorMessage: string;
+  label: string;
+  radioButtonLabel1: string;
+  option1title: string;
+  radioButtonLabel2: string;
+  option2title: string;
+}
+
 interface CalculationListItem {
   term: string;
   description: PortabelTextBlockType;
@@ -50,6 +64,6 @@ export interface CalculatorSchema {
   bottomContentOnSufficientIncome: PortabelTextBlockType;
   calculationList: CalculationListItem[];
   title: string;
-  questions: [IncomeQuestion, HasChildrenQuestion, NumberOfChildrenQuestion];
+  questions: [IncomeQuestion, HasChildrenQuestion, NumberOfChildrenQuestion, IncomePeriodQuestion];
   texts: CalculatorTextElement[];
 }
