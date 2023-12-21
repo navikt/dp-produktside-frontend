@@ -130,13 +130,24 @@ export function DagpengerKalkulator() {
     return Math.min(amount, 6 * gValue);
   }
 
-  const incomeLast36Months =
-    wageCap6G(watchIncomeLast36MonthsThisYear) +
-    wageCap6G(watchIncomeLast36MonthsLastYear) +
-    wageCap6G(watchIncomeLast36MonthsTwoYearsAgo);
-  const totalIncome = watchIncomePeriod === "12" ? watchIncomeLast12Months : incomeLast36Months;
+  function getTotaltIncomeLast36Months() {
+    return watchIncomeLast36MonthsThisYear + watchIncomeLast36MonthsLastYear + watchIncomeLast36MonthsTwoYearsAgo;
+  }
+
+  function getAvrageIncomeLast36MonthsWithWageCap6G() {
+    return (
+      (wageCap6G(watchIncomeLast36MonthsThisYear) +
+        wageCap6G(watchIncomeLast36MonthsLastYear) +
+        wageCap6G(watchIncomeLast36MonthsTwoYearsAgo)) /
+      3
+    );
+  }
+
+  const income = watchIncomePeriod === "12" ? watchIncomeLast12Months : getTotaltIncomeLast36Months();
+  const incomeForCalculation =
+    watchIncomePeriod === "12" ? watchIncomeLast12Months : getAvrageIncomeLast36MonthsWithWageCap6G();
   const minumumIncomeBasedOnPeriodeLength = watchIncomePeriod === "12" ? 1.5 : 3;
-  const hasNotEnoughIncome = totalIncome < minumumIncomeBasedOnPeriodeLength * gValue;
+  const hasNotEnoughIncome = income < minumumIncomeBasedOnPeriodeLength * gValue;
 
   const incomeQuestion = calculator.questions.find(({ _type }) => _type === "incomeQuestion") as IncomeQuestion;
   const hasChildrenQuestion = calculator.questions.find(
@@ -151,9 +162,9 @@ export function DagpengerKalkulator() {
 
   const barnetillegg = getBarneTillegg(new Date());
   const numberOfChildren = watchNumberOfChildren ?? 0;
-  const mellom0og6g = Math.max(0, Math.min(totalIncome, 6 * gValue));
+  const mellom0og6g = Math.max(0, Math.min(incomeForCalculation, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
-  const dagpengerPer2Week = resultatMellom0og6G / (52 / 2);
+  const dagpengerPer2Week = (resultatMellom0og6G / 52) * 2;
   const barnetilleggPer2Week = barnetillegg * 2 * 5 * numberOfChildren;
   const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
 
