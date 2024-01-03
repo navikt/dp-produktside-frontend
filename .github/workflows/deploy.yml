@@ -2,6 +2,10 @@ name: Build and deploy
 
 on: push
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   install:
     runs-on: ubuntu-latest
@@ -77,9 +81,6 @@ jobs:
   upload-cdn:
     needs: [ build ]
     runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
     steps:
       - uses: actions/cache@v3
         id: restore-build
