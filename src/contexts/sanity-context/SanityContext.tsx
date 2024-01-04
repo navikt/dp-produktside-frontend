@@ -65,7 +65,7 @@ export function useSanityContext() {
     return element.textValue;
   }
 
-  function getCalculatorTextBlock(id: string) {
+  function getCalculatorTextBlock(id: string): any {
     const calculatorTextId = `calculator.${id}`;
     const element = context?.calculator?.texts?.find(({ textId }) => textId === calculatorTextId);
 

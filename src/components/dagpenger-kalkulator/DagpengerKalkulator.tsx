@@ -263,7 +263,7 @@ export function DagpengerKalkulator() {
         {watchIncomePeriod === "12" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
-              {selectIncomePeriodQuestion.option1title}
+              {selectIncomePeriodQuestion?.option1title}
             </BodyShort>
             <div className={classNames(styles.inputContainer, styles.singleInputContainer)}>
               <Label size="small">
@@ -314,7 +314,7 @@ export function DagpengerKalkulator() {
         {watchIncomePeriod === "36" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
-              {selectIncomePeriodQuestion.option2title}
+              {selectIncomePeriodQuestion?.option2title}
             </BodyShort>
             {incomeLast36MonthsPeriodList.map((period, index) => (
               <div className={classNames(styles.inputContainer, styles.multipleInputContainer)} key={period.name}>
@@ -414,15 +414,8 @@ export function DagpengerKalkulator() {
               <>
                 <NegativeResult
                   title={<PortableTextCalculator value={getCalculatorTextBlock("negative-result-section-title")} />}
-                  resultExplanationDescription1={
-                    <PortableTextCalculator
-                      value={getCalculatorTextBlock("negative-result-explanation-description-1")}
-                    />
-                  }
-                  resultExplanationDescription2={
-                    <PortableTextCalculator
-                      value={getCalculatorTextBlock("negative-result-explanation-description-2")}
-                    />
+                  description={
+                    <PortableTextContent value={getCalculatorTextBlock("negative-result-explanation-description-1")} />
                   }
                 />
 
