@@ -18,7 +18,7 @@ interface Props {
 
 export function Header({ title, leftSubtitle, rightSubtitle, lastUpdated }: Props) {
   return (
-    <header className={styles.header}>
+    <div className={styles.header}>
       <div className={styles.illustration} aria-hidden="true" role="presentation">
         <Image className={styles.svgIcon} src={svgIcon} alt="Ikon for dagpenger" sizes="100vw" />
       </div>
@@ -46,6 +46,6 @@ export function Header({ title, leftSubtitle, rightSubtitle, lastUpdated }: Prop
           )}
         </div>
       </div>
-    </header>
+    </div>
   );
 }
