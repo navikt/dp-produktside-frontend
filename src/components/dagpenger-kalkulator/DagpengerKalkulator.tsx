@@ -49,8 +49,8 @@ interface FormValues {
 
 interface Period {
   name: "incomeLast36MonthsThisYear" | "incomeLast36MonthsLastYear" | "incomeLast36MonthsTwoYearsAgo";
-  start: Date;
-  end: Date;
+  from: Date;
+  to: Date;
 }
 
 export function DagpengerKalkulator() {
@@ -82,20 +82,20 @@ export function DagpengerKalkulator() {
   const lastMonthWithPay = subMonths(today, monthsToSubtract);
 
   const incomeLast36MonthsPeriodList: Period[] = [
-    { name: "incomeLast36MonthsThisYear", start: subMonths(lastMonthWithPay, 11), end: lastMonthWithPay },
+    { name: "incomeLast36MonthsThisYear", from: subMonths(lastMonthWithPay, 11), to: lastMonthWithPay },
     {
       name: "incomeLast36MonthsLastYear",
-      start: subMonths(lastMonthWithPay, 11 + 12),
-      end: subMonths(lastMonthWithPay, 12),
+      from: subMonths(lastMonthWithPay, 11 + 12),
+      to: subMonths(lastMonthWithPay, 12),
     },
     {
       name: "incomeLast36MonthsTwoYearsAgo",
-      start: subMonths(lastMonthWithPay, 12 * 2 + 11),
-      end: subMonths(lastMonthWithPay, 2 * 12),
+      from: subMonths(lastMonthWithPay, 12 * 2 + 11),
+      to: subMonths(lastMonthWithPay, 2 * 12),
     },
   ];
 
-  const incomeLast12MonthsPeriod = { start: subMonths(lastMonthWithPay, 11), end: lastMonthWithPay };
+  const incomeLast12MonthsPeriod = { from: subMonths(lastMonthWithPay, 11), to: lastMonthWithPay };
 
   const childrenOptions = Array.from({ length: 10 }, (_, i) => (
     <option value={i + 1} key={i + 1}>
@@ -218,6 +218,21 @@ export function DagpengerKalkulator() {
     return new Date(date).toLocaleDateString(locale, options);
   }
 
+  function getFromAndToDateHtmlLabel(fromDate: Date, toDate: Date) {
+    return (
+      <>
+        <div>{`${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(fromDate)}`}</div>
+        <div>{`${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(toDate)}`}</div>
+      </>
+    );
+  }
+
+  function getFromAndToDateScreenReaderLabel(fromDate: Date, toDate: Date) {
+    const fromDateText = `${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(fromDate)}`;
+    const toDateText = `${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(toDate)}`;
+    return `${fromDateText} ${toDateText}`;
+  }
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={styles.calculatorFieldset}>
@@ -263,22 +278,11 @@ export function DagpengerKalkulator() {
         {watchIncomePeriod === "12" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
-              {selectIncomePeriodQuestion.option1title}
+              {selectIncomePeriodQuestion?.option1title}
             </BodyShort>
             <div className={classNames(styles.inputContainer, styles.singleInputContainer)}>
-              <Label size="small">
-                <div>
-                  {
-                    // @ts-ignore
-                    `${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(incomeLast12MonthsPeriod.start)}`
-                  }
-                </div>
-                <div>
-                  {
-                    // @ts-ignore
-                    `${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(incomeLast12MonthsPeriod.end)}`
-                  }
-                </div>
+              <Label size="small" aria-hidden>
+                {getFromAndToDateHtmlLabel(incomeLast12MonthsPeriod.from, incomeLast12MonthsPeriod.to)}
               </Label>
               <Controller
                 control={control}
@@ -303,8 +307,13 @@ export function DagpengerKalkulator() {
                     className={classNames(styles.textField, "navds-form-field--custom")}
                     customInput={TextField}
                     error={error?.message}
-                    label="" // TODO: Sjekk om vi kan gjøre det sånn
+                    hideLabel
+                    label={getFromAndToDateScreenReaderLabel(
+                      incomeLast12MonthsPeriod.from,
+                      incomeLast12MonthsPeriod.to,
+                    )}
                     suffix={locale === "en" ? " NOK" : " kr"}
+                    autoComplete="off"
                   />
                 )}
               />
@@ -314,23 +323,12 @@ export function DagpengerKalkulator() {
         {watchIncomePeriod === "36" && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
-              {selectIncomePeriodQuestion.option2title}
+              {selectIncomePeriodQuestion?.option2title}
             </BodyShort>
             {incomeLast36MonthsPeriodList.map((period, index) => (
               <div className={classNames(styles.inputContainer, styles.multipleInputContainer)} key={period.name}>
-                <Label size="small">
-                  <div>
-                    {
-                      // @ts-ignore
-                      `${toPlainText(getCalculatorTextBlock("from"))} ${formatDate(period.start)}`
-                    }
-                  </div>
-                  <div>
-                    {
-                      // @ts-ignore
-                      `${toPlainText(getCalculatorTextBlock("to"))} ${formatDate(period.end)}`
-                    }
-                  </div>
+                <Label size="small" aria-hidden>
+                  {getFromAndToDateHtmlLabel(period.from, period.to)}
                 </Label>
                 <Controller
                   key={index}
@@ -356,8 +354,10 @@ export function DagpengerKalkulator() {
                       className={classNames(styles.textField, styles.textFeild36, "navds-form-field--custom")}
                       customInput={TextField}
                       error={error?.message}
-                      label="" // TODO: Sjekk om vi kan gjøre det sånn
+                      label={getFromAndToDateScreenReaderLabel(period.from, period.to)}
+                      hideLabel
                       suffix={locale === "en" ? " NOK" : " kr"}
+                      autoComplete="off"
                     />
                   )}
                 />
@@ -414,15 +414,8 @@ export function DagpengerKalkulator() {
               <>
                 <NegativeResult
                   title={<PortableTextCalculator value={getCalculatorTextBlock("negative-result-section-title")} />}
-                  resultExplanationDescription1={
-                    <PortableTextCalculator
-                      value={getCalculatorTextBlock("negative-result-explanation-description-1")}
-                    />
-                  }
-                  resultExplanationDescription2={
-                    <PortableTextCalculator
-                      value={getCalculatorTextBlock("negative-result-explanation-description-2")}
-                    />
+                  description={
+                    <PortableTextContent value={getCalculatorTextBlock("negative-result-explanation-description-1")} />
                   }
                 />
 
