@@ -56,7 +56,7 @@ interface Period {
 export function DagpengerKalkulator() {
   const { locale } = useRouter();
   const { calculator, getCalculatorTextBlock } = useSanityContext();
-  const { gValue } = useGrunnbelopContext();
+  const { gValue, barnetilleggValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
   const resultTablesContainerRef = useRef<HTMLDivElement | null>(null);
   const {
@@ -160,12 +160,11 @@ export function DagpengerKalkulator() {
     ({ _type }) => _type === "incomePeriodQuestion",
   ) as IncomePeriodQuestion;
 
-  const barnetillegg = getBarneTillegg(new Date());
   const numberOfChildren = watchNumberOfChildren ?? 0;
   const mellom0og6g = Math.max(0, Math.min(incomeForCalculation, 6 * gValue));
   const resultatMellom0og6G = mellom0og6g * 0.624;
   const dagpengerPer2Week = (resultatMellom0og6G / 52) * 2;
-  const barnetilleggPer2Week = barnetillegg * 2 * 5 * numberOfChildren;
+  const barnetilleggPer2Week = barnetilleggValue * 2 * 5 * numberOfChildren;
   const totalPer2Week = dagpengerPer2Week + barnetilleggPer2Week;
 
   function resolveCalculatorVariable(variable: CalculatorVariables): string {
