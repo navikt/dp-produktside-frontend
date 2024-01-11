@@ -99,3 +99,25 @@ describe("Hent barnetillegg", () => {
     expect(barnetillegg).toBe(37);
   });
 });
+
+describe("Høytider", () => {
+  test("Kristi himmelfart 2027 er 6. mai", () => {
+    const monthsToSubtract = getMonthsToSubtract(new Date("2027-05-06"));
+    expect(monthsToSubtract).toBe(2);
+  });
+
+  test("2. pinsedag 2033 er 6. juni", () => {
+    const monthsToSubtract = getMonthsToSubtract(new Date("2033-06-06"));
+    expect(monthsToSubtract).toBe(2);
+  });
+
+  test("Skjærtorsdag 2034 er 6. april", () => {
+    const monthsToSubtract = getMonthsToSubtract(new Date("2034-04-06"));
+    expect(monthsToSubtract).toBe(2);
+  });
+
+  test("Langfredag 2034 er 7. april", () => {
+    const monthsToSubtract = getMonthsToSubtract(new Date("2034-04-07"));
+    expect(monthsToSubtract).toBe(2);
+  });
+});
