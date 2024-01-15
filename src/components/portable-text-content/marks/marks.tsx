@@ -14,4 +14,7 @@ export const commonMarks: Record<string, PortableTextMarkComponent<any> | undefi
       </Link>
     );
   },
+  anchor: ({ children, value }) => {
+    return <span id={value.slug.current}>{children}</span>;
+  },
 };
