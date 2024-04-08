@@ -3,12 +3,12 @@ import { PortableTextContent } from "components/portable-text-content/PortableTe
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
 import { GrunnbelopData } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { useSanityContext } from "contexts/sanity-context/SanityContext";
+import { max } from "date-fns";
 import { GetStaticPropsContext } from "next";
 import { sanityClient } from "sanity-utils/client";
 import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
-import styles from "./styles.module.css";
 import { convertTimestampToDate, isValidDate } from "utils/dates";
-import { max } from "date-fns";
+import styles from "./styles.module.css";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
@@ -24,9 +24,9 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   };
 }
 
-export default function HistorikkIndex() {
+export default function KalkulatorIndex() {
   const sanityData = useSanityContext();
-  const { header, settings, kortFortalt, seo } = sanityData;
+  const { header, settings, kortFortalt } = sanityData;
 
   /* @ts-ignore */
   const kalkulator = settings?.content?.find((c) => c.iconName === "CalculatorIcon");
