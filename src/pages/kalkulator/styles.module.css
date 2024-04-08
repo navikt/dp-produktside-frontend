@@ -1,0 +1,13 @@
+.layout {
+  margin-top: var(--a-spacing-8);
+  margin-bottom: var(--a-spacing-20);
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  max-width: var(--a-breakpoint-md-down);
+  align-items: center;
+  justify-content: center;
+}
