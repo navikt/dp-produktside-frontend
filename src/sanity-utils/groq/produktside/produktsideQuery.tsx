@@ -6,6 +6,7 @@ const settingsGroq = `{
     ...produktsideSection-> {
        iconName,
        title,
+       key,
        content,
        slug,
        _updatedAt,

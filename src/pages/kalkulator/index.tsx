@@ -29,7 +29,7 @@ export default function KalkulatorIndex() {
   const { header, settings, kortFortalt } = sanityData;
 
   /* @ts-ignore */
-  const kalkulator = settings?.content?.find((c) => c.iconName === "CalculatorIcon");
+  const kalkulator = settings?.content?.find((c) => c.key === "hvor-mye-kan-du-faa");
   const { title, content, slug, iconName } = kalkulator;
 
   const lastUpdatedDates = [
