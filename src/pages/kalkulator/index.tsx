@@ -30,7 +30,8 @@ export default function KalkulatorIndex() {
 
   // console.log(`🔥  :`, sanityData.generalTexts);
 
-  console.group(sanityData);
+  console.log("🔥");
+  console.log(sanityData);
 
   return (
     <main>
