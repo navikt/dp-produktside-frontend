@@ -26,7 +26,7 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 export default function KalkulatorIndex() {
   const sanityData = useSanityContext();
   /* @ts-ignore */
-  const { content, title, subtitle } = sanityData?.calculatorPage;
+  const { title, subtitle } = sanityData?.calculatorPage;
 
   return (
     <main>
@@ -43,7 +43,7 @@ export default function KalkulatorIndex() {
               <Image src={svgIcon} aria-hidden alt="" />
             </div>
           </div>
-          {content && <PortableTextContent value={content} />}
+          <PortableTextContent value={sanityData?.calculatorPage?.content} />
         </div>
       </div>
     </main>
