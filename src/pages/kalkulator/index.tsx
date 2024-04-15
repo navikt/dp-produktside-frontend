@@ -26,14 +26,18 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 export default function KalkulatorIndex() {
   const sanityData = useSanityContext();
   /* @ts-ignore */
-  const { content = [], title = "", subtitle = "" } = sanityData?.calculatorPage;
+  // const { content, title, subtitle } = sanityData?.calculatorPage;
+
+  // console.log(`🔥  :`, sanityData.generalTexts);
+
+  console.group(sanityData);
 
   return (
     <main>
       <div className={styles.layout}>
         <div className={styles.content}>
           <div className={styles.header}>
-            <BodyShort className={styles.subtitle} aria-hidden>
+            {/* <BodyShort className={styles.subtitle} aria-hidden>
               {subtitle}
             </BodyShort>
             <div className={styles.title}>
@@ -41,7 +45,7 @@ export default function KalkulatorIndex() {
                 {title}
               </Heading>
               <Image src={svgIcon} aria-hidden alt="" />
-            </div>
+            </div> */}
           </div>
           <PortableTextContent value={content} />
         </div>
