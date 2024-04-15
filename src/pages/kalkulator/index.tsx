@@ -43,8 +43,7 @@ export default function KalkulatorIndex() {
               <Image src={svgIcon} aria-hidden alt="" />
             </div>
           </div>
-
-          <PortableTextContent value={content} />
+          {content && <PortableTextContent value={content} />}
         </div>
       </div>
     </main>
