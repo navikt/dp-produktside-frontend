@@ -3,11 +3,31 @@
   margin-bottom: var(--a-spacing-20);
   display: flex;
   justify-content: center;
+  background-color: var(--a-white);
 }
 
 .content {
   display: flex;
-  max-width: var(--a-breakpoint-md-down);
-  align-items: center;
-  justify-content: center;
+  padding: 0 var(--a-spacing-4);
+  flex-direction: column;
+  max-width: 600px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--a-spacing-4);
+}
+
+.subtitle {
+  display: flex;
+  color: var(--a-text-subtle);
+  text-transform: uppercase;
+  font-size: var(--a-font-size-small);
+}
+
+@media (min-width: 600px) {
+  .content {
+    padding: 0;
+  }
 }
