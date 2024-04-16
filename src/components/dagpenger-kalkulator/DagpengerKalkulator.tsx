@@ -77,6 +77,8 @@ export function DagpengerKalkulator() {
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
 
+  console.log(`🔥 watchIncomePeriod :`, watchIncomePeriod);
+
   const today = new Date();
   const monthsToSubtract = getMonthsToSubtract(new Date());
   const lastMonthWithPay = subMonths(today, monthsToSubtract);
@@ -279,7 +281,7 @@ export function DagpengerKalkulator() {
 
         <PortableTextContent value={selectIncomePeriodQuestion?.description1} />
 
-        {watchIncomePeriod === "12" && (
+        {(!watchIncomePeriod || watchIncomePeriod === "12") && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion?.option1title}
