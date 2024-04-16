@@ -26,6 +26,25 @@
   font-size: var(--a-font-size-small);
 }
 
+.dagpengerLink {
+  display: flex;
+  flex-direction: row;
+  padding: var(--a-spacing-4);
+  box-shadow: var(--a-shadow-xlarge);
+  border-radius: 5px;
+  text-decoration: none;
+  color: var(--a-text-default);
+}
+
+.dagpengerLink:focus {
+  background-color: var(--a-surface-default);
+  color: var(--a-text-default);
+}
+
+.dagpengerLink:hover {
+  background-color: var(--a-bg-subtle);
+}
+
 @media (min-width: 600px) {
   .content {
     padding: 0;
