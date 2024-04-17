@@ -8,3 +8,5 @@ ingresses: |
     - https://www.nav.no/dagpenger/historikk($|\/$)
     - https://www.nav.no/dagpenger/en/historikk($|\/$)
     - https://www.nav.no/dagpenger/api/history($|\/.*)
+    - https://www.nav.no/dagpenger/kalkulator($|\/$)
+    - https://www.nav.no/dagpenger/en/kalkulator($|\/$)

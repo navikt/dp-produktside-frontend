@@ -54,7 +54,7 @@ interface Period {
 }
 
 export function DagpengerKalkulator() {
-  const { locale } = useRouter();
+  const { locale, pathname } = useRouter();
   const { calculator, getCalculatorTextBlock } = useSanityContext();
   const { gValue, barnetilleggValue } = useGrunnbelopContext();
   const [showResult, setShowResult] = useState<boolean>(false);
@@ -76,6 +76,8 @@ export function DagpengerKalkulator() {
   const hasChildren = convertStringToBoolean(watchHasChildren);
   const skjemanavn = "Kalkulator";
   const skjemaId = "produktside-dagpenger-kalkulator";
+
+  console.log(`🔥 watchIncomePeriod :`, watchIncomePeriod);
 
   const today = new Date();
   const monthsToSubtract = getMonthsToSubtract(new Date());
@@ -235,20 +237,25 @@ export function DagpengerKalkulator() {
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
       <fieldset className={styles.calculatorFieldset}>
-        <legend className={styles.calculatorTitle}>
-          <Image className={styles.calculatorIcon} src={svgIcon} aria-hidden alt="" />
-          <Heading size="medium" level="3">
-            {calculator?.title}
-          </Heading>
-        </legend>
-        <div role="img" className={styles.calculatorDecorativeLine} aria-hidden>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 4" fill="none">
-            <path d="M2 2H280" stroke="#CCE1FF" strokeWidth="4" strokeLinecap="round" />
-          </svg>
-        </div>
+        {pathname !== "/kalkulator" && (
+          <legend className={styles.calculatorTitle}>
+            <Heading size="medium" level="3">
+              {calculator?.title}
+            </Heading>
+            <Image className={styles.calculatorIcon} src={svgIcon} aria-hidden alt="" />
+          </legend>
+        )}
+
         <BodyShort spacing>
           <PortableTextCalculator value={getCalculatorTextBlock("intro")} />
         </BodyShort>
+
+        <div role="img" className={styles.calculatorDecorativeLine} aria-hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 2" fill="none">
+            <path d="M2 2H280" stroke="#CBCFD5" strokeWidth="1" strokeLinecap="round" />
+          </svg>
+        </div>
+
         <Controller
           defaultValue={"12"}
           control={control}
@@ -274,7 +281,7 @@ export function DagpengerKalkulator() {
 
         <PortableTextContent value={selectIncomePeriodQuestion?.description1} />
 
-        {watchIncomePeriod === "12" && (
+        {(!watchIncomePeriod || watchIncomePeriod === "12") && (
           <div className={styles.lastThirySixMonthPeriodContainer}>
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion?.option1title}

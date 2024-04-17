@@ -42,7 +42,7 @@ export default function MyApp({ Component, pageProps }: AppProps<PageProps>) {
           <SanityProvider sanityData={pageProps.sanityData}>
             <GrunnbelopProvider grunnbeloep={pageProps.grunnbelopData?.grunnbeloep}>
               <PreviewBanner />
-              <Component {...pageProps} />;
+              <Component {...pageProps} />
             </GrunnbelopProvider>
           </SanityProvider>
         </FilterContextProvider>

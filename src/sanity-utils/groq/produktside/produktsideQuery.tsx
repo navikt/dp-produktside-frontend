@@ -42,6 +42,9 @@ export const produktsideQuery = groq`{
     'generalTexts': *[_type == 'produktsideGeneralText' && __i18n_lang == $baseLang]{
       ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
+    'calculatorPage': *[_type == "produktsideCalculatorPage" && __i18n_lang == $baseLang][0]{
+      ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
+    },
     'calculator': {
       ...*[_type == 'produktsideCalculatorSettings' && __i18n_lang == $baseLang][0]{
         ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})

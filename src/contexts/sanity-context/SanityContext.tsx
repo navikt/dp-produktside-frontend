@@ -19,6 +19,7 @@ interface SanityContextValues {
   kortFortalt: any;
   filterSection: any;
   generalTexts: any;
+  calculatorPage: any;
   contactOptions: any;
   seo: any;
   topContent: TopContentSchema;
