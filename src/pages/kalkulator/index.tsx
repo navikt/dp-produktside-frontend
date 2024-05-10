@@ -49,8 +49,13 @@ export default function KalkulatorIndex() {
             </div>
             <PortableTextContent value={content} />
             <Link className={styles.dagpengerLink} href={dagpengerLink.link}>
-              <Image src={dagpengerIcon} height={50} alt="Ikon for dagpenger" aria-hidden />
-              {dagpengerLink.text}
+              <div className={styles.dagpengerLinkIcon}>
+                <Image src={dagpengerIcon} height={50} alt="Ikon for dagpenger" aria-hidden />
+              </div>
+              <div className={styles.dagpengerLinkText}>
+                <div className={styles.dagpengerLinkTitle}>{dagpengerLink.text}</div>
+                <BodyShort>{dagpengerLink.description}</BodyShort>
+              </div>
             </Link>
           </div>
         </div>
