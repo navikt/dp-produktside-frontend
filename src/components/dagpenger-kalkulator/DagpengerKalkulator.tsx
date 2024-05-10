@@ -282,7 +282,7 @@ export function DagpengerKalkulator() {
         <PortableTextContent value={selectIncomePeriodQuestion?.description1} />
 
         {(!watchIncomePeriod || watchIncomePeriod === "12") && (
-          <div className={styles.lastThirySixMonthPeriodContainer}>
+          <div className={classNames(styles.lastThirySixMonthPeriodContainer, "income-periods")}>
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion?.option1title}
             </BodyShort>
@@ -327,7 +327,7 @@ export function DagpengerKalkulator() {
           </div>
         )}
         {watchIncomePeriod === "36" && (
-          <div className={styles.lastThirySixMonthPeriodContainer}>
+          <div className={classNames(styles.lastThirySixMonthPeriodContainer, "income-periods")}>
             <BodyShort weight="semibold" spacing>
               {selectIncomePeriodQuestion?.option2title}
             </BodyShort>
