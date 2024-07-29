@@ -2,9 +2,8 @@ dekoratorMiljo: prod
 sanityDataset: production
 ingresses: |
   ingresses:
-    - https://www.nav.no/dagpenger($|\/$)
-    - https://www.nav.no/dagpenger/nb($|\/$)
-    - https://www.nav.no/dagpenger/en($|\/$)
     - https://www.nav.no/dagpenger/historikk($|\/$)
     - https://www.nav.no/dagpenger/en/historikk($|\/$)
     - https://www.nav.no/dagpenger/api/history($|\/.*)
+    - https://www.nav.no/dagpenger/kalkulator($|\/$)
+    - https://www.nav.no/dagpenger/en/kalkulator($|\/$)

@@ -7,10 +7,7 @@ $common-input-max-width: common.px-to-rem(140px);
 .container {
   display: flex;
   flex-direction: column;
-  border-radius: $common-border-radius;
-  border: $common-border-width solid var(--a-blue-100);
   position: relative;
-  padding: 1rem;
 
   .calculatorFieldset {
     display: flex;
@@ -23,10 +20,9 @@ $common-input-max-width: common.px-to-rem(140px);
     margin-bottom: 1.5rem;
 
     .calculatorTitle {
-      float: left;
       display: flex;
-      flex-direction: row;
       align-items: center;
+      justify-content: space-between;
       text-align: center;
       width: 100%;
       margin-bottom: 0.5rem;
