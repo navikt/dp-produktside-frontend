@@ -13,9 +13,10 @@ export interface Revision extends Omit<RawRevision, "author" | "documentIDs" | "
 const token = process.env.SANITY_READ_TOKEN;
 const { projectId, dataset } = sanityConfig;
 
-export async function revisionsFetcher(docId: string | string[]): Promise<Revision[]> {
+export async function revisionsFetcher(documentId: string | string[]): Promise<Revision[]> {
+  console.log(`🔥 documentId :`, documentId);
   try {
-    const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/transactions/${docId}?excludeContent=true`;
+    const url = `https://${projectId}.apicdn.sanity.io/v1/data/history/${dataset}/transactions/${documentId}?excludeContent=true`;
 
     const response = await fetch(
       url,
@@ -25,7 +26,7 @@ export async function revisionsFetcher(docId: string | string[]): Promise<Revisi
               authorization: `Bearer ${token}`,
             },
           }
-        : {}
+        : {},
     );
 
     // https://stackoverflow.com/questions/60634337/when-using-fetch-how-to-convert-response-body-from-application-x-ndjson-to-appli

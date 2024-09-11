@@ -1,9 +1,9 @@
 import { BodyLong, Button, DatePicker, Heading, Loader, Select, useDatepicker } from "@navikt/ds-react";
-import { useGrunnbelopContext } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { Header } from "components/header/Header";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
 import { SectionWithHeader } from "components/section-with-header/SectionWithHeader";
+import { useGrunnbelopContext } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { isSameDay, startOfDay } from "date-fns";
 import { GetStaticPropsContext } from "next";
 import Head from "next/head";
@@ -18,7 +18,6 @@ import homeStyles from "styles/Home.module.scss";
 import { convertTimestampToDate, formatLocaleDateAndTime, formatTimestampAsLocaleTime, toISOString } from "utils/dates";
 import { HistoryData, fetchHistoryData } from "utils/historikk/fetchHistoryData";
 import { fetchHistoryGrunnbelop } from "utils/historikk/fetchHistoryGrunnbelop";
-import { produktsideKortFortaltId, produktsideSettingsId } from "utils/historikk/historyDocumentIds";
 
 interface Props {
   sanityData: any;
@@ -27,7 +26,6 @@ interface Props {
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const lang = locale ?? "nb";
-  const localeId = lang !== "nb" ? lang : "";
 
   const sanityData = await sanityClient.fetch(produktsideQuery, { lang: lang });
   const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery, {
@@ -35,8 +33,8 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   });
 
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
-  const revisionsProduktsideSettings = await revisionsFetcher(`${produktsideSettingsId}${localeId}`);
-  const revisionsProduktsideKortFortalt = await revisionsFetcher(`${produktsideKortFortaltId}${localeId}`);
+  const revisionsProduktsideSettings = await revisionsFetcher("produktsideSettingsId");
+  const revisionsProduktsideKortFortalt = await revisionsFetcher("produktsideKortFortaltId");
   const revisionsProduktsideSection = await revisionsFetcher(sectionIdsArray);
 
   const revisions = [
@@ -101,7 +99,7 @@ export default function HistorikkIndex({ revisions }: Props) {
     setLoading(true);
     event.preventDefault();
     replace("/historikk", undefined, { shallow: true });
-    const newHistoryData = await fetchHistoryData({ basePath, locale, timestamp: selectedTimestamp });
+    const newHistoryData = await fetchHistoryData({ basePath, timestamp: selectedTimestamp });
     const historyGrunnbelop = await fetchHistoryGrunnbelop(selectedTimestamp);
 
     setHistoryData(newHistoryData);

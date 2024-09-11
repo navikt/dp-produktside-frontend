@@ -4,7 +4,6 @@ import {
   HistoryProduktsideSection,
   HistoryProduktsideSettings,
 } from "sanity-utils/types";
-import { produktsideKortFortaltId, produktsideSettingsId } from "./historyDocumentIds";
 
 export interface HistoryData {
   settings?: HistoryProduktsideSettings;
@@ -15,25 +14,17 @@ export interface HistoryData {
 export interface HistoryOptions {
   basePath: string;
   timestamp: string;
-  locale?: string;
 }
 
-export async function fetchHistoryData({ basePath, timestamp, locale }: HistoryOptions) {
-  const lang = locale ?? "nb";
-  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
-
+export async function fetchHistoryData({ basePath, timestamp }: HistoryOptions) {
   async function fetchHistoryApi<T>(requestId: string | string[]) {
     const historyResponse = await fetch(`${basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
     const historyData = await historyResponse.json();
     return historyData as HistorikkResponse<T>;
   }
 
-  const produktsideSettingsData = await fetchHistoryApi<HistoryProduktsideSettings>(
-    `${produktsideSettingsId}${localeId}`,
-  );
-  const produktsideKortFortaltData = await fetchHistoryApi<HistoryProduktsideKortFortalt>(
-    `${produktsideKortFortaltId}${localeId}`,
-  );
+  const produktsideSettingsData = await fetchHistoryApi<HistoryProduktsideSettings>("produktsideSettingsId");
+  const produktsideKortFortaltData = await fetchHistoryApi<HistoryProduktsideKortFortalt>("produktsideKortFortaltId");
 
   // TODO: Fiks typescript
   // @ts-ignore
