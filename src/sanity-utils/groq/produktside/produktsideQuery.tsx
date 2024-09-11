@@ -21,45 +21,45 @@ const getAllFieldsGroq = `{
 }`;
 
 export const produktsideQuery = groq`{
-    'header': *[_type=="produktsideHeader" && language==$lang][0] {
+    "header": *[_type=="produktsideHeader" && language==$lang][0] {
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'settings': *[_type=="produktsideSettings" && language==$lang][0] {
+    "settings": *[_type=="produktsideSettings" && language==$lang][0] {
       ...coalesce(*[_id==^._id && language==$lang][0]${settingsGroq}, ${settingsGroq})
     },
-    'kortFortalt': *[_type=="produktsideKortFortalt" && language==$lang][0]{
+    "kortFortalt": *[_type=="produktsideKortFortalt" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'filterSection': *[_type=="produktsideFilterSection" && language==$lang][0]{
+    "filterSection": *[_type=="produktsideFilterSection" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'seo': *[_type=="produktsideSEO" && language==$lang][0]{
+    "seo": *[_type=="produktsideSEO" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'contactOptions': *[_type=='produktsideContactOptions' && language==$lang][0]{
+    "contactOptions": *[_type=="produktsideContactOptions" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'generalTexts': *[_type=='produktsideGeneralText' && language==$lang]{
+    "generalTexts": *[_type=="produktsideGeneralText" && language==$lang]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'calculatorPage': *[_type=="produktsideCalculatorPage" && language==$lang][0]{
+    "calculatorPage": *[_type=="produktsideCalculatorPage" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
-    'calculator': {
-      ...*[_type=='produktsideCalculatorSettings' && language==$lang][0]{
+    "calculator": {
+      ...*[_type=="produktsideCalculatorSettings" && language==$lang][0]{
         ...coalesce(* [_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
       },
-      'texts' : *[_type=='produktsideCalculatorText' && language==$lang]{
+      "texts" : *[_type=="produktsideCalculatorText" && language==$lang]{
         ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
       }
     },
-    'topContent': *[_type=='produktsideTopContent' && language==$lang][0]{
+    "topContent": *[_type=="produktsideTopContent" && language==$lang][0]{
       ...coalesce(*[_id==^._id && language==$lang][0]${getAllFieldsGroq}, ${getAllFieldsGroq})
     },
 }`;
 
 export const produktsideSectionIdsQuery = groq`{
-  'sectionIds': *[_type=="produktsideSection" && language==$lang && !(_id in path("drafts.**"))]{
+  "sectionIds": *[_type=="produktsideSection" && language==$lang && !(_id in path("drafts.**"))]{
     _id
   }
 }`;
