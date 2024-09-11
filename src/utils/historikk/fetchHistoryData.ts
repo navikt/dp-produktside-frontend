@@ -20,7 +20,7 @@ export interface HistoryOptions {
 
 export async function fetchHistoryData({ basePath, timestamp, locale }: HistoryOptions) {
   const lang = locale ?? "nb";
-  const localeId = lang !== "nb" ? lang : "";
+  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
 
   async function fetchHistoryApi<T>(requestId: string | string[]) {
     const historyResponse = await fetch(`${basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
