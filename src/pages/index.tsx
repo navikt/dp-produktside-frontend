@@ -21,9 +21,11 @@ import { TopContent } from "components/top-content/TopContent";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
-  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
+  const sanityData = await sanityClient.fetch(produktsideQuery, { lang: locale || "nb" });
   const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
   const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+
+  console.log(`🔥 produktsideQuery :`, produktsideQuery);
 
   return {
     props: {

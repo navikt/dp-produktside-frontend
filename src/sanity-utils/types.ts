@@ -11,7 +11,7 @@ export interface CommonDocumentFields {
   _id: string;
   _rev: string;
   _updatedAt: string;
-  __i18n_lang: string;
+  language: string;
   title: string;
   content: TypedObject | TypedObject[];
 }

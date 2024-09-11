@@ -27,13 +27,11 @@ interface Props {
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const lang = locale ?? "nb";
-  const baseLang = "nb";
-  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
+  const localeId = lang !== "nb" ? lang : "";
 
-  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang, lang });
+  const sanityData = await sanityClient.fetch(produktsideQuery, { lang: lang });
   const sectionIdsData = await sanityClient.fetch<HistorySectionIds>(produktsideSectionIdsQuery, {
-    baseLang,
-    lang,
+    lang: lang,
   });
 
   const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
@@ -90,7 +88,7 @@ export default function HistorikkIndex({ revisions }: Props) {
       historyData?.settings?.content?.map((settingsSection) => {
         // @ts-ignore
         const section = historyData?.contentSections?.find(
-          ({ _id }) => _id == settingsSection?.produktsideSection?._ref
+          ({ _id }) => _id == settingsSection?.produktsideSection?._ref,
         );
 
         if (section) {
@@ -220,7 +218,7 @@ export default function HistorikkIndex({ revisions }: Props) {
                         title={historyData?.kortFortalt?.title}
                       >
                         <p>{`Oppdatert ${formatLocaleDateAndTime(
-                          convertTimestampToDate(historyData?.kortFortalt?._updatedAt)
+                          convertTimestampToDate(historyData?.kortFortalt?._updatedAt),
                         )}`}</p>
                         <PortableTextContent value={historyData?.kortFortalt?.content!} />
                       </SectionWithHeader>
@@ -232,7 +230,7 @@ export default function HistorikkIndex({ revisions }: Props) {
                             {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
                             <PortableTextContent value={content} />
                           </SectionWithHeader>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

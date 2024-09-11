@@ -20,7 +20,7 @@ export interface HistoryOptions {
 
 export async function fetchHistoryData({ basePath, timestamp, locale }: HistoryOptions) {
   const lang = locale ?? "nb";
-  const localeId = lang !== "nb" ? `__i18n_${lang}` : "";
+  const localeId = lang !== "nb" ? lang : "";
 
   async function fetchHistoryApi<T>(requestId: string | string[]) {
     const historyResponse = await fetch(`${basePath}/api/history?requestId=${requestId}&time=${timestamp}`);
@@ -29,17 +29,17 @@ export async function fetchHistoryData({ basePath, timestamp, locale }: HistoryO
   }
 
   const produktsideSettingsData = await fetchHistoryApi<HistoryProduktsideSettings>(
-    `${produktsideSettingsId}${localeId}`
+    `${produktsideSettingsId}${localeId}`,
   );
   const produktsideKortFortaltData = await fetchHistoryApi<HistoryProduktsideKortFortalt>(
-    `${produktsideKortFortaltId}${localeId}`
+    `${produktsideKortFortaltId}${localeId}`,
   );
 
   // TODO: Fiks typescript
   // @ts-ignore
   const produktsideSectionDocumentIds = produktsideSettingsData?.documents?.[0]?.content?.map(
     // @ts-ignore
-    (section) => section?.produktsideSection?._ref
+    (section) => section?.produktsideSection?._ref,
   );
   const produktsideSectionData = await fetchHistoryApi<HistoryProduktsideSection>(produktsideSectionDocumentIds);
 

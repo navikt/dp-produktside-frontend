@@ -12,7 +12,7 @@ import dagpengerIcon from "../../../public/static-dagpenger.svg";
 import styles from "./styles.module.css";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
+  const sanityData = await sanityClient.fetch(produktsideQuery, { lang: locale });
   const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
   const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
 
@@ -27,6 +27,8 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
 
 export default function KalkulatorIndex() {
   const sanityData = useSanityContext();
+
+  console.log(`🔥 sanityData :`, sanityData);
   /* @ts-ignore */
   const { content, title, subtitle, dagpengerLink, seo } = sanityData?.calculatorPage;
 

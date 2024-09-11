@@ -34,7 +34,7 @@ export function SanityProvider({ sanityData, children }: SanityProviderProps) {
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
   const { locale } = useRouter();
-  const previewData = useSanityPreview(sanityData, produktsideQuery, { baseLang: "nb", lang: locale });
+  const previewData = useSanityPreview(sanityData, produktsideQuery, { lang: locale || "nb" });
 
   return (
     <SanityContext.Provider
