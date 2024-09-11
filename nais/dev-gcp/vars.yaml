@@ -1,5 +1,5 @@
 dekoratorMiljo: dev
-sanityDataset: production
+sanityDataset: migrering-test
 ingresses: |
   ingresses:
     - https://arbeid.ekstern.dev.nav.no/dagpenger/historikk($|\/$)
