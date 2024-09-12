@@ -1,5 +1,5 @@
 dekoratorMiljo: prod
-sanityDataset: production
+sanityDataset: kopi-av-prod
 ingresses: |
   ingresses:
     - https://www.nav.no/dagpenger/historikk($|\/$)
