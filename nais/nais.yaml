@@ -46,8 +46,8 @@ spec:
       value: {{dekoratorMiljo}}
     - name: NPM_CONFIG_CACHE
       value: /tmp
-    - name: NEXT_PUBLIC_SANITY_DATASET
-      value: {{sanityDataset}}
+    - name: NEXT_PUBLIC_SANITY_DATASETT
+      value: {{sanityDatasett}}
   envFrom:
     - secret: dp-produktside-frontend-sanity-cms-read-token
   {{ingresses}}
