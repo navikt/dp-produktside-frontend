@@ -39,6 +39,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        env:
+          NEXT_PUBLIC_SANITY_DATASET: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
       - uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
