@@ -6,9 +6,6 @@ permissions:
   contents: read
   id-token: write
 
-env:
-  DAY_OF_WEEK: Monday
-
 jobs:
   install:
     runs-on: ubuntu-latest
@@ -51,7 +48,6 @@ jobs:
         with:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
-          NEXT_PUBLIC_SANITY_DATASET: kopi-av-prod
 
       - name: Cache .next/cache
         uses: actions/cache@v3
