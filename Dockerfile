@@ -1,4 +1,4 @@
-FROM node:lts-bullseye-slim AS runtime
+FROM gcr.io/distroless/nodejs22-debian12 AS runtime
 WORKDIR /home/node/app
 
 ENV PORT=3000 \
@@ -14,6 +14,5 @@ COPY .next/static ./.next/static
 
 
 EXPOSE 3000
-USER node
 
-CMD ["node", "server.js"]
+CMD ["server.js"]
