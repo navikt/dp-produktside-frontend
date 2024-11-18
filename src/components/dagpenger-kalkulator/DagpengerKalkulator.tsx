@@ -244,9 +244,11 @@ export function DagpengerKalkulator() {
           </legend>
         )}
 
-        <BodyShort spacing>
-          <PortableTextCalculator value={getCalculatorTextBlock("intro")} />
-        </BodyShort>
+        <legend>
+          <BodyShort spacing>
+            <PortableTextCalculator value={getCalculatorTextBlock("intro")} />
+          </BodyShort>
+        </legend>
 
         <div role="img" className={styles.calculatorDecorativeLine} aria-hidden>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 2" fill="none">
