@@ -33,7 +33,7 @@ export default function KalkulatorIndex() {
   return (
     <div>
       <PageMeta title={seo?.title} description={seo?.description} seoImage={seo?.image} />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         <div className={styles.layout}>
           <div className={styles.content}>
             <div className={styles.header}>

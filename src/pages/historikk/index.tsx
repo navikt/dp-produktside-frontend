@@ -90,7 +90,7 @@ export default function HistorikkIndex({ revisions }: Props) {
       historyData?.settings?.content?.map((settingsSection) => {
         // @ts-ignore
         const section = historyData?.contentSections?.find(
-          ({ _id }) => _id == settingsSection?.produktsideSection?._ref
+          ({ _id }) => _id == settingsSection?.produktsideSection?._ref,
         );
 
         if (section) {
@@ -121,13 +121,16 @@ export default function HistorikkIndex({ revisions }: Props) {
     <div className={styles.container}>
       <Head>
         <meta name="robots" content="noindex, nofollow" />
+        <title>Dagpenger - Pengesøktte historikk</title>
       </Head>
 
       <form onSubmit={onSubmit}>
         <fieldset className={styles.fieldset}>
-          <Heading level="1" size="xlarge" className={styles.title}>
-            Historikk
-          </Heading>
+          <legend className={styles.legend}>
+            <Heading level="1" size="xlarge" className={styles.title}>
+              Historikk
+            </Heading>
+          </legend>
 
           <BodyLong className={styles.description}>
             Her finner du historiske versjoner av den <strong>{locale === "en" ? "engelske" : "norske"}</strong> siden
@@ -153,6 +156,7 @@ export default function HistorikkIndex({ revisions }: Props) {
                   setSelectedTimestamp(event.target.value);
                 }}
                 value={selectedTimestamp}
+                autoComplete="off"
               >
                 {!hasRevisionsOnSelectedDay && (
                   <option key={defaultSelectedTimestamp} value={defaultSelectedTimestamp}>
@@ -187,7 +191,7 @@ export default function HistorikkIndex({ revisions }: Props) {
 
       {!loading && selectedTimestamp && historyData?.kortFortalt && historyData?.settings && (
         <>
-          <main className={homeStyles.main}>
+          <main className={homeStyles.main} id="maincontent" tabIndex={-1}>
             <div className={homeStyles.productPage}>
               {/* TODO: Fiks historikk for Header-skjema */}
               <Header title="Dagpenger" leftSubtitle="PENGESTØTTE" rightSubtitle="Oppdatert" />
@@ -220,7 +224,7 @@ export default function HistorikkIndex({ revisions }: Props) {
                         title={historyData?.kortFortalt?.title}
                       >
                         <p>{`Oppdatert ${formatLocaleDateAndTime(
-                          convertTimestampToDate(historyData?.kortFortalt?._updatedAt)
+                          convertTimestampToDate(historyData?.kortFortalt?._updatedAt),
                         )}`}</p>
                         <PortableTextContent value={historyData?.kortFortalt?.content!} />
                       </SectionWithHeader>
@@ -232,7 +236,7 @@ export default function HistorikkIndex({ revisions }: Props) {
                             {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
                             <PortableTextContent value={content} />
                           </SectionWithHeader>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
