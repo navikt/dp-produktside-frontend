@@ -47,7 +47,7 @@
     "npm-check-updates": "^16.14.20",
     "prettier": "^3.3.3",
     "sass": "^1.77.8",
-    "vitest": "^1.6.0"
+    "vitest": "^3.0.2"
   },
   "prettier": {
     "printWidth": 120
