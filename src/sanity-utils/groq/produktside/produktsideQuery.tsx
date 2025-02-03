@@ -1,5 +1,3 @@
-import { groq } from "next-sanity";
-
 const settingsGroq = `{
   title,
   content [_type == "produktsideSectionReference" ] {
@@ -20,7 +18,7 @@ const getAllFieldsGroq = `{
   ...
 }`;
 
-export const produktsideQuery = groq`{
+export const produktsideQuery = `{
     'header': *[_type == "produktsideHeader" && language == $lang][0] ${getAllFieldsGroq},
     'settings': *[_type == "produktsideSettings" && language == $lang][0] ${settingsGroq},
     'kortFortalt': *[_type == "produktsideKortFortalt" && language == $lang][0] ${getAllFieldsGroq},
@@ -36,7 +34,7 @@ export const produktsideQuery = groq`{
     },
 }`;
 
-export const produktsideSectionIdsQuery = groq`{
+export const produktsideSectionIdsQuery = `{
   'sectionIds': *[_type == "produktsideSection" && language == $lang && !(_id in path("drafts.**"))]{
     _id
   }

@@ -5,7 +5,6 @@ import {
   DecoratorParams,
   fetchDecoratorReact,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-import * as Sentry from "@sentry/browser";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 const decoratorEnv = (process.env.DECORATOR_ENV || "prod") as Exclude<DecoratorEnvProps["env"], "localhost">;
@@ -30,8 +29,6 @@ export default class MyDocument extends Document<{ decorator: DecoratorComponent
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = locale === undefined ? defaultLocale : (locale as DecoratorLocale);
-
-    Sentry.setContext("culture", { locale: language });
 
     const decorator = await fetchDecoratorReact({
       env: decoratorEnv,

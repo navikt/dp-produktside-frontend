@@ -35,7 +35,6 @@ spec:
         - host: cdn.sanity.io
         - host: rt6o382n.api.sanity.io
         - host: rt6o382n.apicdn.sanity.io
-        - host: sentry.gc.nav.no
       rules:
         - application: nav-dekoratoren
           namespace: personbruker
