@@ -16,7 +16,7 @@
     "@navikt/ds-css": "^5.18.3",
     "@navikt/ds-icons": "^3.4.3",
     "@navikt/ds-react": "^5.18.3",
-    "@navikt/nav-dekoratoren-moduler": "^2.1.6",
+    "@navikt/nav-dekoratoren-moduler": "^3.2.0",
     "@portabletext/react": "^3.1.0",
     "@portabletext/types": "^2.0.13",
     "@sanity/image-url": "^1.0.2",

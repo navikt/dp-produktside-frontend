@@ -1,5 +1,5 @@
 import {
-  DecoratorComponents,
+  DecoratorComponentsReact,
   DecoratorEnvProps,
   DecoratorLocale,
   DecoratorParams,
@@ -23,10 +23,9 @@ const decoratorParams: DecoratorParams = {
   breadcrumbs: [{ title: "Dagpenger", url: "https://www.nav.no/dagpenger/" }],
   context: "privatperson",
   utilsBackground: "white",
-  urlLookupTable: false,
 };
 
-export default class MyDocument extends Document<{ Decorator: DecoratorComponents }> {
+export default class MyDocument extends Document<{ decorator: DecoratorComponentsReact; locale: DecoratorLocale }> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
@@ -34,7 +33,7 @@ export default class MyDocument extends Document<{ Decorator: DecoratorComponent
 
     Sentry.setContext("culture", { locale: language });
 
-    const Decorator: DecoratorComponents = await fetchDecoratorReact({
+    const decorator = await fetchDecoratorReact({
       env: decoratorEnv,
       params: { ...decoratorParams, language },
     }).catch((err) => {
@@ -51,28 +50,23 @@ export default class MyDocument extends Document<{ Decorator: DecoratorComponent
 
     return {
       ...initialProps,
-      Decorator,
+      decorator,
       locale: language,
     };
   }
 
   render() {
-    const { Decorator, locale } = this.props;
+    const { HeadAssets, Scripts, Header, Footer } = this.props.decorator;
 
     return (
-      <Html lang={locale}>
-        <Head>
-          <Decorator.Styles />
-        </Head>
-
+      <Html lang={this.props.locale}>
+        <Head />
+        <Scripts />
+        <HeadAssets />
         <body>
-          {/* TODO: Legg til condition for banner når den prodsettes */}
-          {/* TODO: Utforsk rendring av banner med createPortal */}
-          {/* {process.env.ENABLE_PROTOTYPE_BANNER && <PrototypeBanner />} */}
-          <Decorator.Header />
+          <Header />
           <Main />
-          <Decorator.Footer />
-          <Decorator.Scripts />
+          <Footer />
           <NextScript />
         </body>
       </Html>
