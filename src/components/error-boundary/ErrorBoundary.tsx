@@ -1,5 +1,4 @@
 import { Button } from "@navikt/ds-react";
-import * as Sentry from "@sentry/nextjs";
 import { Component, ErrorInfo, ReactNode } from "react";
 import { Error } from "../error/Error";
 import styles from "./ErrorBoundary.module.scss";
@@ -29,7 +28,6 @@ export default class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // You can use your own error logging service here
     console.log({ error, errorInfo });
-    Sentry.captureException(error, { level: "error", extra: { errorInfo } });
   }
 
   render() {

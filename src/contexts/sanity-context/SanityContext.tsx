@@ -1,8 +1,5 @@
 import { TypedObject } from "@portabletext/types";
-import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext } from "react";
-import { produktsideQuery } from "sanity-utils/groq/produktside/produktsideQuery";
-import { useSanityPreview } from "sanity-utils/useSanityPreview";
 import { CalculatorSchema } from "./types/calculator-schema-types";
 import { HeaderSchema } from "./types/header-schema";
 import { TopContentSchema } from "./types/top-content-schema";
@@ -33,13 +30,10 @@ const SanityContext = createContext<SanityContextValues | undefined>(undefined);
 export function SanityProvider({ sanityData, children }: SanityProviderProps) {
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const { locale } = useRouter();
-  const previewData = useSanityPreview(sanityData, produktsideQuery, { baseLang: "nb", lang: locale });
-
   return (
     <SanityContext.Provider
       value={{
-        ...previewData,
+        ...sanityData,
       }}
     >
       {children}
