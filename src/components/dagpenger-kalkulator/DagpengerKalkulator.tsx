@@ -19,13 +19,12 @@ import {
   IncomeQuestion,
   NumberOfChildrenQuestion,
 } from "contexts/sanity-context/types/calculator-schema-types";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import svgIcon from "../../../public/kalkulator.svg";
 import styles from "./DagpengerKalkulator.module.scss";
 import { InformationBox } from "./InformationBox";
 import { NegativeResult } from "./NegativeResult";
 import { PositiveResult } from "./PositiveResult";
-import { getBarneTillegg, getMonthsToSubtract, toKR } from "./utils";
+import { getMonthsToSubtract, toKR } from "./utils";
 import classNames from "classnames";
 import { subMonths } from "date-fns";
 
@@ -120,10 +119,6 @@ export function DagpengerKalkulator() {
   function onSubmit() {
     setShowResult(true);
     resultTablesContainerRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    logAmplitudeEvent(AnalyticsEvents.FORM_SUBMITTED, {
-      skjemanavn,
-      skjemaId,
-    });
   }
 
   function wageCap6G(amount: number): number {

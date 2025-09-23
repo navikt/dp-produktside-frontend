@@ -1,6 +1,5 @@
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { useSanityContext } from "contexts/sanity-context/SanityContext";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import { FilterExplanation } from "./FilterExplanation";
 
 interface Props {
@@ -34,30 +33,8 @@ export function FilterMenu({
       }}
       value={selectedFilters}
     >
-      <Checkbox
-        value="arbeidsledig"
-        onChange={(event) => {
-          logAmplitudeEvent(AnalyticsEvents.FILTER, {
-            kategori: checkboxLegend,
-            filternavn: arbeidsledigLabel,
-            avkrysset: event.target.checked,
-          });
-        }}
-      >
-        {arbeidsledigLabel}
-      </Checkbox>
-      <Checkbox
-        value="permittert"
-        onChange={(event) => {
-          logAmplitudeEvent(AnalyticsEvents.FILTER, {
-            kategori: checkboxLegend,
-            filternavn: permittertLabel,
-            avkrysset: event.target.checked,
-          });
-        }}
-      >
-        {permittertLabel}
-      </Checkbox>
+      <Checkbox value="arbeidsledig">{arbeidsledigLabel}</Checkbox>
+      <Checkbox value="permittert">{permittertLabel}</Checkbox>
       <FilterExplanation selectedFilters={selectedFilters} availableFilters={availableFilters} />
     </CheckboxGroup>
   );

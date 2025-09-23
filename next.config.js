@@ -13,7 +13,7 @@ const myAppDirectives = {
   "img-src": ["'self'", "data:"],
   "font-src": ["'self'", "fonts.googleapis.com"],
   "style-src-elem": ["fonts.googleapis.com"],
-  "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io", "amplitude.nav.no/collect"],
+  "connect-src": ["'self'", "rt6o382n.api.sanity.io", "rt6o382n.apicdn.sanity.io"],
 };
 
 /** @type {import('next').NextConfig} */

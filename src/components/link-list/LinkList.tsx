@@ -2,7 +2,6 @@ import { BodyShort, Heading } from "@navikt/ds-react";
 import styles from "./LinkList.module.scss";
 import Link from "next/link";
 import { SupportLink } from "sanity-utils/types";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 
 interface Props {
   title?: string;
@@ -27,19 +26,7 @@ export function LinkList({ title, links }: Props) {
         <ul className={styles.linkList}>
           {links?.map(({ url, title: linkText, targetBlank }, index) => (
             <li key={index} className={styles.linkListElement}>
-              <Link
-                href={url}
-                className={styles.link}
-                target={targetBlank ? "_blank" : "_self"}
-                onClick={() => {
-                  logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-                    destinasjon: url,
-                    lenketekst: linkText,
-                    komponent: "Lenkeliste for støtteinformasjon",
-                    seksjon: "Nyttig å vite",
-                  });
-                }}
-              >
+              <Link href={url} className={styles.link} target={targetBlank ? "_blank" : "_self"}>
                 <BodyShort className={styles.linkText} as="span">
                   {linkText}
                 </BodyShort>

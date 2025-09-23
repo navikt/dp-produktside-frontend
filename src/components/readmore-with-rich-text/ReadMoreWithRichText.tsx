@@ -1,6 +1,5 @@
 import { ReadMore } from "@navikt/ds-react";
 import { ReactNode, useState } from "react";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./ReadMoreWithRichText.module.scss";
 
 interface ReadMoreWithRichTextProps {
@@ -16,11 +15,6 @@ export function ReadMoreWithRichText({ _key, header, children, size = "medium" }
   return (
     <ReadMore
       onClick={() => {
-        logAmplitudeEvent(isOpen ? AnalyticsEvents.ACC_COLLAPSE : AnalyticsEvents.ACC_EXPAND, {
-          _key: _key,
-          tekst: header,
-          komponent: "ReadMore",
-        });
         setIsOpen((prevIsOpen) => !prevIsOpen);
       }}
       open={isOpen}

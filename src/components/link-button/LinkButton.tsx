@@ -2,7 +2,6 @@ import * as AkselIcons from "@navikt/aksel-icons";
 import * as NavIcons from "@navikt/ds-icons";
 import { Button } from "@navikt/ds-react";
 import { PortableTextTypeComponentProps } from "@portabletext/react";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./LinkButton.module.scss";
 
 export function LinkButton({ value }: PortableTextTypeComponentProps<any>) {
@@ -25,12 +24,6 @@ export function LinkButton({ value }: PortableTextTypeComponentProps<any>) {
       variant={value?.variant}
       {...iconProps}
       href={value?.url}
-      onClick={() => {
-        logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-          destinasjon: value?.url,
-          lenketekst: value?.title,
-        });
-      }}
     >
       {value?.title}
     </Button>
