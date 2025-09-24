@@ -7,7 +7,6 @@ import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import { appUrls } from "utils/url";
 import { ReactNode } from "react";
 import styles from "./SectionWithHeader.module.scss";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -55,11 +54,6 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
               size="small"
               icon={<LinkIcon aria-hidden />}
               activeIcon={<LinkIcon aria-hidden />}
-              onClick={() => {
-                logAmplitudeEvent(AnalyticsEvents.COPY_LINK, {
-                  seksjon: title,
-                });
-              }}
             />
           )}
         </div>

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { memo, ReactNode } from "react";
 import { smoothScrollToTarget } from "utils/scroll";
 import { appUrls } from "utils/url";
-import { AnalyticsEvents, logAmplitudeEvent } from "utils/amplitude";
 import styles from "./NavigationLink.module.scss";
 import { navigationAnchorOffsetPx } from "./NavigationMenu";
 import navigationSidebarStyles from "./NavigationSidebar.module.scss";
@@ -31,13 +30,6 @@ function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Prop
     window.history.pushState(window.history.state, undefined, linkHref);
 
     smoothScrollToTarget(targetId, navigationAnchorOffsetPx);
-
-    logAmplitudeEvent(AnalyticsEvents.NAVIGATION, {
-      destinasjon: appUrls.produktsideProductionURL({ anchorId: targetId, locale }),
-      lenketekst: children,
-      komponent: "Meny for intern-navigasjon",
-      seksjon: "Innhold",
-    });
   };
 
   return (
@@ -57,7 +49,7 @@ function NavigationLink({ targetId, isCurrent, scrollDirection, children }: Prop
         },
         {
           [navigationSidebarStyles.current]: isCurrent,
-        }
+        },
       )}
       onClick={setLocationHashAndScrollToTarget}
     >
