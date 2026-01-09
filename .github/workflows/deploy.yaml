@@ -19,7 +19,7 @@ jobs:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         if: steps.node_modules.outputs.cache-hit != 'true'
         with:
           node-version: "lts/*"
@@ -39,7 +39,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
 
