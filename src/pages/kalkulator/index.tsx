@@ -1,7 +1,7 @@
 import { BodyShort, Heading, Link } from "@navikt/ds-react";
 import { PageMeta } from "components/PageMeta";
 import { PortableTextContent } from "components/portable-text-content/PortableTextContent";
-import { GrunnbelopData } from "contexts/grunnbelop-context/GrunnbelopContext";
+// import { GrunnbelopData } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { useSanityContext } from "contexts/sanity-context/SanityContext";
 import { GetStaticPropsContext } from "next";
 import Image from "next/image";
@@ -13,13 +13,21 @@ import styles from "./styles.module.css";
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
-  const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
-  const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+  // const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
+  // const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+
+  const nyGrunnbelop = {
+    dato: "2026-05-01",
+    grunnbeloep: 136549,
+    grunnbeloepPerMaaned: 11380,
+    gjennomsnittPerAar: 134419,
+    omregningsfaktor: 1.049085,
+  };
 
   return {
     props: {
       sanityData: sanityData,
-      grunnbelopData: grunnbelopData,
+      grunnbelopData: nyGrunnbelop,
     },
     revalidate: 120,
   };

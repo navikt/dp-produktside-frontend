@@ -4,7 +4,7 @@ import { Heading } from "@navikt/ds-react";
 import { openChatbot } from "@navikt/nav-dekoratoren-moduler";
 import { ContactOption } from "components/contact-option/ContactOption";
 import { FilterSection } from "components/filter-section/FilterSection";
-import { GrunnbelopData } from "contexts/grunnbelop-context/GrunnbelopContext";
+// import { GrunnbelopData } from "contexts/grunnbelop-context/GrunnbelopContext";
 import { Header } from "components/header/Header";
 import { KortFortaltSection } from "components/kort-fortalt-section/KortFortaltSection";
 import { LeftMenuSection } from "components/layout/left-menu-section/LeftMenuSection";
@@ -22,15 +22,23 @@ import { TopContent } from "components/top-content/TopContent";
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: errorhåndtering hvis man ikke greier å hente produktside
   const sanityData = await sanityClient.fetch(produktsideQuery, { baseLang: "nb", lang: locale });
-  const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
-  const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+  // const grunnbelopResponse = await fetch("https://g.nav.no/api/v1/grunnbeloep");
+  // const grunnbelopData: GrunnbelopData = await grunnbelopResponse.json();
+
+  const nyGrunnbelop = {
+    dato: "2026-05-01",
+    grunnbeloep: 136549,
+    grunnbeloepPerMaaned: 11380,
+    gjennomsnittPerAar: 134419,
+    omregningsfaktor: 1.049085,
+  };
 
   return {
     props: {
       sanityData: sanityData,
-      grunnbelopData: grunnbelopData,
+      grunnbelopData: nyGrunnbelop,
     },
-    revalidate: 120,
+    revalidate: 1,
   };
 }
 
