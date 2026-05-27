@@ -1,8 +1,8 @@
 import { chromium, Page } from "@playwright/test";
 import fs from "fs";
 
-const FROM = "2025-05-27"; // yyyy-mm-dd (inclusive, earlier date)
-const TO = "2025-05-27"; // yyyy-mm-dd (inclusive, later date)
+const FROM = "2024-04-10"; // yyyy-mm-dd (inclusive, earlier date)
+const TO = "2024-04-11"; // yyyy-mm-dd (inclusive, later date)
 const BASE_URL = process.argv[2] ?? "http://localhost:3000";
 
 function parseYYYYMMDD(d: string): Date {
