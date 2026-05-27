@@ -38,15 +38,6 @@ $verticalMargin: 1.75rem;
 
       // Break out of the global app padding for better screen-width usage
       // on narrower screens
-      @media #{common.$mq-screen-tablet-and-desktop} {
-        margin-left: -(common.$padding-sides-tablet);
-        margin-right: -(common.$padding-sides-tablet);
-      }
-
-      @media #{common.$mq-screen-desktop} {
-        margin-left: -(common.$padding-sides-desktop);
-        margin-right: -(common.$padding-sides-desktop);
-      }
 
       .layoutContainer {
         max-width: common.px-to-rem(1080);
@@ -86,7 +77,7 @@ $verticalMargin: 1.75rem;
 
           > section {
             width: 100%;
-            max-width: $sectionMaxWidth;
+            max-width: 1700px;
             margin-bottom: 2rem;
           }
         }

@@ -11,7 +11,7 @@ export function AccordionWithRichText({ value }: PortableTextTypeComponentProps<
   const { normal, ...restCommonBlockStyles } = commonBlockStyles;
 
   return (
-    <Accordion.Item open={isOpen}>
+    <Accordion.Item open={true}>
       <Accordion.Header
         onClick={() => {
           setIsOpen((prevIsOpen) => !prevIsOpen);

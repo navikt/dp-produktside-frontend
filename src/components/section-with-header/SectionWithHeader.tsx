@@ -47,7 +47,7 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
 
           {anchorId && (
             <CopyButton
-              className={styles.copyLink}
+              className={classNames(styles.copyLink, ".not-printable")}
               text={getGeneralText("copy-to-clipboard.title")}
               activeText={getGeneralText("copy-to-clipboard.popover-text")}
               copyText={appUrls.produktsideProductionURL({ anchorId, locale: locale })}

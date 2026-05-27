@@ -12,3 +12,47 @@ body {
   margin-right: 1rem;
   margin-bottom: var(--label-margin-bottom);
 }
+
+.not-printable {
+  @media print {
+    display: none !important;
+  }
+}
+
+@media print {
+  .navds-copybutton {
+    display: none !important;
+  }
+
+  .anchor-ref,
+  [id].is-anchor-target::after {
+    word-break: break-all;
+    text-decoration: underline dotted blue;
+  }
+
+  [id].is-anchor-target::after {
+    content: " #" attr(id) " ";
+  }
+
+  a[href]:not([href^="#"]) {
+    color: blue !important;
+  }
+  *,
+  *::before,
+  *::after {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .navds-checkbox__label::before,
+  .navds-radio__label::before {
+    border: 2px solid black !important;
+    box-shadow: none !important;
+  }
+
+  .navds-checkbox__input:checked + .navds-checkbox__label::before,
+  .navds-radio__input:checked + .navds-radio__label::before {
+    background-color: black !important;
+    border-color: black !important;
+  }
+}

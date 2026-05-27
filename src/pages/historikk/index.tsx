@@ -124,7 +124,7 @@ export default function HistorikkIndex({ revisions }: Props) {
         <title>Dagpenger - Pengesøktte historikk</title>
       </Head>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="not-printable">
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>
             <Heading level="1" size="xlarge" className={styles.title}>
@@ -193,31 +193,10 @@ export default function HistorikkIndex({ revisions }: Props) {
         <>
           <main className={homeStyles.main} id="maincontent" tabIndex={-1}>
             <div className={homeStyles.productPage}>
-              {/* TODO: Fiks historikk for Header-skjema */}
               <Header title="Dagpenger" leftSubtitle="PENGESTØTTE" rightSubtitle="Oppdatert" />
-
               <div className={homeStyles.content}>
                 <div className={homeStyles.layoutContainer}>
                   <div className={homeStyles.topRow}>
-                    <div className={homeStyles.leftCol}>
-                      <LeftMenuSection
-                        title={historyData?.settings?.title}
-                        internalLinks={[
-                          {
-                            anchorId: historyData?.kortFortalt?.slug?.current ?? "",
-                            linkText: historyData?.kortFortalt?.title ?? "",
-                          },
-                          ...(settingsSections?.map(({ title, slug }) => ({
-                            anchorId: slug?.current,
-                            linkText: title,
-                          })) ?? []),
-                        ]}
-                        supportLinksTitle={historyData.settings?.supportLinksTitle}
-                        supportLinks={historyData.settings?.supportLinks}
-                        sticky={true}
-                      />
-                    </div>
-
                     <div className={homeStyles.mainCol}>
                       <SectionWithHeader
                         anchorId={historyData?.kortFortalt?.slug?.current}
@@ -233,7 +212,6 @@ export default function HistorikkIndex({ revisions }: Props) {
                         ({ _id, slug, title, iconName, _updatedAt, content }: HistoryProduktsideSection) => (
                           <SectionWithHeader key={_id} anchorId={slug?.current} title={title} iconName={iconName}>
                             <p>{`Oppdatert ${formatLocaleDateAndTime(convertTimestampToDate(_updatedAt))}`}</p>
-                            {/* TODO: Håndter generelle tekster og kalkulator for historikk */}
                             <PortableTextContent value={content} />
                           </SectionWithHeader>
                         ),
