@@ -31,8 +31,7 @@ $iconContainerRadius: common.px-to-rem(64px / 2);
     position: relative;
     border-radius: 50%;
     background-color: $defaultBgColor;
-    overflow: hidden;
-    display: none;
+    overflow: visible;
 
     .icon {
       height: 50%;

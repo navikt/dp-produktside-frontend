@@ -20,14 +20,10 @@ body {
 }
 
 @media print {
-  .navds-copybutton {
-    display: none !important;
-  }
-
   .anchor-ref,
   [id].is-anchor-target::after {
     word-break: break-all;
-    text-decoration: underline dotted blue;
+    text-decoration: underline dotted #0067c5;
   }
 
   [id].is-anchor-target::after {
@@ -35,8 +31,13 @@ body {
   }
 
   a[href]:not([href^="#"]) {
-    color: blue !important;
+    color: #0067c5 !important;
   }
+
+  a[role="button"] {
+    border: 1px solid #0067c5 !important;
+  }
+
   *,
   *::before,
   *::after {
@@ -52,7 +53,7 @@ body {
 
   .navds-checkbox__input:checked + .navds-checkbox__label::before,
   .navds-radio__input:checked + .navds-radio__label::before {
-    background-color: black !important;
-    border-color: black !important;
+    background-color: #0067c5 !important;
+    border-color: #0067c5 !important;
   }
 }

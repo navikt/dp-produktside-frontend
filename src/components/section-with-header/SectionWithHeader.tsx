@@ -33,8 +33,9 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
     <section id={Icon ? undefined : anchorId} className={Icon && styles.withIcon}>
       <Panel className={classNames(styles.container)}>
         {Icon && (
-          <div id={Icon ? anchorId : undefined} className={styles.iconContainer} tabIndex={-1}>
-            <Icon className={akselIcon ? styles.akselIcon : styles.icon} aria-hidden />
+          <div id={Icon ? anchorId : undefined} tabIndex={-1}>
+            {/* <Icon className={akselIcon ? styles.akselIcon : styles.icon} aria-hidden /> */}
+            {anchorId && <span className={styles.iconAnchorId}>#{anchorId}</span>}
           </div>
         )}
 
@@ -46,15 +47,18 @@ export function SectionWithHeader({ anchorId, children, iconName, title }: Props
           )}
 
           {anchorId && (
-            <CopyButton
-              className={classNames(styles.copyLink, ".not-printable")}
-              text={getGeneralText("copy-to-clipboard.title")}
-              activeText={getGeneralText("copy-to-clipboard.popover-text")}
-              copyText={appUrls.produktsideProductionURL({ anchorId, locale: locale })}
-              size="small"
-              icon={<LinkIcon aria-hidden />}
-              activeIcon={<LinkIcon aria-hidden />}
-            />
+            <>
+              {/* <CopyButton
+                className={classNames(styles.copyLink)}
+                text={getGeneralText("copy-to-clipboard.title")}
+                activeText={getGeneralText("copy-to-clipboard.popover-text")}
+                copyText={appUrls.produktsideProductionURL({ anchorId, locale: locale })}
+                size="small"
+                icon={<LinkIcon aria-hidden />}
+                activeIcon={<LinkIcon aria-hidden />}
+              /> */}
+              <span>Kopier lenke: {appUrls.produktsideProductionURL({ anchorId, locale: locale })}</span>
+            </>
           )}
         </div>
 
