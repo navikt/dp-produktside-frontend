@@ -17,11 +17,11 @@
     "@navikt/ds-icons": "^3.4.3",
     "@navikt/ds-react": "^5.18.3",
     "@navikt/nav-dekoratoren-moduler": "^3.6.1",
+    "@next/bundle-analyzer": "^14.2.35",
     "@portabletext/react": "^3.2.4",
     "@portabletext/types": "^2.0.15",
-    "@sanity/image-url": "^1.2.0",
     "@sanity/client": "^6.29.1",
-    "@next/bundle-analyzer": "^14.2.35",
+    "@sanity/image-url": "^1.2.0",
     "classnames": "^2.5.1",
     "date-fns": "^2.30.0",
     "lodash": "^4.17.23",
@@ -34,6 +34,7 @@
     "typescript": "5.9.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/lodash": "^4.17.23",
     "@types/node": "20.19.30",
     "@types/react": "18.3.27",
