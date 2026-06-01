@@ -26,7 +26,7 @@ Spørsmål tilknyttet koden kan rettes mot:
 2. Åpne `scripts/screenshot.ts` og sett `FROM` og `TO` til ønsket datointervall.
 3. Velg språk du vil eksportere:
    - Norsk: `http://localhost:3000` gir `${BASE_URL}/dagpenger/historikk`
-   - Engelsk: `http://localhost:3000/en` gir `${BASE_URL}/dagpenger/historikk`
+   - Engelsk: `http://localhost:3000/` gir `${BASE_URL}/dagpenger/en/historikk`
 4. Start applikasjonen lokalt:
 
 ```bash
