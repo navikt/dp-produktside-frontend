@@ -17,18 +17,24 @@ npm run dev
 
 Spørsmål tilknyttet koden kan rettes mot:
 
-- Knut Magne Riise, knut.magne.riise@nav.no
-- Mikail Arslan, mikail.arslan@nav.no
+- John Martin Lindseth, john.martin.lindseth@nav.no
+- Nattphong Klinjan, nattaphong.klinjan@nav.no
 
-### Internt
+## Eksportere historikken i PDF
 
-Slack: #po-arbeid-innhold, #po-arbeid, #team-dagpenger, #team-dagpenger-dev
+1. Sjekk ut branchen `pdf-export`.
+2. Åpne `scripts/screenshot.ts` og sett `FROM` og `TO` til ønsket datointervall.
+3. Velg språk du vil eksportere:
+   - Norsk: `http://localhost:3000` gir `${BASE_URL}/dagpenger/historikk`
+   - Engelsk: `http://localhost:3000/en` gir `${BASE_URL}/dagpenger/historikk`
+4. Start applikasjonen lokalt:
 
-## Learn More
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Åpne en ny terminal og kjør eksport:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+npm run pdf-export
+```
