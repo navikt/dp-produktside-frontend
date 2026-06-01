@@ -25,6 +25,14 @@ interface Props {
   revisions: Revision[];
 }
 
+function hasSectionId(value: { _id?: string } | undefined | null): value is { _id: string } {
+  return Boolean(value?._id);
+}
+
+function hasHistorySection(value: HistoryProduktsideSection | undefined): value is HistoryProduktsideSection {
+  return Boolean(value?._id);
+}
+
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const lang = locale ?? "nb";
   const baseLang = "nb";
@@ -36,7 +44,7 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
     lang,
   });
 
-  const sectionIdsArray = sectionIdsData.sectionIds.map(({ _id }) => _id);
+  const sectionIdsArray = sectionIdsData.sectionIds.filter(hasSectionId).map((section) => section._id);
   const revisionsProduktsideSettings = await revisionsFetcher(`${produktsideSettingsId}${localeId}`);
   const revisionsProduktsideKortFortalt = await revisionsFetcher(`${produktsideKortFortaltId}${localeId}`);
   const revisionsProduktsideSection = await revisionsFetcher(sectionIdsArray);
@@ -61,11 +69,12 @@ export default function HistorikkIndex({ revisions }: Props) {
   const [selectedTimestamp, setSelectedTimestamp] = useState("");
   const [historyData, setHistoryData] = useState<HistoryData | undefined>(undefined);
   const fromDate = locale === "en" ? new Date(2023, 6, 5) : new Date(2023, 3, 26);
-  const toDate = new Date();
+  const toDate = new Date(2024, 4, 24);
 
   const { datepickerProps, inputProps, selectedDay } = useDatepicker({
     fromDate,
     toDate,
+    defaultSelected: toDate,
     onDateChange: () => {
       setSelectedTimestamp("");
       setHistoryData(undefined);
@@ -87,16 +96,19 @@ export default function HistorikkIndex({ revisions }: Props) {
   // @ts-ignore
   const settingsSections: HistoryProduktsideSection[] = historyData
     ? // @ts-ignore
-      historyData?.settings?.content?.map((settingsSection) => {
+      historyData?.settings?.content
         // @ts-ignore
-        const section = historyData?.contentSections?.find(
-          ({ _id }) => _id == settingsSection?.produktsideSection?._ref,
-        );
+        ?.map((settingsSection) => {
+          // @ts-ignore
+          const section = historyData?.contentSections?.find(
+            (contentSection) => contentSection?._id == settingsSection?.produktsideSection?._ref,
+          );
 
-        if (section) {
-          return section;
-        }
-      })
+          if (section) {
+            return section;
+          }
+        })
+        ?.filter(hasHistorySection)
     : [];
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
