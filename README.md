@@ -22,19 +22,17 @@ Spørsmål tilknyttet koden kan rettes mot:
 
 ## Eksportere historikken i PDF
 
-1. Sjekk ut branchen `pdf-export`.
-2. Åpne `scripts/screenshot.ts` og sett `FROM` og `TO` til ønsket datointervall.
-3. Velg språk du vil eksportere:
-   - Norsk: `http://localhost:3000` gir `${BASE_URL}/dagpenger/historikk`
-   - Engelsk: `http://localhost:3000/` gir `${BASE_URL}/dagpenger/en/historikk`
-4. Start applikasjonen lokalt:
+- Eksporterte PDF-er vil ligge i /pdf-export-mappen.
+- Bokmål-historikk er fra 26.04.2023 til 09.04.2024.
+- Engelsk historikk er fra 05.07.2023 til 09.04.2024.
 
-```bash
-npm run dev
-```
+### Hvordan eksporterer du historikk i PDF
 
-5. Åpne en ny terminal og kjør eksport:
-
-```bash
-npm run pdf-export
-```
+- Sjekk ut branchen `pdf-export`
+- Installere dependency `npm i`
+- Åpne `scripts/screenshot.ts` og sett `FROM` og `TO` til ønsket datointervall.
+- Velg språk du vil eksportere:
+  - Bokmål: `${BASE_URL}/dagpenger/historikk`
+  - Engelsk: `${BASE_URL}/dagpenger/en/historikk`
+- Start applikasjonen lokalt: `npm run dev`
+- Åpne en ny terminal og kjør eksport: `npm run pdf-export`
