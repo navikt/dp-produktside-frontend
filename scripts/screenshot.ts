@@ -1,9 +1,10 @@
 import { chromium, Page } from "@playwright/test";
 import fs from "fs";
 
-const FROM = "2024-04-10"; // yyyy-mm-dd (inclusive, earlier date)
-const TO = "2024-04-11"; // yyyy-mm-dd (inclusive, later date)
+const FROM = "2023-04-27"; // yyyy-mm-dd (inclusive, earlier date)
+const TO = "2023-08-03"; // yyyy-mm-dd (inclusive, later date)
 const BASE_URL = process.argv[2] ?? "http://localhost:3000";
+const HISTORY_URL = `${BASE_URL}/dagpenger/historikk`;
 
 function parseYYYYMMDD(d: string): Date {
   const [yyyy, mm, dd] = d.split("-");
@@ -25,17 +26,6 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
   await page.locator("main#maincontent").waitFor({ state: "visible", timeout: 30000 });
   await page.waitForLoadState("networkidle");
 
-  const shownTimestampText = await page
-    .getByText(/^Viser innhold for:/)
-    .first()
-    .textContent();
-  const shownTimestamp = shownTimestampText?.replace("Viser innhold for:", "").replace(/\s+/g, " ").trim();
-
-  if (!shownTimestamp) {
-    console.error(`  Could not find 'Viser innhold for' text for timestamp ${timestamp}`);
-    return null;
-  }
-
   await page.evaluate(() => {
     document.querySelectorAll('a[href^="#"]').forEach((link) => {
       const href = (link as HTMLAnchorElement).getAttribute("href") ?? "";
@@ -48,10 +38,15 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
     });
   });
 
-  // shownTimestamp is "DD.MM.YYYY HH:mm" — keep date from text, but use revision timestamp for HH-mm-ss
-  const [datePart] = shownTimestamp.split(" ");
-  const [dd, mm, yyyy] = datePart.split(".");
   const tsDate = new Date(timestamp);
+  if (Number.isNaN(tsDate.getTime())) {
+    console.error(`  Invalid timestamp for filename: ${timestamp}`);
+    return null;
+  }
+
+  const yyyy = String(tsDate.getFullYear());
+  const mm = String(tsDate.getMonth() + 1).padStart(2, "0");
+  const dd = String(tsDate.getDate()).padStart(2, "0");
   const hh = String(tsDate.getHours()).padStart(2, "0");
   const min = String(tsDate.getMinutes()).padStart(2, "0");
   const sec = String(tsDate.getSeconds()).padStart(2, "0");
@@ -59,13 +54,16 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
   fs.mkdirSync(outputDir, { recursive: true });
   const outputFile = `${outputDir}/${yyyy}-${mm}-${dd}_${hh}-${min}-${sec}.pdf`;
 
+  await page.emulateMedia({ media: "print" });
   await page.pdf({
     path: outputFile,
     format: "A4",
     printBackground: true,
-    scale: 0.9,
-    margin: { top: "1cm", bottom: "1cm", left: "1cm", right: "1cm" },
+    scale: 0.85,
+    margin: { top: "1cm", bottom: "1cm", left: "1.3cm", right: "1.3cm" },
   });
+
+  await page.emulateMedia({ media: "screen" });
 
   return outputFile;
 }
@@ -74,6 +72,7 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.setViewportSize({ width: 794, height: 1123 });
+  await page.emulateMedia({ media: "screen" });
 
   const fromDate = parseYYYYMMDD(FROM);
   const toDate = parseYYYYMMDD(TO);
@@ -84,12 +83,12 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
 
   console.log(`Processing ${dates.length} dates: ${FROM} → ${TO}`);
 
-  await page.goto(`${BASE_URL}/dagpenger/historikk`, { waitUntil: "networkidle" });
+  await page.goto(HISTORY_URL, { waitUntil: "networkidle" });
 
   for (const date of dates) {
     console.log(`\n── Date: ${date}`);
 
-    const dateInput = page.getByLabel("Velg dato");
+    const dateInput = page.getByRole("textbox", { name: /Velg dato|Choose date/i });
     await dateInput.click();
     await dateInput.fill(date);
     await dateInput.press("Tab");
@@ -124,9 +123,9 @@ async function savePdf(page: Page, timestamp: string): Promise<string | null> {
       if (saved) console.log(`  Saved: ${saved}`);
 
       // Return to form state for next iteration
-      await page.goto(`${BASE_URL}/dagpenger/historikk`, { waitUntil: "networkidle" });
+      await page.goto(HISTORY_URL, { waitUntil: "networkidle" });
 
-      const dateInputAgain = page.getByLabel("Velg dato");
+      const dateInputAgain = page.getByRole("textbox", { name: /Velg dato|Choose date/i });
       await dateInputAgain.click();
       await dateInputAgain.fill(date);
       await dateInputAgain.press("Tab");

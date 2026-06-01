@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "check-updates": "ncu -i --format group",
-    "test": "vitest"
+    "test": "vitest",
+    "export-pdf": "npx tsx scripts/screenshot.ts"
   },
   "dependencies": {
     "@navikt/ds-css": "^5.18.3",
