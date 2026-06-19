@@ -19,7 +19,7 @@
     "@navikt/nav-dekoratoren-moduler": "^3.6.1",
     "@portabletext/react": "^3.2.4",
     "@portabletext/types": "^2.0.15",
-    "@sanity/image-url": "^1.2.0",
+    "@sanity/image-url": "^2.0.3",
     "@sanity/client": "^6.29.1",
     "@next/bundle-analyzer": "^14.2.35",
     "classnames": "^2.5.1",
