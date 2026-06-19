@@ -61,9 +61,9 @@ export default class MyDocument extends Document<{ decorator: DecoratorComponent
         <Scripts />
         <HeadAssets />
         <body>
-          <Header />
+          {/* <Header /> */}
           <Main />
-          <Footer />
+          {/* <Footer /> */}
           <NextScript />
         </body>
       </Html>

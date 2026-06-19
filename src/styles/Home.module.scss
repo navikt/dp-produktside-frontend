@@ -19,6 +19,11 @@
   @media #{common.$mq-screen-desktop} {
     padding: 0 common.$padding-sides-desktop 2rem common.$padding-sides-desktop;
   }
+
+  @media print {
+    max-width: 100%;
+    padding: 0;
+  }
 }
 
 $sectionMaxWidth: common.px-to-rem(600);
@@ -51,6 +56,10 @@ $verticalMargin: 1.75rem;
       .layoutContainer {
         max-width: common.px-to-rem(1080);
         margin: 0 auto;
+
+        @media print {
+          max-width: 100%;
+        }
 
         .topRow {
           display: flex;
@@ -86,8 +95,12 @@ $verticalMargin: 1.75rem;
 
           > section {
             width: 100%;
-            max-width: $sectionMaxWidth;
+            max-width: 1700px;
             margin-bottom: 2rem;
+
+            @media print {
+              max-width: 100%;
+            }
           }
         }
         // TODO: Finn en bedre løsning og rydd opp i styling for kontakt oss banneret.
@@ -106,6 +119,11 @@ $verticalMargin: 1.75rem;
             margin: 2rem calc((100vw - 100%) / -2) 4rem;
             margin-bottom: 0;
             padding-bottom: 0;
+
+            @media print {
+              padding: 0;
+              margin: 0;
+            }
           }
 
           .contactOptionsTitle {

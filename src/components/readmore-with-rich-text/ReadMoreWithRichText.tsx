@@ -17,7 +17,7 @@ export function ReadMoreWithRichText({ _key, header, children, size = "medium" }
       onClick={() => {
         setIsOpen((prevIsOpen) => !prevIsOpen);
       }}
-      open={isOpen}
+      open={true}
       className={styles.readMore}
       header={header}
       size={size}

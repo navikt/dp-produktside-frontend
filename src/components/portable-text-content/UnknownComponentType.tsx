@@ -9,7 +9,7 @@ export function UnknownComponentType({ value }: PortableTextTypeComponentProps<U
         Her var det en ukjent komponent
       </Heading>
       {value?._type && <p>Komponentnavn: {value._type}</p>}
-      <ReadMore header="Rådata">
+      <ReadMore header="Rådata" open={true}>
         <pre className={styles.pre}>{JSON.stringify(value)}</pre>
       </ReadMore>
     </Alert>
